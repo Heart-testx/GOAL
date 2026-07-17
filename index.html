@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700;800&family=Sarabun:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
-/* ============================= DESIGN TOKENS (LITTLE HERO THEME) ============================= */
+/* ============================= DESIGN TOKENS ============================= */
 :root{
   --bg-deep: #F0F9FF;
   --bg-deep-2: #E0F2FE;
@@ -55,7 +55,7 @@ input{font-family:inherit;color:inherit;}
 @keyframes drift1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(40px,50px) scale(1.1)}}
 @keyframes drift2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-50px,-40px) scale(1.15)}}
 
-/* ============================= SPLASH / OPENING LOADING ============================= */
+/* ============================= SPLASH & SHELL ============================= */
 #splash{
   position:fixed;inset:0;z-index:9999;
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;
@@ -65,8 +65,7 @@ input{font-family:inherit;color:inherit;}
 #splash.hide{opacity:0;transform:scale(1.04);pointer-events:none;}
 .splash-mark{
   width:96px;height:96px;border-radius:30px;
-  background:white;
-  border:3px solid var(--mint);
+  background:white; border:3px solid var(--mint);
   display:flex;align-items:center;justify-content:center;
   box-shadow:0 8px 0 var(--mint);
   animation:markPop 1s var(--ease-spring);
@@ -79,11 +78,9 @@ input{font-family:inherit;color:inherit;}
 .splash-bar{width:180px;height:6px;border-radius:6px;background:white;border:1px solid #CBD5E1;overflow:hidden;opacity:0;animation:fadeUp .6s var(--ease-out) .5s forwards;}
 .splash-bar-fill{height:100%;width:0%;border-radius:6px;background:linear-gradient(90deg,var(--mint),var(--volt));transition:width .25s var(--ease-out);}
 
-/* ============================= SHELL ============================= */
 #app{position:relative;z-index:1;max-width:520px;margin:0 auto;min-height:100vh;padding:14px 16px 120px;opacity:0;}
 #app.show{opacity:1;animation:fadeUp .5s var(--ease-out);}
 
-/* island header */
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:6px 4px 14px;}
 .island{
   display:flex;align-items:center;gap:10px;
@@ -100,17 +97,15 @@ input{font-family:inherit;color:inherit;}
   width:42px;height:42px;border-radius:14px;
   background:white;border:2px solid var(--border-glass);
   display:flex;align-items:center;justify-content:center;
-  box-shadow:var(--shadow-chunky);
-  transition:all .15s var(--ease-spring);
+  box-shadow:var(--shadow-chunky); transition:all .15s var(--ease-spring);
 }
 .icon-btn:active{transform:translateY(4px);box-shadow:var(--shadow-chunky-active);background:#F8FAFC;}
 .icon-btn svg{width:20px;height:20px;stroke:var(--text-1);}
 
-/* ============================= HERO PROFILE & BADGES BAR (NEW) ============================= */
+/* ============================= HERO PROFILE & GOAL HERO ============================= */
 .hero-bar{
   background:white;border:2px solid var(--border-glass);border-radius:24px;
-  padding:14px 16px;margin-bottom:16px;
-  box-shadow:var(--shadow-chunky);
+  padding:14px 16px;margin-bottom:16px; box-shadow:var(--shadow-chunky);
   display:flex;align-items:center;justify-content:space-between;gap:12px;
   cursor:pointer;transition:all .15s var(--ease-spring);
 }
@@ -129,7 +124,6 @@ input{font-family:inherit;color:inherit;}
   font-size:13px;font-weight:700;color:var(--mint-dim);
 }
 
-/* ============================= GOAL HERO ============================= */
 .goal-hero{position:relative;display:flex;flex-direction:column;align-items:center;padding:8px 0 16px;}
 .goal-name{font-size:16px;color:var(--text-1);font-weight:700;margin-bottom:4px;background:white;padding:6px 16px;border-radius:100px;border:2px solid var(--border-glass);box-shadow:var(--shadow-chunky);}
 .ring-box{position:relative;width:230px;height:230px;margin:12px 0 16px;background:white;border-radius:50%;box-shadow:0 12px 30px rgba(56,189,248,0.2), inset 0 4px 12px rgba(0,0,0,0.05);border:4px solid white;}
@@ -150,26 +144,32 @@ input{font-family:inherit;color:inherit;}
 .goal-remain{font-size:14.5px;color:var(--text-2);text-align:center;font-weight:600;background:white;padding:8px 16px;border-radius:14px;border:2px solid var(--border-glass);}
 .goal-remain b{color:var(--mint-dim);font-weight:800;font-size:16px;}
 
-/* ============================= MILESTONES BREAKDOWN (NEW) ============================= */
-.ms-wrap{
-  width:100%;background:white;border:2px solid var(--border-glass);border-radius:22px;
-  padding:16px;margin:12px 0 20px;box-shadow:var(--shadow-chunky);
-}
-.ms-title{font-size:14px;font-weight:700;color:var(--text-1);margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;}
-.ms-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;position:relative;}
-.ms-step{display:flex;flex-direction:column;align-items:center;text-align:center;position:relative;z-index:2;}
-.ms-icon{
-  width:36px;height:36px;border-radius:50%;background:#F1F5F9;border:2px solid #CBD5E1;
-  display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:6px;
-  transition:all .3s var(--ease-spring);
-}
-.ms-step.passed .ms-icon{background:#DCFCE7;border-color:var(--volt);box-shadow:0 0 0 3px rgba(74,222,128,0.2);transform:scale(1.08);}
-.ms-step.current .ms-icon{background:#FEF9C3;border-color:var(--gold);animation:pulse 1.5s infinite;}
-@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
-.ms-lbl{font-size:11px;font-weight:700;color:var(--text-2);}
-.ms-val{font-size:10px;color:var(--text-3);font-weight:600;margin-top:2px;}
-.ms-step.passed .ms-lbl{color:#166534;}
-.ms-step.current .ms-lbl{color:#854D0E;}
+/* ============================= SYSTEM 1: COMPONENTS ============================= */
+.comp-wrap { background:white; border-radius:22px; padding:16px; margin:12px 0; border:2px solid var(--border-glass); box-shadow:var(--shadow-chunky); }
+.comp-title { font-size:15px; font-family:'Prompt',sans-serif; font-weight:700; margin-bottom:12px; display:flex; align-items:center; justify-content:space-between;}
+.comp-list { display:flex; flex-direction:column; gap:10px; }
+.comp-item { display:flex; align-items:center; justify-content:space-between; padding:12px 14px; background:#F8FAFC; border:2px solid #E2E8F0; border-radius:16px; transition:all 0.3s;}
+.comp-item.unlocked { background:#DCFCE7; border-color:var(--volt); }
+.comp-item.ready { background:#FEF9C3; border-color:var(--gold); }
+.comp-info { flex:1; min-width:0;}
+.comp-name { font-weight:700; font-size:14.5px; color:var(--text-1); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.comp-price { font-size:12.5px; font-weight:600; color:var(--text-2); margin-top:2px;}
+.comp-item.unlocked .comp-price { color:#166534; }
+.comp-btn { padding:8px 14px; border-radius:12px; font-weight:700; font-size:13px; cursor:pointer; flex-shrink:0; transition:all 0.2s;}
+.comp-btn.lock { background:#E2E8F0; color:var(--text-3); cursor:not-allowed; border:2px solid transparent;}
+.comp-btn.unlock { background:var(--gold); color:#854D0E; border:2px solid #CA8A04; box-shadow:0 4px 0 #CA8A04; animation:pulseBtn 1.5s infinite; }
+.comp-btn.unlock:active { transform:translateY(4px); box-shadow:0 0 0 transparent; }
+.comp-btn.done { background:#22C55E; color:white; border:2px solid #16A34A; }
+@keyframes pulseBtn{ 0%,100%{transform:scale(1)} 50%{transform:scale(1.05)} }
+
+/* ============================= SYSTEM 2: PROJECTION ============================= */
+.proj-wrap { background:white; border-radius:22px; padding:16px; margin:12px 0 24px; border:2px dashed var(--mint-dim); background-image: linear-gradient(to bottom, #F0F9FF, white); }
+.proj-title { font-size:15px; font-family:'Prompt',sans-serif; font-weight:700; color:var(--mint-dim); margin-bottom:10px; display:flex; align-items:center; gap:8px;}
+.proj-text { font-size:14px; font-weight:500; color:var(--text-1); line-height:1.6; }
+.proj-input-group { display:flex; align-items:center; gap:8px; margin-top:12px; background:#E0F2FE; padding:10px 14px; border-radius:14px; border:1px solid #BAE6FD;}
+.proj-input { width:65px; padding:6px 8px; border-radius:10px; border:2px solid var(--mint); font-weight:800; text-align:center; font-size:15px; outline:none; font-family:'Space Grotesk',sans-serif;}
+.proj-result { margin-top:12px; font-size:13.5px; font-weight:700; color:#0369A1; padding:10px 14px; background:#E0F2FE; border-radius:12px; line-height:1.5;}
+.proj-result.wow { color:#166534; background:#DCFCE7; border:1px solid var(--volt); animation:fadeUp 0.3s ease-out;}
 
 /* stats */
 .stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;}
@@ -191,7 +191,7 @@ input{font-family:inherit;color:inherit;}
 .stat-val.neg{color:var(--coral);}
 .stat-lbl{font-size:12px;color:var(--text-2);font-weight:600;}
 
-/* quick actions */
+/* quick actions & lists */
 .qa-row{display:flex;gap:12px;margin-bottom:26px;}
 .qa-btn{
   flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;
@@ -209,12 +209,10 @@ input{font-family:inherit;color:inherit;}
 .qa-goal .qa-ic svg{stroke:#854D0E;}
 .qa-btn span{font-size:13.5px;font-weight:700;color:var(--text-1);}
 
-/* section header */
 .sec-head{display:flex;align-items:center;justify-content:space-between;margin:8px 0 12px;padding:0 4px;}
 .sec-title{font-size:17px;font-weight:700;font-family:'Prompt',sans-serif;color:var(--text-1);}
 .sec-link{font-size:13px;color:var(--mint-dim);font-weight:700;background:white;padding:4px 10px;border-radius:100px;border:2px solid var(--border-glass);}
 
-/* transaction list */
 .tx-list{display:flex;flex-direction:column;gap:12px;}
 .tx-row{
   display:flex;align-items:center;gap:14px;background:white;border:2px solid var(--border-glass);border-radius:20px;
@@ -239,7 +237,6 @@ input{font-family:inherit;color:inherit;}
 .empty-state b{color:var(--text-1);font-size:16px;font-weight:700;}
 .empty-state span{font-size:13.5px;line-height:1.5;font-weight:500;}
 
-/* FAB */
 .fab{
   position:fixed;bottom:26px;left:50%;transform:translateX(-50%);
   display:flex;align-items:center;gap:10px;background:var(--mint);
@@ -250,7 +247,7 @@ input{font-family:inherit;color:inherit;}
 .fab:active{transform:translateX(-50%) translateY(6px);box-shadow:0 2px 0 #0284C7;}
 .fab svg{width:22px;height:22px;stroke-width:2.5;}
 
-/* ============================= SHEETS / MODALS ============================= */
+/* ============================= SHEETS ============================= */
 .overlay{position:fixed;inset:0;background:rgba(15,23,42,.4);backdrop-filter:blur(4px);z-index:200;opacity:0;pointer-events:none;transition:opacity .3s var(--ease-out);}
 .overlay.show{opacity:1;pointer-events:auto;}
 .sheet{
@@ -288,17 +285,11 @@ input{font-family:inherit;color:inherit;}
 .btn-secondary{width:100%;padding:16px;border-radius:20px;font-weight:700;font-size:15px;background:#F1F5F9;border:2px solid #CBD5E1;margin-top:12px;color:var(--text-1);transition:all .15s var(--ease-spring);}
 .btn-secondary:active{transform:translateY(3px);box-shadow:0 0 0 transparent;}
 
-/* ============================= BADGES SHEET STYLES (NEW) ============================= */
+/* BADGES & CELEBRATION */
 .badge-grid{display:grid;grid-template-columns:repeat(1,1fr);gap:12px;margin-bottom:20px;}
-.badge-card{
-  display:flex;align-items:center;gap:16px;background:#F8FAFC;border:2px solid var(--border-glass);
-  border-radius:20px;padding:14px;transition:all .2s;
-}
+.badge-card{display:flex;align-items:center;gap:16px;background:#F8FAFC;border:2px solid var(--border-glass);border-radius:20px;padding:14px;transition:all .2s;}
 .badge-card.unlocked{background:white;border-color:var(--gold);box-shadow:0 4px 0 var(--gold);}
-.badge-ic{
-  width:52px;height:52px;border-radius:16px;background:#E2E8F0;display:flex;align-items:center;
-  justify-content:center;font-size:26px;flex-shrink:0;filter:grayscale(1);opacity:0.6;
-}
+.badge-ic{width:52px;height:52px;border-radius:16px;background:#E2E8F0;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0;filter:grayscale(1);opacity:0.6;}
 .badge-card.unlocked .badge-ic{background:#FEF9C3;border:2px solid var(--gold);filter:grayscale(0);opacity:1;}
 .badge-info{flex:1;min-width:0;}
 .badge-name{font-size:16px;font-weight:800;color:var(--text-2);margin-bottom:2px;}
@@ -308,14 +299,9 @@ input{font-family:inherit;color:inherit;}
 .badge-status{font-size:12px;font-weight:800;padding:4px 10px;border-radius:100px;background:#E2E8F0;color:var(--text-3);}
 .badge-card.unlocked .badge-status{background:#DCFCE7;color:#166534;}
 
-/* celebration */
 .confetti-wrap{position:fixed;inset:0;z-index:300;pointer-events:none;overflow:hidden;}
 .confetti{position:absolute;top:-50px;animation:confettiFall linear forwards;display:flex;align-items:center;justify-content:center;}
-@keyframes confettiFall{
-  0%{transform:translateY(0) rotate(0deg) scale(0.5);opacity:1;}
-  50%{transform:translateY(50vh) rotate(180deg) scale(1.2);}
-  100%{transform:translateY(110vh) rotate(360deg) scale(1);opacity:0;}
-}
+@keyframes confettiFall{ 0%{transform:translateY(0) rotate(0deg) scale(0.5);opacity:1;} 50%{transform:translateY(50vh) rotate(180deg) scale(1.2);} 100%{transform:translateY(110vh) rotate(360deg) scale(1);opacity:0;} }
 .celeb-card{
   position:fixed;left:50%;top:50%;transform:translate(-50%,-50%) scale(.7);z-index:301;
   width:calc(100% - 48px);max-width:360px;background:white;
@@ -330,13 +316,11 @@ input{font-family:inherit;color:inherit;}
 .celeb-sub{font-size:15px;color:var(--text-2);line-height:1.5;margin-bottom:26px;font-weight:600;}
 .celeb-sub b{color:var(--mint-dim);font-weight:800;font-size:18px;}
 
-/* toast */
 .toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-150%);z-index:400;background:white;border:3px solid var(--text-1);padding:14px 20px;border-radius:100px;font-size:14.5px;font-weight:700;color:var(--text-1);display:flex;align-items:center;gap:10px;transition:transform .4s var(--ease-spring);box-shadow:0 6px 0 var(--text-1);max-width:90%;}
 .toast.show{transform:translateX(-50%) translateY(0);}
 .toast .dot2{width:10px;height:10px;border-radius:50%;background:var(--volt);flex-shrink:0;border:2px solid #064E3B;}
 .toast.err .dot2{background:var(--coral);border-color:#4C0519;}
 
-/* history modal */
 .hist-item{display:flex;align-items:center;justify-content:space-between;padding:16px 12px;border:2px solid #E2E8F0;border-radius:20px;margin-bottom:10px;box-shadow:0 4px 0 #E2E8F0;}
 .hist-item:last-child{margin-bottom:0;}
 .hist-name{font-size:15px;font-weight:700;color:var(--text-1);}
@@ -380,31 +364,28 @@ input{font-family:inherit;color:inherit;}
     </button>
   </div>
 
-  <!-- SKELETON LOADING -->
   <div class="skeleton-wrap" id="skeletonWrap">
     <div class="sk sk-ring"></div>
-    <div class="sk-stats">
-      <div class="sk sk-stat"></div><div class="sk sk-stat"></div><div class="sk sk-stat"></div>
-    </div>
+    <div class="sk-stats"><div class="sk sk-stat"></div><div class="sk sk-stat"></div><div class="sk sk-stat"></div></div>
   </div>
 
-  <!-- REAL CONTENT -->
   <div class="content-wrap" id="contentWrap">
     <div class="offline-banner" id="offlineBanner">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 1l22 22M16.72 11.06A10.94 10.94 0 0 1 19 12.55M5 12.55a10.94 10.94 0 0 1 5.17-2.39M10.71 5.05A16 16 0 0 1 22.58 9M1.42 9a15.91 15.91 0 0 1 4.7-2.88M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/></svg>
       <span>ออฟไลน์ — ข้อมูลจะซิงค์เมื่อต่อเน็ตนะ!</span>
     </div>
 
-    <!-- HERO PROFILE & BADGES BAR (NEW) -->
-    <div class="hero-bar" id="heroProfileBar">
-      <!-- Generated via JS -->
-    </div>
+    <!-- HERO PROFILE -->
+    <div class="hero-bar" id="heroProfileBar"></div>
 
     <!-- GOAL HERO -->
     <div class="goal-hero" id="goalHero"></div>
 
-    <!-- MILESTONES ROADMAP (NEW) -->
-    <div id="milestonesContainer"></div>
+    <!-- COMPONENTS SYSTEM (NEW) -->
+    <div id="componentsContainer"></div>
+
+    <!-- PROJECTION SYSTEM (NEW) -->
+    <div id="projectionContainer"></div>
 
     <!-- STATS -->
     <div class="stats-grid">
@@ -477,19 +458,27 @@ input{font-family:inherit;color:inherit;}
   <button class="btn-primary" id="txSubmit">บันทึกยอดเยี่ยม!</button>
 </div>
 
-<!-- ============ GOAL SHEET ============ -->
+<!-- ============ GOAL SHEET (UPDATED FOR COMPONENTS) ============ -->
 <div class="overlay" id="overlayGoal"></div>
 <div class="sheet" id="sheetGoal">
   <div class="sheet-handle"></div>
   <div class="sheet-title" id="goalSheetTitle">ตั้งเป้าหมายฮีโร่</div>
-  <div class="field-lbl">ชื่อเป้าหมาย</div>
-  <input type="text" class="text-input" id="goalName" placeholder="เช่น ซื้อหุ่นยนต์ตัวใหม่">
-  <div class="field-lbl">จำนวนเงินที่ต้องใช้</div>
+  <div class="field-lbl">ชื่อเป้าหมายหลัก</div>
+  <input type="text" class="text-input" id="goalName" placeholder="เช่น สร้างคอมพิวเตอร์ในฝัน">
+  
+  <div class="field-lbl" style="display:flex; justify-content:space-between;">
+    <span>ชิ้นส่วนย่อย (Micro-wins)</span>
+    <span style="font-size:12px; color:var(--text-3); font-weight:500;">(ไม่บังคับ)</span>
+  </div>
+  <div id="compEditList" style="display:flex; flex-direction:column; gap:8px; margin-bottom:12px;"></div>
+  <button class="btn-secondary" id="btnAddDraftComp" style="margin-top:0; margin-bottom:16px;">+ เพิ่มชิ้นส่วนย่อย</button>
+  
+  <div class="field-lbl">จำนวนเงินรวมที่ต้องใช้</div>
   <div class="amt-input-wrap"><span>฿</span><input type="number" inputmode="decimal" class="amt-input" id="goalTarget" placeholder="0"></div>
   <button class="btn-primary" id="goalSubmit">เริ่มภารกิจ!</button>
 </div>
 
-<!-- ============ BADGES SHEET (NEW) ============ -->
+<!-- ============ BADGES SHEET ============ -->
 <div class="overlay" id="overlayBadges"></div>
 <div class="sheet" id="sheetBadges">
   <div class="sheet-handle"></div>
@@ -531,12 +520,13 @@ const txCol = db.collection('sg_transactions');
 const archCol = db.collection('sg_archived');
 
 /* ============================= STATE ============================= */
-const ADMIN_PIN = "1234"; // กำหนดรหัสผ่านสำหรับลบ/รีเซตข้อมูลที่นี่
+const ADMIN_PIN = "1234";
 let state = { goal: null, transactions: {}, archivedGoals: {} };
 let firstLoadDone = false;
 let celebratedFor = null;
 let pendingTxType = 'save';
 let pendingCarryChoice = 'carry';
+let draftComps = []; // สำหรับแก้ไขชิ้นส่วนในหน้า Goal Sheet
 
 /* ============================= HELPERS ============================= */
 const fmt = n => '฿' + Math.round(n).toLocaleString('th-TH');
@@ -576,7 +566,6 @@ function computeStats(){
   const balance = totalSaved - totalSpent;
   const todayNet = todaySaved - todaySpent;
   
-  // คำนวณเงินออมสะสมทั้งหมดทุกเป้าหมาย (เพื่อใช้คำนวณ Level ฮีโร่)
   let allTimeSaved = 0;
   Object.values(state.transactions || {}).forEach(t => {
     if(t.type === 'save') allTimeSaved += t.amount;
@@ -585,7 +574,176 @@ function computeStats(){
   return {totalSaved, totalSpent, balance, todayNet, txs, allTimeSaved};
 }
 
-/* ============================= SYSTEM 1: LEVEL UP & BADGES LOGIC ============================= */
+/* ============================= SYSTEM 1: COMPONENT LOGIC ============================= */
+function renderComponents(stats) {
+  const cont = $('componentsContainer');
+  if(!state.goal || !state.goal.components || state.goal.components.length === 0) {
+    cont.innerHTML = '';
+    return;
+  }
+  
+  const comps = state.goal.components;
+  let unlockedTotal = comps.filter(c => c.unlocked).reduce((s, c) => s + c.price, 0);
+  let availableBalance = stats.balance - unlockedTotal;
+  
+  const compHTML = comps.map((c, idx) => {
+    if(c.unlocked) {
+      return `
+        <div class="comp-item unlocked">
+          <div class="comp-info">
+            <div class="comp-name">✨ ${escapeHtml(c.name)}</div>
+            <div class="comp-price">${fmt(c.price)}</div>
+          </div>
+          <button class="comp-btn done">สำเร็จแล้ว ✓</button>
+        </div>`;
+    } else {
+      const canUnlock = availableBalance >= c.price;
+      if(canUnlock) {
+        // หักเงินจำลองสำหรับคำนวณชิ้นถัดไปให้ถูกต้อง
+        availableBalance -= c.price;
+        return `
+          <div class="comp-item ready">
+            <div class="comp-info">
+              <div class="comp-name">📦 ${escapeHtml(c.name)}</div>
+              <div class="comp-price">${fmt(c.price)}</div>
+            </div>
+            <button class="comp-btn unlock" onclick="unlockComponent(${c.id})">🔓 ปลดล็อกเลย!</button>
+          </div>`;
+      } else {
+        return `
+          <div class="comp-item">
+            <div class="comp-info">
+              <div class="comp-name">🔒 ${escapeHtml(c.name)}</div>
+              <div class="comp-price">${fmt(c.price)} (ขาดอีก ${fmt(c.price - Math.max(0, availableBalance))})</div>
+            </div>
+            <button class="comp-btn lock">รอเก็บเงิน</button>
+          </div>`;
+      }
+    }
+  }).join('');
+
+  cont.innerHTML = `
+    <div class="comp-wrap">
+      <div class="comp-title"><span>🧩 ชิ้นส่วนประกอบ (Micro-wins)</span> <span style="font-size:12px;color:var(--text-3);">${comps.filter(c=>c.unlocked).length}/${comps.length}</span></div>
+      <div class="comp-list">${compHTML}</div>
+    </div>
+  `;
+}
+
+window.unlockComponent = function(compId) {
+  if(!state.goal || !state.goal.components) return;
+  const newComps = state.goal.components.map(c => c.id === compId ? {...c, unlocked:true} : c);
+  goalRef.update({components: newComps}).then(() => {
+    toast('🎉 ปลดล็อกชิ้นส่วนสำเร็จแล้วฮีโร่!');
+    showMiniCelebration();
+  });
+};
+
+function showMiniCelebration(){
+  const wrap = document.createElement('div');
+  wrap.className = 'confetti-wrap';
+  const emojis = ['✨', '🔓', '🎉', '🔥', '💖'];
+  for(let i=0;i<20;i++){
+    const c = document.createElement('div');
+    c.className = 'confetti';
+    c.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    c.style.fontSize = (20 + Math.random()*12) + 'px';
+    c.style.left = (Math.random()*100)+'%';
+    c.style.animationDuration = (1.5 + Math.random())+'s';
+    c.style.animationDelay = (Math.random()*0.2)+'s';
+    wrap.appendChild(c);
+  }
+  document.body.appendChild(wrap);
+  setTimeout(() => wrap.remove(), 2500);
+}
+
+function renderDraftComps(){
+  const list = $('compEditList');
+  if(draftComps.length === 0){
+    list.innerHTML = '';
+    return;
+  }
+  list.innerHTML = draftComps.map((c, i) => `
+    <div style="display:flex;gap:8px;">
+      <input type="text" class="text-input" style="margin-bottom:0;flex:2;padding:10px 14px;" placeholder="ชื่อ (เช่น RAM)" value="${c.name}" oninput="draftComps[${i}].name=this.value">
+      <input type="number" class="text-input" style="margin-bottom:0;flex:1;padding:10px 14px;" placeholder="ราคา" value="${c.price || ''}" oninput="draftComps[${i}].price=parseFloat(this.value)||0; updateDraftTarget();">
+      <button class="tx-del" style="background:#FFE4E6;color:#9F1239;border-radius:12px;width:42px;" onclick="draftComps.splice(${i},1);renderDraftComps();updateDraftTarget();">✕</button>
+    </div>
+  `).join('');
+}
+
+function updateDraftTarget(){
+  if(draftComps.length > 0){
+    const sum = draftComps.reduce((s,c)=>s+(c.price||0), 0);
+    $('goalTarget').value = sum;
+  }
+}
+$('btnAddDraftComp').onclick = () => {
+  draftComps.push({id:Date.now() + Math.random(), name:'', price:'', unlocked:false});
+  renderDraftComps();
+};
+
+
+/* ============================= SYSTEM 2: DYNAMIC PROJECTION ============================= */
+function renderProjection(stats) {
+  const cont = $('projectionContainer');
+  if(!state.goal || state.goal.target <= 0 || stats.balance >= state.goal.target) {
+    cont.innerHTML = ''; return;
+  }
+  
+  const target = state.goal.target;
+  const bal = stats.balance;
+  const remaining = target - bal;
+  
+  // คำนวณวันเฉลี่ย (ถ้าเพิ่งสร้างเป้าหมายในวันนี้ ให้ถือว่าเป็น 1 วันเพื่อป้องกันหาร 0)
+  const daysSinceStart = Math.max(1, (Date.now() - state.goal.startAt) / (1000 * 60 * 60 * 24));
+  const avgDaily = bal / daysSinceStart;
+
+  if(avgDaily <= 0) {
+    cont.innerHTML = `
+      <div class="proj-wrap">
+        <div class="proj-title">🔮 พยากรณ์วันสำเร็จ</div>
+        <div class="proj-text">เริ่มออมเงินภารกิจนี้ เพื่อดูระบบพยากรณ์วันสำเร็จแบบ Real-time กันเถอะ!</div>
+      </div>`;
+    return;
+  }
+
+  const daysLeft = Math.ceil(remaining / avgDaily);
+  const estDate = new Date(Date.now() + daysLeft * 86400000).toLocaleDateString('th-TH', {day:'numeric', month:'long', year:'numeric'});
+
+  cont.innerHTML = `
+    <div class="proj-wrap">
+      <div class="proj-title">🔮 พยากรณ์วันสำเร็จล่วงหน้า</div>
+      <div class="proj-text">จากสถิติปัจจุบัน คุณเก็บได้เฉลี่ย <b>${fmt(avgDaily)}/วัน</b><br>เป้าหมายนี้จะสำเร็จประมาณวันที่ <b>${estDate}</b></div>
+      <div class="proj-input-group">
+        <span>🔥 ถ้าเก็บเพิ่มอีกวันละ</span>
+        <input type="number" id="projExtra" class="proj-input" placeholder="50">
+        <span>บาท</span>
+      </div>
+      <div id="projResult" class="proj-result" style="display:none;"></div>
+    </div>
+  `;
+
+  // ผูก Event ใส่ตัวเลขเพื่อจำลองอนาคต
+  $('projExtra').oninput = (e) => {
+    const extra = parseFloat(e.target.value) || 0;
+    const resEl = $('projResult');
+    if(extra > 0) {
+      const newVelocity = avgDaily + extra;
+      const newDaysLeft = Math.ceil(remaining / newVelocity);
+      const diff = daysLeft - newDaysLeft;
+      const newDate = new Date(Date.now() + newDaysLeft * 86400000).toLocaleDateString('th-TH', {day:'numeric', month:'short'});
+      
+      resEl.style.display = 'block';
+      resEl.className = 'proj-result wow';
+      resEl.innerHTML = `🚀 เย้! คุณจะได้ของเร็วขึ้นตั้ง <b>${diff} วัน</b><br>(ขยับวันสำเร็จมาเป็นวันที่ ${newDate})`;
+    } else {
+      resEl.style.display = 'none';
+    }
+  };
+}
+
+/* ============================= HERO LEVEL & BADGES ============================= */
 function computeHeroLevel(allTimeSaved){
   const levels = [
     { rank: "Lv.1 ฮีโร่ฝึกหัด (Cadet)", icon: "🛡️", min: 0, max: 100 },
@@ -597,7 +755,7 @@ function computeHeroLevel(allTimeSaved){
     { rank: "Lv.7 ผู้พิทักษ์คริสตัล", icon: "🔮", min: 3500, max: 5000 },
     { rank: "Lv.8 มาสเตอร์เพชรแท้", icon: "💎", min: 5000, max: 7500 },
     { rank: "Lv.9 นักล่าแห่งท้องฟ้า", icon: "🦅", min: 7500, max: 10000 },
-    { rank: "Lv.10 ฮีโร่สายฟ้า (10K Club)", icon: "⚡", min: 10000, max: 15000 },
+    { rank: "Lv.10 ฮีโร่สายฟ้า", icon: "⚡", min: 10000, max: 15000 },
     { rank: "Lv.11 นักสำรวจกาแล็กซี", icon: "🌟", min: 15000, max: 20000 },
     { rank: "Lv.12 ผู้พิชิตมังกรทอง", icon: "🐉", min: 20000, max: 30000 },
     { rank: "Lv.13 ตำนานฮีโร่เศรษฐี", icon: "👑", min: 30000, max: 50000 },
@@ -605,47 +763,26 @@ function computeHeroLevel(allTimeSaved){
     { rank: "Lv.15 เทพเจ้าออมเงินอินฟินิตี้", icon: "♾️", min: 100000, max: Infinity }
   ];
   
-  // 1. คำนวณยอดเงินสะสมทั้งหมด และ ยอดที่ใช้ไปทั้งหมด
   const allTxs = Object.values(state.transactions || {});
-  let totalSaved = 0;
-  let totalSpent = 0;
+  let totalSaved = 0, totalSpent = 0;
   allTxs.forEach(t => {
     if(t.type === 'save') totalSaved += t.amount;
     else if(t.type === 'spend') totalSpent += t.amount;
   });
-  
-  // เงินออมคงเหลือจริง (Net Balance)
   const netSaved = Math.max(0, totalSaved - totalSpent);
 
-  // 2. หาเลเวลสูงสุดที่เคยทำได้ (Peak Level จากยอดออมทั้งหมด)
-  let peakLevelIdx = 0;
+  let peakLevelIdx = 0, currentLevelIdx = 0;
   for(let i = 0; i < levels.length; i++){ 
     if(totalSaved >= levels[i].min) peakLevelIdx = i; 
-  }
-
-  // 3. หาเลเวลปัจจุบันตามเงินคงเหลือจริง (Current Level)
-  let currentLevelIdx = 0;
-  for(let i = 0; i < levels.length; i++){ 
     if(netSaved >= levels[i].min) currentLevelIdx = i; 
   }
-
-  // 4. ระบบ เซฟโซน (Safe Zone): ห้ามตกชั้นเกิน 1 เลเวลจากจุดสูงสุดที่เคยทำได้!
+  
   const safeZoneIdx = Math.max(0, peakLevelIdx - 1);
-  if(currentLevelIdx < safeZoneIdx){
-    currentLevelIdx = safeZoneIdx; // ดึงเลเวลกลับขึ้นมาที่จุด Safe Zone
-  }
+  if(currentLevelIdx < safeZoneIdx) currentLevelIdx = safeZoneIdx;
 
   let cur = levels[currentLevelIdx];
-  
-  // 5. ระบบ Debuff: ถ้าเลเวลปัจจุบัน ต่ำกว่าเลเวลสูงสุดที่เคยทำได้ ให้ติดป้ายเตือน
   let isDebuffed = currentLevelIdx < peakLevelIdx;
-  if(isDebuffed){
-    cur = {
-      ...cur,
-      rank: `${cur.rank} (📉 เกราะแตกชั่วคราว!)`,
-      icon: "⚠️"
-    };
-  }
+  if(isDebuffed) cur = { ...cur, rank: `${cur.rank} (📉 เกราะแตกชั่วคราว!)`, icon: "⚠️" };
 
   let progPct = 100;
   let nextTxt = "MAX LEVEL 👑";
@@ -653,7 +790,6 @@ function computeHeroLevel(allTimeSaved){
     progPct = Math.min(100, Math.max(0, ((netSaved - cur.min) / (cur.max - cur.min)) * 100));
     nextTxt = isDebuffed ? `ออมอีก ${fmt(levels[peakLevelIdx].min - netSaved)} เพื่อกู้คืนยศเดิม!` : `อีก ${fmt(cur.max - netSaved)} เลื่อนขั้น`;
   }
-  
   return { ...cur, progPct, nextTxt, isDebuffed };
 }
 
@@ -661,19 +797,11 @@ function computeBadges(){
   const allTxs = Object.values(state.transactions || {}).sort((a,b)=> a.date - b.date);
   const archs = Object.values(state.archivedGoals || {});
   
-  // 1. ก้าวแรกของฮีโร่
   const firstStep = allTxs.some(t => t.type === 'save');
-
-  // 2. Hero ตื่นเช้า (ตี 4 - 8 โมงเช้า)
   const earlyBird = allTxs.some(t => t.type === 'save' && new Date(t.date).getHours() >= 4 && new Date(t.date).getHours() < 8);
-
-  // 3. กระปุกพลังโต ขั้น 1 (100+ บาท)
   const big100 = allTxs.some(t => t.type === 'save' && t.amount >= 100);
-  
-  // 4. [ใหม่] กระปุกยักษ์ตำนาน (ออมครั้งเดียว 1,000+ บาทขึ้นไป)
   const big1000 = allTxs.some(t => t.type === 'save' && t.amount >= 1000);
 
-  // 5. [ใหม่] ฮีโร่เครื่องร้อน (Streak: ออมเงิน 3 วันติดต่อกันโดยไม่ขาด)
   let maxStreak = 0, curStreak = 0, lastDateString = "";
   allTxs.filter(t=>t.type === 'save').forEach(t => {
     const dStr = new Date(t.date).toDateString();
@@ -685,28 +813,19 @@ function computeBadges(){
       if(curStreak > maxStreak) maxStreak = curStreak;
     }
   });
-  const streak3 = maxStreak >= 3;
-  const streak7 = maxStreak >= 7; // 6. [ใหม่] ออมติดต่อกัน 7 วัน
+  const streak3 = maxStreak >= 3, streak7 = maxStreak >= 7;
 
-  // 7. Hero ไม่หวั่นไหว (ไม่ใช้เงินเลย 7 วันติดต่อกัน - อัปเกรดจาก 3 วันให้ยากขึ้น!)
   let unshakable7 = false, lastSpend = 0;
   allTxs.forEach(t => {
     if(t.type === 'spend') lastSpend = t.date;
-    else if(t.type === 'save' && (t.date - lastSpend) >= 7 * 24 * 60 * 60 * 1000 && lastSpend > 0){
-      unshakable7 = true;
-    }
+    else if(t.type === 'save' && (t.date - lastSpend) >= 7 * 24 * 60 * 60 * 1000 && lastSpend > 0) unshakable7 = true;
   });
   if(allTxs.length >= 5 && !allTxs.some(t => t.type === 'spend')) unshakable7 = true;
 
-  // 8. [ใหม่] ครึ่งทางสู่ฝัน (สะสมเงินเป้าหมายปัจจุบันถึง 5,000 บาทขึ้นไป)
   let currentBalance = 0;
   allTxs.forEach(t => { if(t.goalId === (state.goal?state.goal.id:'')) currentBalance += (t.type==='save'?t.amount:-t.amount); });
   const halfway5k = currentBalance >= 5000;
-
-  // 9. ผู้พิชิตเป้าหมาย (จบภารกิจสำเร็จ 1 ครั้ง)
   const goalMaster = archs.length > 0 || (state.goal && state.goal.achieved);
-
-  // 10. [ใหม่] นักสะสมความสำเร็จ (จบภารกิจสำเร็จ 3 ครั้งขึ้นไป)
   const goalMaster3 = archs.length >= 3;
 
   return [
@@ -749,8 +868,7 @@ function renderHeroProfileBar(stats){
 
 function openBadgesSheet(){
   const badges = computeBadges();
-  const grid = $('badgeGridList');
-  grid.innerHTML = badges.map(b => `
+  $('badgeGridList').innerHTML = badges.map(b => `
     <div class="badge-card ${b.unlocked ? 'unlocked' : ''}">
       <div class="badge-ic">${b.icon}</div>
       <div class="badge-info">
@@ -761,46 +879,6 @@ function openBadgesSheet(){
     </div>
   `).join('');
   openSheet('overlayBadges', 'sheetBadges');
-}
-
-/* ============================= SYSTEM 2: MILESTONES ROADMAP LOGIC ============================= */
-function renderMilestones(stats){
-  const cont = $('milestonesContainer');
-  if(!state.goal || state.goal.target <= 0){
-    cont.innerHTML = '';
-    return;
-  }
-  const t = state.goal.target;
-  const b = stats.balance;
-  const steps = [
-    { pct: 25, val: t * 0.25, icon: '🐣', label: 'เริ่มต้นฮึบ!' },
-    { pct: 50, val: t * 0.50, icon: '⚡', label: 'ครึ่งทางแล้ว' },
-    { pct: 75, val: t * 0.75, icon: '🔥', label: 'พลังใกล้เต็ม' },
-    { pct: 100, val: t, icon: '🏆', label: 'พิชิตเป้าหมาย!' }
-  ];
-
-  cont.innerHTML = `
-    <div class="ms-wrap">
-      <div class="ms-title">
-        <span>🗺️ เส้นทางสู่พิชิตเป้าหมาย</span>
-        <span style="font-size:12px;color:var(--mint-dim);">${fmt(b)} / ${fmt(t)}</span>
-      </div>
-      <div class="ms-grid">
-        ${steps.map((s, idx) => {
-          const isPassed = b >= s.val;
-          const isCurrent = !isPassed && (idx === 0 || b >= steps[idx-1].val);
-          let cls = isPassed ? 'passed' : (isCurrent ? 'current' : '');
-          return `
-            <div class="ms-step ${cls}">
-              <div class="ms-icon">${isPassed ? '✓' : s.icon}</div>
-              <div class="ms-lbl">${s.label}</div>
-              <div class="ms-val num">${fmt(s.val)}</div>
-            </div>
-          `;
-        }).join('')}
-      </div>
-    </div>
-  `;
 }
 
 /* ============================= RENDER ============================= */
@@ -818,8 +896,7 @@ function renderGoalHero(stats){
     return;
   }
   const pct = Math.min(100, Math.max(0, (stats.balance / state.goal.target) * 100));
-  const r = 90, c = 2*Math.PI*r;
-  const dash = c * (pct/100);
+  const r = 90, c = 2*Math.PI*r, dash = c * (pct/100);
   hero.innerHTML = `
     <div class="goal-name">🚀 ${escapeHtml(state.goal.name)}</div>
     <div class="ring-box">
@@ -909,17 +986,13 @@ function renderTxList(stats){
   }
   list.innerHTML = txs.slice(0,40).map((t,i) => `
     <div class="tx-row" style="animation-delay:${Math.min(i*40,300)}ms">
-      <div class="tx-ic">
-        ${t.type==='save' ? '🟢' : '🔴'}
-      </div>
+      <div class="tx-ic">${t.type==='save' ? '🟢' : '🔴'}</div>
       <div class="tx-mid">
         <div class="tx-note">${escapeHtml(t.note || (t.type==='save' ? 'เก็บเงิน' : 'ใช้เงิน'))}</div>
         <div class="tx-date">${formatDate(t.date)}</div>
       </div>
       <div class="tx-amt ${t.type}">${t.type==='save'?'+':'-'}${fmt(t.amount)}</div>
-      <button class="tx-del" data-key="${t.key}" aria-label="ลบ">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
-      </button>
+      <button class="tx-del" data-key="${t.key}" aria-label="ลบ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
     </div>
   `).join('');
   list.querySelectorAll('.tx-del').forEach(btn => {
@@ -946,7 +1019,8 @@ function renderAll(){
   const stats = computeStats();
   renderHeroProfileBar(stats);
   renderGoalHero(stats);
-  renderMilestones(stats);
+  renderComponents(stats); // <--- ระบบ Component
+  renderProjection(stats); // <--- ระบบพยากรณ์
   renderStats(stats);
   renderTxList(stats);
   checkAchievement(stats);
@@ -1024,16 +1098,13 @@ function deleteTx(key){
   }
 }
 
-function saveGoal(name, target, carryChoice){
+function saveGoal(name, target, carryChoice, components){
   const doSet = (carryAmount) => {
     const newId = db.collection('sg_goal').doc().id;
-    const newGoal = { id:newId, name, target, startAt: Date.now(), achieved:false };
+    const newGoal = { id:newId, name, target, components: components || [], startAt: Date.now(), achieved:false };
     goalRef.set(newGoal).then(()=>{
       if(carryAmount && carryAmount > 0){
-        txCol.add({
-          amount: Math.round(carryAmount*100)/100, type:'save',
-          note:'พลังสะสมจากภารกิจที่แล้ว', date: Date.now(), goalId: newId
-        });
+        txCol.add({ amount: Math.round(carryAmount*100)/100, type:'save', note:'พลังสะสมจากภารกิจที่แล้ว', date: Date.now(), goalId: newId });
       }
       celebratedFor = null;
       toast('บันทึกภารกิจแล้ว ✓');
@@ -1049,7 +1120,7 @@ function saveGoal(name, target, carryChoice){
       doSet(carryChoice === 'carry' ? stats.balance : 0);
     });
   } else if(state.goal){
-    goalRef.update({name, target}).then(()=>toast('อัปเดตภารกิจแล้ว ✓'));
+    goalRef.update({name, target, components: components || []}).then(()=>toast('อัปเดตภารกิจแล้ว ✓'));
   } else {
     doSet(0);
   }
@@ -1084,6 +1155,11 @@ function openGoalSheet(isNewAfterAchieve, carryAmount){
   $('goalTarget').value = isNewAfterAchieve ? '' : (state.goal ? state.goal.target : '');
   $('goalSubmit').dataset.afterAchieve = isNewAfterAchieve ? '1' : '0';
   $('goalSubmit').dataset.carry = carryAmount || 0;
+  
+  // โหลดชิ้นส่วน Draft
+  draftComps = isNewAfterAchieve ? [] : (state.goal && state.goal.components ? JSON.parse(JSON.stringify(state.goal.components)) : []);
+  renderDraftComps();
+
   openSheet('overlayGoal','sheetGoal');
   setTimeout(()=> $('goalName').focus(), 350);
 }
@@ -1119,22 +1195,17 @@ $('btnResetAll').onclick = () => {
       const batch = db.batch();
       snap.forEach(doc => batch.delete(doc.ref));
       return batch.commit();
-    }).then(() => {
-      return archCol.get().then(snap => {
+    }).then(() => archCol.get().then(snap => {
         const batch = db.batch();
         snap.forEach(doc => batch.delete(doc.ref));
         return batch.commit();
-      });
-    }).then(() => {
-      return goalRef.delete();
-    }).then(() => {
+      })
+    ).then(() => goalRef.delete()
+    ).then(() => {
       toast('รีเซตข้อมูลสำเร็จ! ✨');
       closeSheet('overlayHist', 'sheetHist');
       setTimeout(() => location.reload(), 1500);
-    }).catch(err => {
-      console.error(err);
-      toast('เกิดข้อผิดพลาดในการรีเซต', true);
-    });
+    }).catch(err => toast('เกิดข้อผิดพลาดในการรีเซต', true));
   } else if (pin !== null) {
     toast('รหัสผ่านไม่ถูกต้อง ลบข้อมูลถูกยกเลิก!', true);
   }
@@ -1149,9 +1220,14 @@ $('txSubmit').onclick = () => {
 $('goalSubmit').onclick = () => {
   const name = $('goalName').value.trim();
   const target = parseFloat($('goalTarget').value);
+  
+  // กรองเอาเฉพาะ Component ที่ระบุข้อมูลครบ
+  const finalComps = draftComps.filter(c => c.name.trim() !== '' && c.price > 0);
+
   if(!name){ toast('กรุณาตั้งชื่อภารกิจฮีโร่ก่อน!', true); return; }
-  if(!target || target <= 0){ toast('กรุณาใส่จำนวนเงินที่ต้องการ', true); return; }
-  saveGoal(name, target, pendingCarryChoice);
+  if(!target || target <= 0){ toast('กรุณาใส่จำนวนเงินเป้าหมายที่ต้องการ', true); return; }
+  
+  saveGoal(name, target, pendingCarryChoice, finalComps);
   closeSheet('overlayGoal','sheetGoal');
 };
 
@@ -1209,9 +1285,7 @@ archCol.onSnapshot(snap => {
   onDataChange();
 }, err => { console.error(err); loadFlags.arch = true; tryFinishLoad(); });
 
-function onDataChange(){
-  if(firstLoadDone) renderAll();
-}
+function onDataChange(){ if(firstLoadDone) renderAll(); }
 
 /* ============================= LOADING ORCHESTRATION ============================= */
 let splashMinTimeReached = false;
