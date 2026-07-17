@@ -503,6 +503,9 @@ input{font-family:inherit;color:inherit;}
 <div class="sheet" id="sheetHist">
   <div class="sheet-handle"></div>
   <div class="sheet-title">ภารกิจที่สำเร็จแล้ว ⭐</div>
+  <button class="btn-secondary" id="btnResetAll" style="color: #9F1239; border-color: var(--coral); background: #FFE4E6; margin-bottom: 16px;">
+    🗑️ รีเซตแอปและลบประวัติทั้งหมด (ต้องใส่รหัส)
+  </button>
   <div id="histList" style="max-height:50vh;overflow-y:auto;padding-bottom:10px;"></div>
 </div>
 
@@ -528,6 +531,7 @@ const txCol = db.collection('sg_transactions');
 const archCol = db.collection('sg_archived');
 
 /* ============================= STATE ============================= */
+const ADMIN_PIN = "1234"; // กำหนดรหัสผ่านสำหรับลบ/รีเซตข้อมูลที่นี่
 let state = { goal: null, transactions: {}, archivedGoals: {} };
 let firstLoadDone = false;
 let celebratedFor = null;
@@ -1012,7 +1016,12 @@ function addTransaction(type, amount, note){
 }
 
 function deleteTx(key){
-  txCol.doc(key).delete().then(()=> toast('ลบรายการแล้ว')).catch(err => toast('ลบไม่สำเร็จ', true));
+  const pin = prompt("กรุณาใส่รหัสผ่าน (PIN) เพื่อลบรายการนี้:");
+  if (pin === ADMIN_PIN) {
+    txCol.doc(key).delete().then(()=> toast('ลบรายการแล้ว')).catch(err => toast('ลบไม่สำเร็จ', true));
+  } else if (pin !== null) {
+    toast('รหัสผ่านไม่ถูกต้อง!', true);
+  }
 }
 
 function saveGoal(name, target, carryChoice){
@@ -1101,6 +1110,35 @@ $('overlayGoal').onclick = () => closeSheet('overlayGoal','sheetGoal');
 $('overlayHist').onclick = () => closeSheet('overlayHist','sheetHist');
 $('overlayBadges').onclick = () => closeSheet('overlayBadges','sheetBadges');
 $('closeBadgesBtn').onclick = () => closeSheet('overlayBadges','sheetBadges');
+
+$('btnResetAll').onclick = () => {
+  const pin = prompt("⚠️ อันตราย: คุณกำลังจะลบเป้าหมาย, เงินออม และประวัติ 'ทั้งหมด'!\n\nกรุณาใส่รหัสผ่าน (PIN) เพื่อยืนยันการรีเซต:");
+  if (pin === ADMIN_PIN) {
+    toast('กำลังล้างข้อมูล... ⏳');
+    txCol.get().then(snap => {
+      const batch = db.batch();
+      snap.forEach(doc => batch.delete(doc.ref));
+      return batch.commit();
+    }).then(() => {
+      return archCol.get().then(snap => {
+        const batch = db.batch();
+        snap.forEach(doc => batch.delete(doc.ref));
+        return batch.commit();
+      });
+    }).then(() => {
+      return goalRef.delete();
+    }).then(() => {
+      toast('รีเซตข้อมูลสำเร็จ! ✨');
+      closeSheet('overlayHist', 'sheetHist');
+      setTimeout(() => location.reload(), 1500);
+    }).catch(err => {
+      console.error(err);
+      toast('เกิดข้อผิดพลาดในการรีเซต', true);
+    });
+  } else if (pin !== null) {
+    toast('รหัสผ่านไม่ถูกต้อง ลบข้อมูลถูกยกเลิก!', true);
+  }
+};
 
 $('txSubmit').onclick = () => {
   const amt = parseFloat($('txAmount').value);
