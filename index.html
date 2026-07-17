@@ -6,27 +6,27 @@
 <title>SaveGoal · เป้าหมายเงินออม</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&family=Sarabun:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700;800&family=Sarabun:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
-/* ============================= DESIGN TOKENS ============================= */
+/* ============================= DESIGN TOKENS (LITTLE HERO THEME) ============================= */
 :root{
-  --bg-deep:#080B14;
-  --bg-deep-2:#0D1220;
-  --card:rgba(255,255,255,.055);
-  --card-strong:rgba(255,255,255,.09);
-  --card-solid:#121729;
-  --border-glass:rgba(255,255,255,.10);
-  --border-glass-strong:rgba(255,255,255,.18);
-  --mint:#34E8B0;
-  --mint-dim:#1E9E79;
-  --gold:#FFB648;
-  --coral:#FF6B7A;
-  --text-1:#F3F5FA;
-  --text-2:#8B93B0;
-  --text-3:#565E7C;
-  --shadow-glass:0 8px 32px rgba(0,0,0,.45);
-  --ease-spring:cubic-bezier(.34,1.56,.64,1);
-  --ease-out:cubic-bezier(.16,1,.3,1);
+  --bg-deep: #F0F9FF;
+  --bg-deep-2: #E0F2FE;
+  --card: #FFFFFF;
+  --border-glass: #CBD5E1;
+  --border-glass-strong: #94A3B8;
+  --mint: #38BDF8;
+  --mint-dim: #0284C7;
+  --gold: #FBBF24;
+  --coral: #FB7185;
+  --volt: #4ADE80;
+  --text-1: #1E293B;
+  --text-2: #64748B;
+  --text-3: #94A3B8;
+  --shadow-chunky: 0 4px 0 #CBD5E1;
+  --shadow-chunky-active: 0 0px 0 #CBD5E1;
+  --ease-spring: cubic-bezier(.34,1.56,.64,1);
+  --ease-out: cubic-bezier(.16,1,.3,1);
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 html,body{height:100%;}
@@ -37,291 +37,333 @@ body{
   overflow-x:hidden;
   min-height:100vh;
   position:relative;
+  background-image: radial-gradient(#CBD5E1 1px, transparent 1px);
+  background-size: 20px 20px;
 }
 h1,h2,h3,.display{font-family:'Prompt',sans-serif;}
 .num{font-family:'Space Grotesk','Prompt',sans-serif;font-variant-numeric:tabular-nums;}
-::selection{background:var(--mint);color:#08121000;}
+::selection{background:var(--mint);color:#fff;}
 button{font-family:inherit;border:none;background:none;color:inherit;cursor:pointer;}
 input{font-family:inherit;color:inherit;}
 @media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important;}}
 
-/* ambient background mesh */
+/* ambient background meshes */
 .mesh{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;}
-.blob{position:absolute;border-radius:50%;filter:blur(70px);opacity:.35;}
-.blob1{width:480px;height:480px;background:radial-gradient(circle,#1E9E79,transparent 70%);top:-160px;left:-120px;animation:drift1 22s ease-in-out infinite;}
-.blob2{width:420px;height:420px;background:radial-gradient(circle,#3A4FE0,transparent 70%);bottom:-140px;right:-100px;animation:drift2 26s ease-in-out infinite;}
-.blob3{width:320px;height:320px;background:radial-gradient(circle,#FFB648,transparent 70%);top:40%;left:60%;opacity:.18;animation:drift3 30s ease-in-out infinite;}
-@keyframes drift1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(60px,80px) scale(1.15)}}
-@keyframes drift2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-70px,-50px) scale(1.1)}}
-@keyframes drift3{0%,100%{transform:translate(0,0)}50%{transform:translate(-40px,60px)}}
+.blob{position:absolute;border-radius:50%;filter:blur(60px);opacity:.6;}
+.blob1{width:400px;height:400px;background:#BAE6FD;top:-100px;left:-100px;animation:drift1 20s ease-in-out infinite;}
+.blob2{width:400px;height:400px;background:#FEF08A;bottom:-100px;right:-100px;opacity:0.4;animation:drift2 24s ease-in-out infinite;}
+@keyframes drift1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(40px,50px) scale(1.1)}}
+@keyframes drift2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-50px,-40px) scale(1.15)}}
 
 /* ============================= SPLASH / OPENING LOADING ============================= */
 #splash{
   position:fixed;inset:0;z-index:9999;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;
-  background:radial-gradient(120% 120% at 50% 20%,#101632 0%,#080B14 65%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;
+  background:var(--bg-deep-2);
   transition:opacity .6s var(--ease-out),transform .6s var(--ease-out);
 }
 #splash.hide{opacity:0;transform:scale(1.04);pointer-events:none;}
 .splash-mark{
-  width:88px;height:88px;border-radius:26px;
-  background:linear-gradient(150deg,rgba(255,255,255,.14),rgba(255,255,255,.02));
-  border:1px solid var(--border-glass-strong);
+  width:96px;height:96px;border-radius:30px;
+  background:white;
+  border:3px solid var(--mint);
   display:flex;align-items:center;justify-content:center;
-  box-shadow:0 20px 60px rgba(52,232,176,.18),inset 0 1px 0 rgba(255,255,255,.15);
+  box-shadow:0 8px 0 var(--mint);
   animation:markPop 1s var(--ease-spring);
 }
 @keyframes markPop{0%{transform:scale(.4) rotate(-12deg);opacity:0}100%{transform:scale(1) rotate(0);opacity:1}}
-.splash-mark svg{width:44px;height:44px;}
-.splash-word{font-weight:700;font-size:22px;letter-spacing:.5px;opacity:0;animation:fadeUp .7s var(--ease-out) .25s forwards;}
-.splash-sub{font-size:13px;color:var(--text-2);opacity:0;animation:fadeUp .7s var(--ease-out) .4s forwards;}
-@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.splash-bar{width:160px;height:3px;border-radius:3px;background:rgba(255,255,255,.08);overflow:hidden;opacity:0;animation:fadeUp .6s var(--ease-out) .5s forwards;}
-.splash-bar-fill{height:100%;width:0%;border-radius:3px;background:linear-gradient(90deg,var(--mint),var(--gold));transition:width .25s var(--ease-out);}
+.splash-mark svg{width:50px;height:50px;}
+.splash-word{font-weight:800;font-size:26px;color:var(--mint-dim);letter-spacing:.5px;opacity:0;animation:fadeUp .7s var(--ease-out) .25s forwards;}
+.splash-sub{font-size:14px;color:var(--text-2);font-weight:600;opacity:0;animation:fadeUp .7s var(--ease-out) .4s forwards;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.splash-bar{width:180px;height:6px;border-radius:6px;background:white;border:1px solid #CBD5E1;overflow:hidden;opacity:0;animation:fadeUp .6s var(--ease-out) .5s forwards;}
+.splash-bar-fill{height:100%;width:0%;border-radius:6px;background:linear-gradient(90deg,var(--mint),var(--volt));transition:width .25s var(--ease-out);}
 
 /* ============================= SHELL ============================= */
 #app{position:relative;z-index:1;max-width:520px;margin:0 auto;min-height:100vh;padding:14px 16px 120px;opacity:0;}
 #app.show{opacity:1;animation:fadeUp .5s var(--ease-out);}
 
 /* island header */
-.topbar{display:flex;align-items:center;justify-content:space-between;padding:6px 4px 18px;}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:6px 4px 14px;}
 .island{
-  display:flex;align-items:center;gap:8px;
-  background:rgba(255,255,255,.06);border:1px solid var(--border-glass);
-  padding:8px 14px 8px 8px;border-radius:100px;backdrop-filter:blur(20px);
+  display:flex;align-items:center;gap:10px;
+  background:white;border:2px solid var(--border-glass);
+  padding:6px 16px 6px 6px;border-radius:100px;
+  box-shadow:var(--shadow-chunky);
 }
-.island .dot{width:8px;height:8px;border-radius:50%;background:var(--mint);box-shadow:0 0 8px var(--mint);}
-.island .dot.off{background:var(--coral);box-shadow:0 0 8px var(--coral);}
-.island-logo{width:26px;height:26px;border-radius:8px;background:linear-gradient(150deg,var(--mint),var(--mint-dim));display:flex;align-items:center;justify-content:center;}
-.island-logo svg{width:15px;height:15px;}
-.island-text{font-size:13px;font-weight:600;font-family:'Prompt',sans-serif;}
+.island .dot{width:10px;height:10px;border-radius:50%;background:var(--volt);box-shadow:0 0 0 2px rgba(74,222,128,0.3);}
+.island .dot.off{background:var(--coral);box-shadow:0 0 0 2px rgba(251,113,133,0.3);}
+.island-logo{width:32px;height:32px;border-radius:50%;background:var(--mint);display:flex;align-items:center;justify-content:center;border:2px solid #0284C7;}
+.island-logo svg{width:16px;height:16px;stroke:white;}
+.island-text{font-size:14px;font-weight:700;font-family:'Prompt',sans-serif;color:var(--text-1);}
 .icon-btn{
-  width:38px;height:38px;border-radius:50%;
-  background:rgba(255,255,255,.06);border:1px solid var(--border-glass);
+  width:42px;height:42px;border-radius:14px;
+  background:white;border:2px solid var(--border-glass);
   display:flex;align-items:center;justify-content:center;
-  transition:transform .2s var(--ease-spring),background .2s;
+  box-shadow:var(--shadow-chunky);
+  transition:all .15s var(--ease-spring);
 }
-.icon-btn:active{transform:scale(.88);background:rgba(255,255,255,.12);}
-.icon-btn svg{width:17px;height:17px;stroke:var(--text-1);}
+.icon-btn:active{transform:translateY(4px);box-shadow:var(--shadow-chunky-active);background:#F8FAFC;}
+.icon-btn svg{width:20px;height:20px;stroke:var(--text-1);}
 
-/* ============================= SKELETON ============================= */
-.skeleton-wrap{display:none;}
-.skeleton-wrap.show{display:block;}
-.sk{background:linear-gradient(100deg,rgba(255,255,255,.04) 30%,rgba(255,255,255,.10) 50%,rgba(255,255,255,.04) 70%);background-size:200% 100%;animation:shimmer 1.4s ease-in-out infinite;border-radius:20px;}
-@keyframes shimmer{0%{background-position:150% 0}100%{background-position:-50% 0}}
-.sk-ring{width:220px;height:220px;border-radius:50%;margin:20px auto 28px;}
-.sk-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;}
-.sk-stat{height:86px;border-radius:20px;}
-.sk-row{height:64px;border-radius:16px;margin-bottom:10px;}
+/* ============================= HERO PROFILE & BADGES BAR (NEW) ============================= */
+.hero-bar{
+  background:white;border:2px solid var(--border-glass);border-radius:24px;
+  padding:14px 16px;margin-bottom:16px;
+  box-shadow:var(--shadow-chunky);
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  cursor:pointer;transition:all .15s var(--ease-spring);
+}
+.hero-bar:active{transform:translateY(3px);box-shadow:var(--shadow-chunky-active);background:#F8FAFC;}
+.hero-level-info{display:flex;align-items:center;gap:12px;flex:1;min-width:0;}
+.hero-rank-ic{font-size:28px;width:48px;height:48px;border-radius:16px;background:#FEF9C3;border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.hero-rank-text{flex:1;min-width:0;}
+.hero-title{font-size:15px;font-weight:800;font-family:'Prompt',sans-serif;color:var(--text-1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.hero-xp-wrap{display:flex;align-items:center;gap:8px;margin-top:4px;}
+.xp-bar{flex:1;height:8px;background:#F1F5F9;border-radius:10px;border:1px solid #E2E8F0;overflow:hidden;}
+.xp-fill{height:100%;background:linear-gradient(90deg,var(--gold),#F59E0B);width:0%;border-radius:10px;transition:width .5s var(--ease-out);}
+.xp-txt{font-size:11px;font-weight:700;color:var(--text-3);}
+.badge-pill{
+  background:#F0F9FF;border:2px solid var(--mint);border-radius:100px;
+  padding:6px 12px;display:flex;align-items:center;gap:6px;flex-shrink:0;
+  font-size:13px;font-weight:700;color:var(--mint-dim);
+}
 
-/* ============================= CONTENT ============================= */
-.content-wrap{display:none;}
-.content-wrap.show{display:block;animation:fadeUp .5s var(--ease-out);}
-
-/* liquid goal ring - signature element */
-.goal-hero{position:relative;display:flex;flex-direction:column;align-items:center;padding:8px 0 22px;}
-.goal-name{font-size:14px;color:var(--text-2);font-weight:500;margin-bottom:2px;}
-.ring-box{position:relative;width:226px;height:226px;margin:8px 0 14px;}
+/* ============================= GOAL HERO ============================= */
+.goal-hero{position:relative;display:flex;flex-direction:column;align-items:center;padding:8px 0 16px;}
+.goal-name{font-size:16px;color:var(--text-1);font-weight:700;margin-bottom:4px;background:white;padding:6px 16px;border-radius:100px;border:2px solid var(--border-glass);box-shadow:var(--shadow-chunky);}
+.ring-box{position:relative;width:230px;height:230px;margin:12px 0 16px;background:white;border-radius:50%;box-shadow:0 12px 30px rgba(56,189,248,0.2), inset 0 4px 12px rgba(0,0,0,0.05);border:4px solid white;}
 .ring-box svg{width:100%;height:100%;transform:rotate(0deg);}
-.ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;}
-.ring-pct{font-size:38px;font-weight:700;letter-spacing:-1px;}
-.ring-pct span{font-size:18px;color:var(--text-2);font-weight:500;}
-.ring-label{font-size:12px;color:var(--text-2);}
+.ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;z-index:10;}
+.ring-pct{font-size:44px;font-weight:800;color:var(--text-1);letter-spacing:-1px;text-shadow:0 2px 4px rgba(255,255,255,0.8);}
+.ring-pct span{font-size:20px;color:var(--text-2);font-weight:600;}
+.ring-label{font-size:13px;color:var(--text-2);font-weight:600;background:rgba(255,255,255,0.8);padding:2px 8px;border-radius:100px;backdrop-filter:blur(4px);}
 .ring-target-empty{width:100%;height:100%;display:flex;align-items:center;justify-content:center;}
 .ring-cta-empty{
   display:flex;flex-direction:column;align-items:center;gap:8px;
-  background:rgba(255,255,255,.05);border:1.5px dashed var(--border-glass-strong);
-  width:186px;height:186px;border-radius:50%;transition:transform .2s var(--ease-spring);
+  background:white;border:2px dashed var(--mint);
+  width:190px;height:190px;border-radius:50%;transition:all .2s var(--ease-spring);
 }
-.ring-cta-empty:active{transform:scale(.94);}
-.ring-cta-empty svg{width:30px;height:30px;stroke:var(--mint);}
-.ring-cta-empty span{font-size:13px;color:var(--text-2);font-weight:500;max-width:120px;text-align:center;line-height:1.4;}
-.goal-remain{font-size:13.5px;color:var(--text-2);text-align:center;}
-.goal-remain b{color:var(--text-1);font-weight:600;}
+.ring-cta-empty:active{transform:scale(.94);background:#F0F9FF;}
+.ring-cta-empty svg{width:36px;height:36px;stroke:var(--mint);}
+.ring-cta-empty span{font-size:14px;color:var(--mint-dim);font-weight:700;max-width:120px;text-align:center;line-height:1.4;}
+.goal-remain{font-size:14.5px;color:var(--text-2);text-align:center;font-weight:600;background:white;padding:8px 16px;border-radius:14px;border:2px solid var(--border-glass);}
+.goal-remain b{color:var(--mint-dim);font-weight:800;font-size:16px;}
+
+/* ============================= MILESTONES BREAKDOWN (NEW) ============================= */
+.ms-wrap{
+  width:100%;background:white;border:2px solid var(--border-glass);border-radius:22px;
+  padding:16px;margin:12px 0 20px;box-shadow:var(--shadow-chunky);
+}
+.ms-title{font-size:14px;font-weight:700;color:var(--text-1);margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;}
+.ms-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;position:relative;}
+.ms-step{display:flex;flex-direction:column;align-items:center;text-align:center;position:relative;z-index:2;}
+.ms-icon{
+  width:36px;height:36px;border-radius:50%;background:#F1F5F9;border:2px solid #CBD5E1;
+  display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:6px;
+  transition:all .3s var(--ease-spring);
+}
+.ms-step.passed .ms-icon{background:#DCFCE7;border-color:var(--volt);box-shadow:0 0 0 3px rgba(74,222,128,0.2);transform:scale(1.08);}
+.ms-step.current .ms-icon{background:#FEF9C3;border-color:var(--gold);animation:pulse 1.5s infinite;}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+.ms-lbl{font-size:11px;font-weight:700;color:var(--text-2);}
+.ms-val{font-size:10px;color:var(--text-3);font-weight:600;margin-top:2px;}
+.ms-step.passed .ms-lbl{color:#166534;}
+.ms-step.current .ms-lbl{color:#854D0E;}
 
 /* stats */
-.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px;}
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;}
 .stat-card{
-  background:var(--card);border:1px solid var(--border-glass);border-radius:20px;
-  padding:14px 12px;backdrop-filter:blur(18px);
-  display:flex;flex-direction:column;gap:8px;
-  transition:transform .25s var(--ease-spring),background .2s;
+  background:var(--card);border:2px solid var(--border-glass);border-radius:24px;
+  padding:16px 12px;display:flex;flex-direction:column;gap:8px;
+  box-shadow:var(--shadow-chunky);transition:all .15s var(--ease-spring);
 }
-.stat-card:active{transform:scale(.96);background:var(--card-strong);}
-.stat-icon{width:30px;height:30px;border-radius:10px;display:flex;align-items:center;justify-content:center;}
-.stat-icon svg{width:16px;height:16px;}
-.stat-icon.mint{background:rgba(52,232,176,.14);}
-.stat-icon.mint svg{stroke:var(--mint);}
-.stat-icon.gold{background:rgba(255,182,72,.14);}
-.stat-icon.gold svg{stroke:var(--gold);}
-.stat-icon.blue{background:rgba(90,140,255,.14);}
-.stat-icon.blue svg{stroke:#7EA6FF;}
-.stat-val{font-size:16.5px;font-weight:700;line-height:1.15;}
+.stat-card:active{transform:translateY(4px);box-shadow:var(--shadow-chunky-active);background:#F8FAFC;}
+.stat-icon{width:34px;height:34px;border-radius:12px;display:flex;align-items:center;justify-content:center;border:2px solid;}
+.stat-icon svg{width:18px;height:18px;stroke-width:2.5;}
+.stat-icon.mint{background:#DCFCE7;border-color:var(--volt);}
+.stat-icon.mint svg{stroke:#166534;}
+.stat-icon.gold{background:#FEF9C3;border-color:var(--gold);}
+.stat-icon.gold svg{stroke:#854D0E;}
+.stat-icon.blue{background:#E0F2FE;border-color:var(--mint);}
+.stat-icon.blue svg{stroke:#0369A1;}
+.stat-val{font-size:18px;font-weight:800;line-height:1.15;color:var(--text-1);}
 .stat-val.neg{color:var(--coral);}
-.stat-lbl{font-size:11.5px;color:var(--text-2);}
+.stat-lbl{font-size:12px;color:var(--text-2);font-weight:600;}
 
 /* quick actions */
-.qa-row{display:flex;gap:10px;margin-bottom:22px;}
+.qa-row{display:flex;gap:12px;margin-bottom:26px;}
 .qa-btn{
-  flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;
-  padding:14px 8px;border-radius:18px;
-  background:var(--card);border:1px solid var(--border-glass);backdrop-filter:blur(18px);
-  transition:transform .2s var(--ease-spring);
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;
+  padding:16px 8px;border-radius:22px;background:white;border:2px solid var(--border-glass);
+  box-shadow:var(--shadow-chunky);transition:all .15s var(--ease-spring);
 }
-.qa-btn:active{transform:scale(.93);}
-.qa-btn .qa-ic{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
-.qa-btn .qa-ic svg{width:18px;height:18px;}
-.qa-save .qa-ic{background:linear-gradient(150deg,var(--mint),var(--mint-dim));}
-.qa-save .qa-ic svg{stroke:#06231A;}
-.qa-spend .qa-ic{background:rgba(255,107,122,.16);border:1px solid rgba(255,107,122,.35);}
-.qa-spend .qa-ic svg{stroke:var(--coral);}
-.qa-goal .qa-ic{background:rgba(255,182,72,.16);border:1px solid rgba(255,182,72,.35);}
-.qa-goal .qa-ic svg{stroke:var(--gold);}
-.qa-btn span{font-size:12px;font-weight:600;color:var(--text-1);}
+.qa-btn:active{transform:translateY(4px);box-shadow:var(--shadow-chunky-active);background:#F8FAFC;}
+.qa-btn .qa-ic{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid;}
+.qa-btn .qa-ic svg{width:20px;height:20px;stroke-width:2.5;}
+.qa-save .qa-ic{background:#DCFCE7;border-color:var(--volt);}
+.qa-save .qa-ic svg{stroke:#166534;}
+.qa-spend .qa-ic{background:#FFE4E6;border-color:var(--coral);}
+.qa-spend .qa-ic svg{stroke:#9F1239;}
+.qa-goal .qa-ic{background:#FEF9C3;border-color:var(--gold);}
+.qa-goal .qa-ic svg{stroke:#854D0E;}
+.qa-btn span{font-size:13.5px;font-weight:700;color:var(--text-1);}
 
 /* section header */
-.sec-head{display:flex;align-items:center;justify-content:space-between;margin:4px 0 10px;padding:0 2px;}
-.sec-title{font-size:15px;font-weight:600;font-family:'Prompt',sans-serif;}
-.sec-link{font-size:12.5px;color:var(--mint);font-weight:600;}
+.sec-head{display:flex;align-items:center;justify-content:space-between;margin:8px 0 12px;padding:0 4px;}
+.sec-title{font-size:17px;font-weight:700;font-family:'Prompt',sans-serif;color:var(--text-1);}
+.sec-link{font-size:13px;color:var(--mint-dim);font-weight:700;background:white;padding:4px 10px;border-radius:100px;border:2px solid var(--border-glass);}
 
 /* transaction list */
-.tx-list{display:flex;flex-direction:column;gap:9px;}
+.tx-list{display:flex;flex-direction:column;gap:12px;}
 .tx-row{
-  display:flex;align-items:center;gap:12px;
-  background:var(--card);border:1px solid var(--border-glass);border-radius:16px;
-  padding:12px 13px;backdrop-filter:blur(18px);
-  animation:txIn .45s var(--ease-out) both;
-  transition:transform .2s var(--ease-spring),background .2s;
+  display:flex;align-items:center;gap:14px;background:white;border:2px solid var(--border-glass);border-radius:20px;
+  padding:14px 16px;box-shadow:var(--shadow-chunky);animation:txIn .45s var(--ease-out) both;
+  transition:all .15s var(--ease-spring);
 }
-.tx-row:active{transform:scale(.98);background:var(--card-strong);}
-@keyframes txIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-.tx-ic{width:36px;height:36px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.tx-ic.save{background:rgba(52,232,176,.14);}
-.tx-ic.save svg{stroke:var(--mint);}
-.tx-ic.spend{background:rgba(255,107,122,.14);}
-.tx-ic.spend svg{stroke:var(--coral);}
-.tx-ic svg{width:16px;height:16px;}
+.tx-row:active{transform:translateY(3px);box-shadow:var(--shadow-chunky-active);background:#F8FAFC;}
+@keyframes txIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.tx-ic{width:42px;height:42px;border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px;background:#F1F5F9;}
 .tx-mid{flex:1;min-width:0;}
-.tx-note{font-size:13.5px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.tx-date{font-size:11px;color:var(--text-3);margin-top:1px;}
-.tx-amt{font-size:14.5px;font-weight:700;flex-shrink:0;}
-.tx-amt.save{color:var(--mint);}
+.tx-note{font-size:15px;font-weight:700;color:var(--text-1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.tx-date{font-size:12px;color:var(--text-3);font-weight:600;margin-top:2px;}
+.tx-amt{font-size:16px;font-weight:800;flex-shrink:0;}
+.tx-amt.save{color:var(--volt);}
 .tx-amt.spend{color:var(--coral);}
-.tx-del{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--text-3);flex-shrink:0;}
-.tx-del svg{width:13px;height:13px;}
+.tx-del{width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--text-3);flex-shrink:0;background:#F1F5F9;border:2px solid transparent;}
+.tx-del:active{background:#E2E8F0;border-color:#CBD5E1;}
+.tx-del svg{width:16px;height:16px;stroke-width:2.5;}
 
-.empty-state{display:flex;flex-direction:column;align-items:center;gap:10px;padding:36px 20px;color:var(--text-2);text-align:center;}
-.empty-state svg{width:40px;height:40px;stroke:var(--text-3);}
-.empty-state b{color:var(--text-1);font-size:14px;}
-.empty-state span{font-size:12.5px;line-height:1.5;}
+.empty-state{display:flex;flex-direction:column;align-items:center;gap:12px;padding:40px 20px;color:var(--text-2);text-align:center;background:white;border-radius:24px;border:2px dashed var(--border-glass-strong);}
+.empty-state svg{width:48px;height:48px;stroke:var(--mint);opacity:0.8;}
+.empty-state b{color:var(--text-1);font-size:16px;font-weight:700;}
+.empty-state span{font-size:13.5px;line-height:1.5;font-weight:500;}
 
 /* FAB */
 .fab{
   position:fixed;bottom:26px;left:50%;transform:translateX(-50%);
-  display:flex;align-items:center;gap:8px;
-  background:linear-gradient(150deg,var(--mint),var(--mint-dim));
-  color:#06231A;padding:14px 24px;border-radius:100px;
-  font-weight:700;font-size:14px;
-  box-shadow:0 12px 32px rgba(52,232,176,.35),0 2px 8px rgba(0,0,0,.3);
-  transition:transform .2s var(--ease-spring);
-  z-index:40;max-width:480px;width:calc(100% - 40px);justify-content:center;
+  display:flex;align-items:center;gap:10px;background:var(--mint);
+  color:white;padding:16px 28px;border-radius:100px;font-weight:800;font-size:16px;
+  border:3px solid #0284C7;box-shadow:0 8px 0 #0284C7, 0 12px 24px rgba(2,132,199,0.3);
+  transition:all .15s var(--ease-spring);z-index:40;max-width:480px;width:calc(100% - 40px);justify-content:center;
 }
-.fab:active{transform:translateX(-50%) scale(.95);}
-.fab svg{width:18px;height:18px;}
+.fab:active{transform:translateX(-50%) translateY(6px);box-shadow:0 2px 0 #0284C7;}
+.fab svg{width:22px;height:22px;stroke-width:2.5;}
 
 /* ============================= SHEETS / MODALS ============================= */
-.overlay{position:fixed;inset:0;background:rgba(4,6,12,.6);backdrop-filter:blur(6px);z-index:200;opacity:0;pointer-events:none;transition:opacity .3s var(--ease-out);}
+.overlay{position:fixed;inset:0;background:rgba(15,23,42,.4);backdrop-filter:blur(4px);z-index:200;opacity:0;pointer-events:none;transition:opacity .3s var(--ease-out);}
 .overlay.show{opacity:1;pointer-events:auto;}
 .sheet{
-  position:fixed;left:0;right:0;bottom:0;z-index:201;
-  max-width:520px;margin:0 auto;
-  background:linear-gradient(180deg,#161C30,#0F1424);
-  border:1px solid var(--border-glass-strong);border-bottom:none;
-  border-radius:28px 28px 0 0;
-  padding:10px 20px calc(24px + env(safe-area-inset-bottom));
+  position:fixed;left:0;right:0;bottom:0;z-index:201;max-width:520px;margin:0 auto;
+  background:white;border:2px solid var(--border-glass-strong);border-bottom:none;
+  border-radius:32px 32px 0 0;padding:12px 24px calc(24px + env(safe-area-inset-bottom));
   transform:translateY(105%);transition:transform .42s var(--ease-spring);
-  box-shadow:0 -20px 60px rgba(0,0,0,.5);
+  box-shadow:0 -10px 40px rgba(0,0,0,.1);max-height:85vh;overflow-y:auto;
 }
 .sheet.show{transform:translateY(0);}
-.sheet-handle{width:38px;height:4px;border-radius:3px;background:rgba(255,255,255,.18);margin:6px auto 16px;}
-.sheet-title{font-size:18px;font-weight:700;font-family:'Prompt',sans-serif;margin-bottom:18px;}
-.field-lbl{font-size:12.5px;color:var(--text-2);margin-bottom:8px;font-weight:500;}
-.type-toggle{display:flex;gap:8px;margin-bottom:18px;}
-.type-opt{flex:1;text-align:center;padding:11px;border-radius:14px;background:rgba(255,255,255,.05);border:1.5px solid var(--border-glass);font-size:13.5px;font-weight:600;color:var(--text-2);transition:all .2s;}
-.type-opt.active-save{background:rgba(52,232,176,.14);border-color:var(--mint);color:var(--mint);}
-.type-opt.active-spend{background:rgba(255,107,122,.14);border-color:var(--coral);color:var(--coral);}
-.amt-input-wrap{display:flex;align-items:baseline;gap:6px;background:rgba(255,255,255,.05);border:1.5px solid var(--border-glass);border-radius:16px;padding:14px 16px;margin-bottom:14px;}
-.amt-input-wrap span{font-size:16px;color:var(--text-2);font-weight:600;}
-.amt-input{flex:1;background:none;border:none;outline:none;font-size:24px;font-weight:700;color:var(--text-1);font-family:'Space Grotesk',sans-serif;min-width:0;}
-.text-input{width:100%;background:rgba(255,255,255,.05);border:1.5px solid var(--border-glass);border-radius:14px;padding:13px 15px;font-size:14.5px;outline:none;margin-bottom:14px;transition:border-color .2s;}
-.text-input:focus{border-color:var(--mint);}
-.quick-chips{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;}
-.chip{padding:8px 14px;border-radius:100px;background:rgba(255,255,255,.05);border:1px solid var(--border-glass);font-size:12.5px;color:var(--text-2);font-weight:500;transition:all .15s var(--ease-spring);}
-.chip:active{transform:scale(.92);}
+.sheet-handle{width:48px;height:6px;border-radius:6px;background:#E2E8F0;margin:8px auto 20px;}
+.sheet-title{font-size:20px;font-weight:800;font-family:'Prompt',sans-serif;margin-bottom:20px;color:var(--text-1);text-align:center;}
+.field-lbl{font-size:14px;color:var(--text-1);margin-bottom:10px;font-weight:700;}
+.type-toggle{display:flex;gap:12px;margin-bottom:20px;}
+.type-opt{flex:1;text-align:center;padding:14px;border-radius:18px;background:#F1F5F9;border:2px solid #E2E8F0;font-size:15px;font-weight:700;color:var(--text-2);transition:all .2s;box-shadow:0 4px 0 #E2E8F0;}
+.type-opt:active{transform:translateY(4px);box-shadow:0 0 0 transparent;}
+.type-opt.active-save{background:#DCFCE7;border-color:var(--volt);color:#166534;box-shadow:0 4px 0 var(--volt);}
+.type-opt.active-spend{background:#FFE4E6;border-color:var(--coral);color:#9F1239;box-shadow:0 4px 0 var(--coral);}
+.amt-input-wrap{display:flex;align-items:baseline;gap:8px;background:#F8FAFC;border:2px solid var(--border-glass);border-radius:20px;padding:16px 20px;margin-bottom:16px;}
+.amt-input-wrap span{font-size:18px;color:var(--text-2);font-weight:700;}
+.amt-input{flex:1;background:none;border:none;outline:none;font-size:28px;font-weight:800;color:var(--text-1);font-family:'Space Grotesk',sans-serif;min-width:0;}
+.text-input{width:100%;background:#F8FAFC;border:2px solid var(--border-glass);border-radius:18px;padding:16px 20px;font-size:15px;font-weight:600;outline:none;margin-bottom:18px;transition:border-color .2s;color:var(--text-1);}
+.text-input::placeholder{color:#94A3B8;}
+.text-input:focus{border-color:var(--mint);background:white;}
+.quick-chips{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;}
+.chip{padding:10px 16px;border-radius:100px;background:white;border:2px solid #E2E8F0;font-size:14px;color:var(--text-1);font-weight:700;box-shadow:0 3px 0 #E2E8F0;transition:all .15s var(--ease-spring);}
+.chip:active{transform:translateY(3px);box-shadow:0 0 0 transparent;}
 .btn-primary{
-  width:100%;padding:15px;border-radius:16px;font-weight:700;font-size:15px;
-  background:linear-gradient(150deg,var(--mint),var(--mint-dim));color:#06231A;
-  transition:transform .2s var(--ease-spring);
+  width:100%;padding:18px;border-radius:20px;font-weight:800;font-size:16px;
+  background:var(--volt);color:#064E3B;border:3px solid #16A34A;box-shadow:0 6px 0 #16A34A;
+  transition:all .15s var(--ease-spring);
 }
-.btn-primary:active{transform:scale(.97);}
-.btn-primary.spend-mode{background:linear-gradient(150deg,var(--coral),#C24756);color:#2A0509;}
-.btn-secondary{width:100%;padding:14px;border-radius:16px;font-weight:600;font-size:14px;background:rgba(255,255,255,.06);border:1px solid var(--border-glass);margin-top:10px;color:var(--text-1);transition:transform .2s var(--ease-spring);}
-.btn-secondary:active{transform:scale(.97);}
+.btn-primary:active{transform:translateY(6px);box-shadow:0 0 0 transparent;}
+.btn-primary.spend-mode{background:var(--coral);color:#4C0519;border-color:#E11D48;box-shadow:0 6px 0 #E11D48;}
+.btn-secondary{width:100%;padding:16px;border-radius:20px;font-weight:700;font-size:15px;background:#F1F5F9;border:2px solid #CBD5E1;margin-top:12px;color:var(--text-1);transition:all .15s var(--ease-spring);}
+.btn-secondary:active{transform:translateY(3px);box-shadow:0 0 0 transparent;}
+
+/* ============================= BADGES SHEET STYLES (NEW) ============================= */
+.badge-grid{display:grid;grid-template-columns:repeat(1,1fr);gap:12px;margin-bottom:20px;}
+.badge-card{
+  display:flex;align-items:center;gap:16px;background:#F8FAFC;border:2px solid var(--border-glass);
+  border-radius:20px;padding:14px;transition:all .2s;
+}
+.badge-card.unlocked{background:white;border-color:var(--gold);box-shadow:0 4px 0 var(--gold);}
+.badge-ic{
+  width:52px;height:52px;border-radius:16px;background:#E2E8F0;display:flex;align-items:center;
+  justify-content:center;font-size:26px;flex-shrink:0;filter:grayscale(1);opacity:0.6;
+}
+.badge-card.unlocked .badge-ic{background:#FEF9C3;border:2px solid var(--gold);filter:grayscale(0);opacity:1;}
+.badge-info{flex:1;min-width:0;}
+.badge-name{font-size:16px;font-weight:800;color:var(--text-2);margin-bottom:2px;}
+.badge-card.unlocked .badge-name{color:var(--text-1);}
+.badge-desc{font-size:13px;color:var(--text-3);font-weight:600;line-height:1.4;}
+.badge-card.unlocked .badge-desc{color:var(--text-2);}
+.badge-status{font-size:12px;font-weight:800;padding:4px 10px;border-radius:100px;background:#E2E8F0;color:var(--text-3);}
+.badge-card.unlocked .badge-status{background:#DCFCE7;color:#166534;}
 
 /* celebration */
 .confetti-wrap{position:fixed;inset:0;z-index:300;pointer-events:none;overflow:hidden;}
-.confetti{position:absolute;top:-20px;border-radius:2px;animation:confettiFall linear forwards;}
-@keyframes confettiFall{to{transform:translateY(110vh) rotate(540deg);opacity:.3;}}
+.confetti{position:absolute;top:-50px;animation:confettiFall linear forwards;display:flex;align-items:center;justify-content:center;}
+@keyframes confettiFall{
+  0%{transform:translateY(0) rotate(0deg) scale(0.5);opacity:1;}
+  50%{transform:translateY(50vh) rotate(180deg) scale(1.2);}
+  100%{transform:translateY(110vh) rotate(360deg) scale(1);opacity:0;}
+}
 .celeb-card{
   position:fixed;left:50%;top:50%;transform:translate(-50%,-50%) scale(.7);z-index:301;
-  width:calc(100% - 56px);max-width:360px;
-  background:linear-gradient(160deg,#1A2138,#0F1424);
-  border:1px solid var(--border-glass-strong);border-radius:28px;
-  padding:32px 26px 26px;text-align:center;opacity:0;
-  box-shadow:0 30px 80px rgba(0,0,0,.5);
+  width:calc(100% - 48px);max-width:360px;background:white;
+  border:4px solid var(--mint);border-radius:36px;padding:36px 28px 28px;text-align:center;opacity:0;
+  box-shadow:0 20px 0 var(--mint-dim), 0 30px 60px rgba(0,0,0,.2);
   transition:opacity .4s var(--ease-out),transform .4s var(--ease-spring);
 }
 .celeb-card.show{opacity:1;transform:translate(-50%,-50%) scale(1);}
-.celeb-trophy{width:76px;height:76px;margin:0 auto 16px;border-radius:50%;background:linear-gradient(150deg,var(--gold),#C6821F);display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(255,182,72,.4);animation:trophyPop .7s var(--ease-spring) .1s both;}
+.celeb-trophy{width:90px;height:90px;margin:0 auto 20px;border-radius:50%;background:#FEF9C3;border:4px solid var(--gold);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 0 var(--gold);animation:trophyPop .7s var(--ease-spring) .1s both;font-size:44px;}
 @keyframes trophyPop{0%{transform:scale(0) rotate(-30deg)}100%{transform:scale(1) rotate(0)}}
-.celeb-trophy svg{width:36px;height:36px;stroke:#2A1B02;}
-.celeb-title{font-size:20px;font-weight:700;font-family:'Prompt',sans-serif;margin-bottom:6px;}
-.celeb-sub{font-size:13.5px;color:var(--text-2);line-height:1.5;margin-bottom:22px;}
-.celeb-sub b{color:var(--gold);}
+.celeb-title{font-size:22px;font-weight:800;font-family:'Prompt',sans-serif;margin-bottom:8px;color:var(--text-1);}
+.celeb-sub{font-size:15px;color:var(--text-2);line-height:1.5;margin-bottom:26px;font-weight:600;}
+.celeb-sub b{color:var(--mint-dim);font-weight:800;font-size:18px;}
 
 /* toast */
-.toast{position:fixed;top:16px;left:50%;transform:translateX(-50%) translateY(-120%);z-index:400;background:rgba(20,24,40,.92);border:1px solid var(--border-glass-strong);backdrop-filter:blur(20px);padding:12px 18px;border-radius:14px;font-size:13px;font-weight:500;display:flex;align-items:center;gap:8px;transition:transform .4s var(--ease-spring);box-shadow:0 10px 30px rgba(0,0,0,.4);max-width:90%;}
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-150%);z-index:400;background:white;border:3px solid var(--text-1);padding:14px 20px;border-radius:100px;font-size:14.5px;font-weight:700;color:var(--text-1);display:flex;align-items:center;gap:10px;transition:transform .4s var(--ease-spring);box-shadow:0 6px 0 var(--text-1);max-width:90%;}
 .toast.show{transform:translateX(-50%) translateY(0);}
-.toast .dot2{width:7px;height:7px;border-radius:50%;background:var(--mint);flex-shrink:0;}
-.toast.err .dot2{background:var(--coral);}
+.toast .dot2{width:10px;height:10px;border-radius:50%;background:var(--volt);flex-shrink:0;border:2px solid #064E3B;}
+.toast.err .dot2{background:var(--coral);border-color:#4C0519;}
 
 /* history modal */
-.hist-item{display:flex;align-items:center;justify-content:space-between;padding:13px 4px;border-bottom:1px solid var(--border-glass);}
-.hist-item:last-child{border-bottom:none;}
-.hist-name{font-size:13.5px;font-weight:600;}
-.hist-date{font-size:11px;color:var(--text-3);margin-top:2px;}
-.hist-amt{font-size:14px;font-weight:700;color:var(--gold);}
+.hist-item{display:flex;align-items:center;justify-content:space-between;padding:16px 12px;border:2px solid #E2E8F0;border-radius:20px;margin-bottom:10px;box-shadow:0 4px 0 #E2E8F0;}
+.hist-item:last-child{margin-bottom:0;}
+.hist-name{font-size:15px;font-weight:700;color:var(--text-1);}
+.hist-date{font-size:12.5px;color:var(--text-3);margin-top:4px;font-weight:600;}
+.hist-amt{font-size:16px;font-weight:800;color:var(--gold);background:#FEF9C3;padding:6px 12px;border-radius:12px;border:2px solid var(--gold);}
 
-.offline-banner{display:none;align-items:center;gap:8px;background:rgba(255,107,122,.12);border:1px solid rgba(255,107,122,.3);color:var(--coral);font-size:12.5px;font-weight:500;padding:9px 14px;border-radius:12px;margin-bottom:14px;}
+.offline-banner{display:none;align-items:center;gap:10px;background:#FFE4E6;border:2px solid var(--coral);color:#9F1239;font-size:14px;font-weight:700;padding:12px 16px;border-radius:16px;margin-bottom:16px;box-shadow:0 4px 0 var(--coral);}
 .offline-banner.show{display:flex;}
-.offline-banner svg{width:14px;height:14px;stroke:var(--coral);flex-shrink:0;}
+.offline-banner svg{width:18px;height:18px;stroke:#9F1239;flex-shrink:0;}
 
-@media(max-width:360px){.ring-box{width:196px;height:196px;}.ring-pct{font-size:32px;}}
+@media(max-width:360px){.ring-box{width:200px;height:200px;}.ring-pct{font-size:36px;}}
 </style>
 </head>
 <body>
 
-<div class="mesh"><div class="blob blob1"></div><div class="blob blob2"></div><div class="blob blob3"></div></div>
+<div class="mesh"><div class="blob blob1"></div><div class="blob blob2"></div></div>
 
 <!-- ============ OPENING LOADING ============ -->
 <div id="splash">
   <div class="splash-mark">
-    <svg viewBox="0 0 24 24" fill="none" stroke="#34E8B0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+    <svg viewBox="0 0 24 24" fill="none" stroke="#38BDF8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 2.5c2.8 1.6 5 5.4 5 9 0 2.3-.9 4.3-2 5.6l-.6 3.4-2.4-2-2.4 2-.6-3.4c-1.1-1.3-2-3.3-2-5.6 0-3.6 2.2-7.4 5-9z"/>
+      <circle cx="12" cy="10" r="2"/>
     </svg>
   </div>
   <div class="splash-word display">SaveGoal</div>
-  <div class="splash-sub">กำลังเตรียมข้อมูลของคุณ...</div>
+  <div class="splash-sub">🚀 กำลังเตรียมฐานทัพ...</div>
   <div class="splash-bar"><div class="splash-bar-fill" id="splashFill"></div></div>
 </div>
 
@@ -329,12 +371,12 @@ input{font-family:inherit;color:inherit;}
 <div id="app">
   <div class="topbar">
     <div class="island">
-      <div class="island-logo"><svg viewBox="0 0 24 24" fill="none" stroke="#06231A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+      <div class="island-logo"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5c2.8 1.6 5 5.4 5 9 0 2.3-.9 4.3-2 5.6l-.6 3.4-2.4-2-2.4 2-.6-3.4c-1.1-1.3-2-3.3-2-5.6 0-3.6 2.2-7.4 5-9z"/></svg></div>
       <span class="island-text">SaveGoal</span>
       <span class="dot" id="connDot"></span>
     </div>
     <button class="icon-btn" id="historyBtn" aria-label="ประวัติเป้าหมาย">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v5l4 2"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v5l4 2"/></svg>
     </button>
   </div>
 
@@ -344,35 +386,40 @@ input{font-family:inherit;color:inherit;}
     <div class="sk-stats">
       <div class="sk sk-stat"></div><div class="sk sk-stat"></div><div class="sk sk-stat"></div>
     </div>
-    <div class="sk sk-row"></div>
-    <div class="sk sk-row"></div>
-    <div class="sk sk-row"></div>
   </div>
 
   <!-- REAL CONTENT -->
   <div class="content-wrap" id="contentWrap">
     <div class="offline-banner" id="offlineBanner">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 1l22 22M16.72 11.06A10.94 10.94 0 0 1 19 12.55M5 12.55a10.94 10.94 0 0 1 5.17-2.39M10.71 5.05A16 16 0 0 1 22.58 9M1.42 9a15.91 15.91 0 0 1 4.7-2.88M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/></svg>
-      <span>ออฟไลน์ — ข้อมูลจะซิงค์เมื่อเชื่อมต่ออีกครั้ง</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 1l22 22M16.72 11.06A10.94 10.94 0 0 1 19 12.55M5 12.55a10.94 10.94 0 0 1 5.17-2.39M10.71 5.05A16 16 0 0 1 22.58 9M1.42 9a15.91 15.91 0 0 1 4.7-2.88M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/></svg>
+      <span>ออฟไลน์ — ข้อมูลจะซิงค์เมื่อต่อเน็ตนะ!</span>
+    </div>
+
+    <!-- HERO PROFILE & BADGES BAR (NEW) -->
+    <div class="hero-bar" id="heroProfileBar">
+      <!-- Generated via JS -->
     </div>
 
     <!-- GOAL HERO -->
     <div class="goal-hero" id="goalHero"></div>
 
+    <!-- MILESTONES ROADMAP (NEW) -->
+    <div id="milestonesContainer"></div>
+
     <!-- STATS -->
     <div class="stats-grid">
       <div class="stat-card" id="statToday">
-        <div class="stat-icon mint"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V10M18 20V4M6 20v-4"/></svg></div>
+        <div class="stat-icon mint"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V10M18 20V4M6 20v-4"/></svg></div>
         <div class="stat-val num" id="valToday">฿0</div>
         <div class="stat-lbl">วันนี้เก็บได้</div>
       </div>
       <div class="stat-card" id="statTotal">
-        <div class="stat-icon gold"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M8.5 9.5a2.5 2.5 0 0 1 2.5-1.5h1.5a2 2 0 0 1 0 4H11a2 2 0 0 0 0 4h1.5a2.5 2.5 0 0 0 2.5-1.5"/></svg></div>
+        <div class="stat-icon gold"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M8.5 9.5a2.5 2.5 0 0 1 2.5-1.5h1.5a2 2 0 0 1 0 4H11a2 2 0 0 0 0 4h1.5a2.5 2.5 0 0 0 2.5-1.5"/></svg></div>
         <div class="stat-val num" id="valTotal">฿0</div>
-        <div class="stat-lbl">สะสมทั้งหมด</div>
+        <div class="stat-lbl">ยอดรวมฮีโร่</div>
       </div>
       <div class="stat-card" id="statBalance">
-        <div class="stat-icon blue"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="13" rx="2.5"/><path d="M2 10h20M6 15h4"/></svg></div>
+        <div class="stat-icon blue"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="13" rx="2.5"/><path d="M2 10h20M6 15h4"/></svg></div>
         <div class="stat-val num" id="valBalance">฿0</div>
         <div class="stat-lbl">คงเหลือ</div>
       </div>
@@ -381,22 +428,22 @@ input{font-family:inherit;color:inherit;}
     <!-- QUICK ACTIONS -->
     <div class="qa-row">
       <button class="qa-btn qa-save" id="btnAddSave">
-        <div class="qa-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></div>
+        <div class="qa-ic"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></div>
         <span>เก็บเงิน</span>
       </button>
       <button class="qa-btn qa-spend" id="btnAddSpend">
-        <div class="qa-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></svg></div>
+        <div class="qa-ic"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></svg></div>
         <span>ใช้เงิน</span>
       </button>
       <button class="qa-btn qa-goal" id="btnEditGoal">
-        <div class="qa-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></div>
+        <div class="qa-ic"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></div>
         <span>เป้าหมาย</span>
       </button>
     </div>
 
     <!-- TRANSACTIONS -->
     <div class="sec-head">
-      <span class="sec-title">รายการล่าสุด</span>
+      <span class="sec-title">ภารกิจล่าสุด</span>
       <span class="sec-link" id="txCount"></span>
     </div>
     <div class="tx-list" id="txList"></div>
@@ -404,15 +451,15 @@ input{font-family:inherit;color:inherit;}
 </div>
 
 <button class="fab" id="fabAdd">
-  <svg viewBox="0 0 24 24" fill="none" stroke="#06231A" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
-  บันทึกรายการ
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+  บันทึกภารกิจ
 </button>
 
 <!-- ============ ADD TRANSACTION SHEET ============ -->
 <div class="overlay" id="overlayTx"></div>
 <div class="sheet" id="sheetTx">
   <div class="sheet-handle"></div>
-  <div class="sheet-title" id="txSheetTitle">บันทึกรายการ</div>
+  <div class="sheet-title" id="txSheetTitle">บันทึกเงินเก็บ</div>
   <div class="type-toggle">
     <button class="type-opt active-save" id="typeSave" data-type="save">💰 เก็บเงิน</button>
     <button class="type-opt" id="typeSpend" data-type="spend">🛒 ใช้เงิน</button>
@@ -420,34 +467,43 @@ input{font-family:inherit;color:inherit;}
   <div class="field-lbl">จำนวนเงิน</div>
   <div class="amt-input-wrap"><span>฿</span><input type="number" inputmode="decimal" class="amt-input" id="txAmount" placeholder="0"></div>
   <div class="quick-chips" id="quickChips">
+    <button class="chip" data-v="10">+10</button>
     <button class="chip" data-v="20">+20</button>
     <button class="chip" data-v="50">+50</button>
     <button class="chip" data-v="100">+100</button>
-    <button class="chip" data-v="500">+500</button>
   </div>
-  <div class="field-lbl">โน้ต (ไม่บังคับ)</div>
-  <input type="text" class="text-input" id="txNote" placeholder="เช่น เงินเดือน, ค่าขนม...">
-  <button class="btn-primary" id="txSubmit">บันทึกรายการ</button>
+  <div class="field-lbl">บันทึกช่วยจำ (ไม่บังคับ)</div>
+  <input type="text" class="text-input" id="txNote" placeholder="เช่น ค่าขนม, ซื้อของเล่น...">
+  <button class="btn-primary" id="txSubmit">บันทึกยอดเยี่ยม!</button>
 </div>
 
 <!-- ============ GOAL SHEET ============ -->
 <div class="overlay" id="overlayGoal"></div>
 <div class="sheet" id="sheetGoal">
   <div class="sheet-handle"></div>
-  <div class="sheet-title" id="goalSheetTitle">ตั้งเป้าหมาย</div>
+  <div class="sheet-title" id="goalSheetTitle">ตั้งเป้าหมายฮีโร่</div>
   <div class="field-lbl">ชื่อเป้าหมาย</div>
-  <input type="text" class="text-input" id="goalName" placeholder="เช่น ซื้อโน้ตบุ๊คใหม่">
-  <div class="field-lbl">จำนวนเงินเป้าหมาย</div>
+  <input type="text" class="text-input" id="goalName" placeholder="เช่น ซื้อหุ่นยนต์ตัวใหม่">
+  <div class="field-lbl">จำนวนเงินที่ต้องใช้</div>
   <div class="amt-input-wrap"><span>฿</span><input type="number" inputmode="decimal" class="amt-input" id="goalTarget" placeholder="0"></div>
-  <button class="btn-primary" id="goalSubmit">บันทึกเป้าหมาย</button>
+  <button class="btn-primary" id="goalSubmit">เริ่มภารกิจ!</button>
+</div>
+
+<!-- ============ BADGES SHEET (NEW) ============ -->
+<div class="overlay" id="overlayBadges"></div>
+<div class="sheet" id="sheetBadges">
+  <div class="sheet-handle"></div>
+  <div class="sheet-title">เข็มกลัดเกียรติยศฮีโร่ 🏅</div>
+  <div class="badge-grid" id="badgeGridList"></div>
+  <button class="btn-secondary" id="closeBadgesBtn">ปิดหน้าต่างนี้</button>
 </div>
 
 <!-- ============ HISTORY SHEET ============ -->
 <div class="overlay" id="overlayHist"></div>
 <div class="sheet" id="sheetHist">
   <div class="sheet-handle"></div>
-  <div class="sheet-title">เป้าหมายที่สำเร็จแล้ว</div>
-  <div id="histList" style="max-height:50vh;overflow-y:auto;"></div>
+  <div class="sheet-title">ภารกิจที่สำเร็จแล้ว ⭐</div>
+  <div id="histList" style="max-height:50vh;overflow-y:auto;padding-bottom:10px;"></div>
 </div>
 
 <!-- toast -->
@@ -467,17 +523,12 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
-// Firestore collections (namespaced with sg_ prefix so this app doesn't collide with other data in the same project)
 const goalRef = db.collection('sg_goal').doc('current');
 const txCol = db.collection('sg_transactions');
 const archCol = db.collection('sg_archived');
 
 /* ============================= STATE ============================= */
-let state = {
-  goal: null,            // {id,name,target,startAt,achieved}
-  transactions: {},       // {key: {amount,type,note,date,goalId}}
-  archivedGoals: {}
-};
+let state = { goal: null, transactions: {}, archivedGoals: {} };
 let firstLoadDone = false;
 let celebratedFor = null;
 let pendingTxType = 'save';
@@ -520,7 +571,232 @@ function computeStats(){
   });
   const balance = totalSaved - totalSpent;
   const todayNet = todaySaved - todaySpent;
-  return {totalSaved, totalSpent, balance, todayNet, txs};
+  
+  // คำนวณเงินออมสะสมทั้งหมดทุกเป้าหมาย (เพื่อใช้คำนวณ Level ฮีโร่)
+  let allTimeSaved = 0;
+  Object.values(state.transactions || {}).forEach(t => {
+    if(t.type === 'save') allTimeSaved += t.amount;
+  });
+
+  return {totalSaved, totalSpent, balance, todayNet, txs, allTimeSaved};
+}
+
+/* ============================= SYSTEM 1: LEVEL UP & BADGES LOGIC ============================= */
+function computeHeroLevel(allTimeSaved){
+  const levels = [
+    { rank: "Lv.1 ฮีโร่ฝึกหัด (Cadet)", icon: "🛡️", min: 0, max: 100 },
+    { rank: "Lv.2 นักออมเหรียญทองแดง", icon: "🥉", min: 100, max: 300 },
+    { rank: "Lv.3 นักออมเหรียญเงิน", icon: "🥈", min: 300, max: 500 },
+    { rank: "Lv.4 นักออมเหรียญทอง", icon: "🥇", min: 500, max: 1000 },
+    { rank: "Lv.5 นักออมพลังสูง (Super)", icon: "⚔️", min: 1000, max: 2000 },
+    { rank: "Lv.6 ผู้พิทักษ์การเงิน", icon: "🛡️", min: 2000, max: 3500 },
+    { rank: "Lv.7 ผู้พิทักษ์คริสตัล", icon: "🔮", min: 3500, max: 5000 },
+    { rank: "Lv.8 มาสเตอร์เพชรแท้", icon: "💎", min: 5000, max: 7500 },
+    { rank: "Lv.9 นักล่าแห่งท้องฟ้า", icon: "🦅", min: 7500, max: 10000 },
+    { rank: "Lv.10 ฮีโร่สายฟ้า (10K Club)", icon: "⚡", min: 10000, max: 15000 },
+    { rank: "Lv.11 นักสำรวจกาแล็กซี", icon: "🌟", min: 15000, max: 20000 },
+    { rank: "Lv.12 ผู้พิชิตมังกรทอง", icon: "🐉", min: 20000, max: 30000 },
+    { rank: "Lv.13 ตำนานฮีโร่เศรษฐี", icon: "👑", min: 30000, max: 50000 },
+    { rank: "Lv.14 เจ้าแห่งจักรวาลการเงิน", icon: "🌌", min: 50000, max: 100000 },
+    { rank: "Lv.15 เทพเจ้าออมเงินอินฟินิตี้", icon: "♾️", min: 100000, max: Infinity }
+  ];
+  
+  // 1. คำนวณยอดเงินสะสมทั้งหมด และ ยอดที่ใช้ไปทั้งหมด
+  const allTxs = Object.values(state.transactions || {});
+  let totalSaved = 0;
+  let totalSpent = 0;
+  allTxs.forEach(t => {
+    if(t.type === 'save') totalSaved += t.amount;
+    else if(t.type === 'spend') totalSpent += t.amount;
+  });
+  
+  // เงินออมคงเหลือจริง (Net Balance)
+  const netSaved = Math.max(0, totalSaved - totalSpent);
+
+  // 2. หาเลเวลสูงสุดที่เคยทำได้ (Peak Level จากยอดออมทั้งหมด)
+  let peakLevelIdx = 0;
+  for(let i = 0; i < levels.length; i++){ 
+    if(totalSaved >= levels[i].min) peakLevelIdx = i; 
+  }
+
+  // 3. หาเลเวลปัจจุบันตามเงินคงเหลือจริง (Current Level)
+  let currentLevelIdx = 0;
+  for(let i = 0; i < levels.length; i++){ 
+    if(netSaved >= levels[i].min) currentLevelIdx = i; 
+  }
+
+  // 4. ระบบ เซฟโซน (Safe Zone): ห้ามตกชั้นเกิน 1 เลเวลจากจุดสูงสุดที่เคยทำได้!
+  const safeZoneIdx = Math.max(0, peakLevelIdx - 1);
+  if(currentLevelIdx < safeZoneIdx){
+    currentLevelIdx = safeZoneIdx; // ดึงเลเวลกลับขึ้นมาที่จุด Safe Zone
+  }
+
+  let cur = levels[currentLevelIdx];
+  
+  // 5. ระบบ Debuff: ถ้าเลเวลปัจจุบัน ต่ำกว่าเลเวลสูงสุดที่เคยทำได้ ให้ติดป้ายเตือน
+  let isDebuffed = currentLevelIdx < peakLevelIdx;
+  if(isDebuffed){
+    cur = {
+      ...cur,
+      rank: `${cur.rank} (📉 เกราะแตกชั่วคราว!)`,
+      icon: "⚠️"
+    };
+  }
+
+  let progPct = 100;
+  let nextTxt = "MAX LEVEL 👑";
+  if(cur.max !== Infinity){
+    progPct = Math.min(100, Math.max(0, ((netSaved - cur.min) / (cur.max - cur.min)) * 100));
+    nextTxt = isDebuffed ? `ออมอีก ${fmt(levels[peakLevelIdx].min - netSaved)} เพื่อกู้คืนยศเดิม!` : `อีก ${fmt(cur.max - netSaved)} เลื่อนขั้น`;
+  }
+  
+  return { ...cur, progPct, nextTxt, isDebuffed };
+}
+
+function computeBadges(){
+  const allTxs = Object.values(state.transactions || {}).sort((a,b)=> a.date - b.date);
+  const archs = Object.values(state.archivedGoals || {});
+  
+  // 1. ก้าวแรกของฮีโร่
+  const firstStep = allTxs.some(t => t.type === 'save');
+
+  // 2. Hero ตื่นเช้า (ตี 4 - 8 โมงเช้า)
+  const earlyBird = allTxs.some(t => t.type === 'save' && new Date(t.date).getHours() >= 4 && new Date(t.date).getHours() < 8);
+
+  // 3. กระปุกพลังโต ขั้น 1 (100+ บาท)
+  const big100 = allTxs.some(t => t.type === 'save' && t.amount >= 100);
+  
+  // 4. [ใหม่] กระปุกยักษ์ตำนาน (ออมครั้งเดียว 1,000+ บาทขึ้นไป)
+  const big1000 = allTxs.some(t => t.type === 'save' && t.amount >= 1000);
+
+  // 5. [ใหม่] ฮีโร่เครื่องร้อน (Streak: ออมเงิน 3 วันติดต่อกันโดยไม่ขาด)
+  let maxStreak = 0, curStreak = 0, lastDateString = "";
+  allTxs.filter(t=>t.type === 'save').forEach(t => {
+    const dStr = new Date(t.date).toDateString();
+    if(dStr !== lastDateString){
+      const diffDays = (new Date(dStr) - new Date(lastDateString)) / (1000 * 60 * 60 * 24);
+      if(diffDays === 1 || lastDateString === "") curStreak++;
+      else curStreak = 1;
+      lastDateString = dStr;
+      if(curStreak > maxStreak) maxStreak = curStreak;
+    }
+  });
+  const streak3 = maxStreak >= 3;
+  const streak7 = maxStreak >= 7; // 6. [ใหม่] ออมติดต่อกัน 7 วัน
+
+  // 7. Hero ไม่หวั่นไหว (ไม่ใช้เงินเลย 7 วันติดต่อกัน - อัปเกรดจาก 3 วันให้ยากขึ้น!)
+  let unshakable7 = false, lastSpend = 0;
+  allTxs.forEach(t => {
+    if(t.type === 'spend') lastSpend = t.date;
+    else if(t.type === 'save' && (t.date - lastSpend) >= 7 * 24 * 60 * 60 * 1000 && lastSpend > 0){
+      unshakable7 = true;
+    }
+  });
+  if(allTxs.length >= 5 && !allTxs.some(t => t.type === 'spend')) unshakable7 = true;
+
+  // 8. [ใหม่] ครึ่งทางสู่ฝัน (สะสมเงินเป้าหมายปัจจุบันถึง 5,000 บาทขึ้นไป)
+  let currentBalance = 0;
+  allTxs.forEach(t => { if(t.goalId === (state.goal?state.goal.id:'')) currentBalance += (t.type==='save'?t.amount:-t.amount); });
+  const halfway5k = currentBalance >= 5000;
+
+  // 9. ผู้พิชิตเป้าหมาย (จบภารกิจสำเร็จ 1 ครั้ง)
+  const goalMaster = archs.length > 0 || (state.goal && state.goal.achieved);
+
+  // 10. [ใหม่] นักสะสมความสำเร็จ (จบภารกิจสำเร็จ 3 ครั้งขึ้นไป)
+  const goalMaster3 = archs.length >= 3;
+
+  return [
+    { id:'first', name:'🎯 ก้าวแรกของฮีโร่', desc:'บันทึกการออมเงินครั้งแรกสำเร็จ', icon:'🎯', unlocked: firstStep },
+    { id:'early', name:'🌅 Hero ตื่นเช้า', desc:'บันทึกเงินออมก่อนเวลา 8 โมงเช้า', icon:'🌅', unlocked: earlyBird },
+    { id:'big100', name:'💰 กระปุกพลังโต', desc:'ออมเงินก้อนใหญ่ (100 บาทขึ้นไปในครั้งเดียว)', icon:'💰', unlocked: big100 },
+    { id:'streak3', name:'🔥 ฮีโร่เครื่องร้อน', desc:'ออมเงินติดต่อกัน 3 วันโดยไม่ขาด', icon:'🔥', unlocked: streak3 },
+    { id:'unshakable7', name:'🛡️ เกราะเพชรไม่หวั่นไหว', desc:'ไม่ใช้เงินเลยติดต่อกันอย่างน้อย 7 วันเต็ม!', icon:'🛡️', unlocked: unshakable7 },
+    { id:'halfway5k', name:'⚡ พลังครึ่งหมื่น', desc:'เก็บเงินในเป้าหมายปัจจุบันถึง 5,000 บาท', icon:'⚡', unlocked: halfway5k },
+    { id:'streak7', name:'🌟 วินัยแสงโซลาร์', desc:'ออมเงินติดต่อกัน 7 วันรวด (สุดยอดวินัย!)', icon:'🌟', unlocked: streak7 },
+    { id:'big1000', name:'💎 กระปุกยักษ์ตำนาน', desc:'ออมเงินก้อนยักษ์ (1,000 บาทขึ้นไปในครั้งเดียว)', icon:'💎', unlocked: big1000 },
+    { id:'master', name:'🏆 ผู้พิชิตเป้าหมาย', desc:'ทำภารกิจเป้าหมายใหญ่สำเร็จอย่างน้อย 1 ครั้ง', icon:'🏆', unlocked: goalMaster },
+    { id:'master3', name:'👑 มหาเทพนักออม', desc:'ทำภารกิจเป้าหมายใหญ่สำเร็จถึง 3 ครั้ง!', icon:'👑', unlocked: goalMaster3 }
+  ];
+}
+
+function renderHeroProfileBar(stats){
+  const bar = $('heroProfileBar');
+  const lvl = computeHeroLevel(stats.allTimeSaved);
+  const badges = computeBadges();
+  const unlockedCount = badges.filter(b => b.unlocked).length;
+
+  bar.innerHTML = `
+    <div class="hero-level-info">
+      <div class="hero-rank-ic">${lvl.icon}</div>
+      <div class="hero-rank-text">
+        <div class="hero-title">${lvl.rank}</div>
+        <div class="hero-xp-wrap">
+          <div class="xp-bar"><div class="xp-fill" style="width:${lvl.progPct}%"></div></div>
+          <span class="xp-txt">${lvl.nextTxt}</span>
+        </div>
+      </div>
+    </div>
+    <div class="badge-pill">
+      <span>🏅</span> <span class="num">${unlockedCount}/${badges.length}</span>
+    </div>
+  `;
+  bar.onclick = () => openBadgesSheet();
+}
+
+function openBadgesSheet(){
+  const badges = computeBadges();
+  const grid = $('badgeGridList');
+  grid.innerHTML = badges.map(b => `
+    <div class="badge-card ${b.unlocked ? 'unlocked' : ''}">
+      <div class="badge-ic">${b.icon}</div>
+      <div class="badge-info">
+        <div class="badge-name">${b.name}</div>
+        <div class="badge-desc">${b.desc}</div>
+      </div>
+      <div class="badge-status">${b.unlocked ? 'ปลดล็อกแล้ว ✓' : 'ยังไม่สำเร็จ 🔒'}</div>
+    </div>
+  `).join('');
+  openSheet('overlayBadges', 'sheetBadges');
+}
+
+/* ============================= SYSTEM 2: MILESTONES ROADMAP LOGIC ============================= */
+function renderMilestones(stats){
+  const cont = $('milestonesContainer');
+  if(!state.goal || state.goal.target <= 0){
+    cont.innerHTML = '';
+    return;
+  }
+  const t = state.goal.target;
+  const b = stats.balance;
+  const steps = [
+    { pct: 25, val: t * 0.25, icon: '🐣', label: 'เริ่มต้นฮึบ!' },
+    { pct: 50, val: t * 0.50, icon: '⚡', label: 'ครึ่งทางแล้ว' },
+    { pct: 75, val: t * 0.75, icon: '🔥', label: 'พลังใกล้เต็ม' },
+    { pct: 100, val: t, icon: '🏆', label: 'พิชิตเป้าหมาย!' }
+  ];
+
+  cont.innerHTML = `
+    <div class="ms-wrap">
+      <div class="ms-title">
+        <span>🗺️ เส้นทางสู่พิชิตเป้าหมาย</span>
+        <span style="font-size:12px;color:var(--mint-dim);">${fmt(b)} / ${fmt(t)}</span>
+      </div>
+      <div class="ms-grid">
+        ${steps.map((s, idx) => {
+          const isPassed = b >= s.val;
+          const isCurrent = !isPassed && (idx === 0 || b >= steps[idx-1].val);
+          let cls = isPassed ? 'passed' : (isCurrent ? 'current' : '');
+          return `
+            <div class="ms-step ${cls}">
+              <div class="ms-icon">${isPassed ? '✓' : s.icon}</div>
+              <div class="ms-lbl">${s.label}</div>
+              <div class="ms-val num">${fmt(s.val)}</div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    </div>
+  `;
 }
 
 /* ============================= RENDER ============================= */
@@ -528,10 +804,10 @@ function renderGoalHero(stats){
   const hero = $('goalHero');
   if(!state.goal){
     hero.innerHTML = `
-      <div class="ring-box"><div class="ring-target-empty">
+      <div class="ring-box" style="border:none;box-shadow:none;"><div class="ring-target-empty">
         <button class="ring-cta-empty" id="emptyGoalBtn">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
-          <span>ตั้งเป้าหมายแรกของคุณ</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+          <span>ตั้งเป้าหมายแรกของคุณกันเถอะฮีโร่!</span>
         </button>
       </div></div>`;
     $('emptyGoalBtn').onclick = () => openGoalSheet(false);
@@ -541,63 +817,54 @@ function renderGoalHero(stats){
   const r = 90, c = 2*Math.PI*r;
   const dash = c * (pct/100);
   hero.innerHTML = `
-    <div class="goal-name">🎯 ${escapeHtml(state.goal.name)}</div>
+    <div class="goal-name">🚀 ${escapeHtml(state.goal.name)}</div>
     <div class="ring-box">
       <svg viewBox="0 0 200 200">
         <defs>
           <clipPath id="liquidClip"><circle cx="100" cy="100" r="86"/></clipPath>
           <linearGradient id="waveGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#34E8B0"/>
-            <stop offset="100%" stop-color="#1E9E79"/>
-          </linearGradient>
-          <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="#34E8B0"/>
-            <stop offset="100%" stop-color="#FFB648"/>
+            <stop offset="0%" stop-color="#38BDF8"/>
+            <stop offset="100%" stop-color="#0284C7"/>
           </linearGradient>
         </defs>
-        <circle cx="100" cy="100" r="86" fill="rgba(255,255,255,0.04)"/>
+        <circle cx="100" cy="100" r="86" fill="#F8FAFC"/>
         <g clip-path="url(#liquidClip)">
           <g id="waveGroup" style="transform:translateY(${200 - 14 - (pct*1.6)}px);transition:transform 1s var(--ease-out, ease);">
-            <path id="wavePath1" d="" fill="url(#waveGrad)" opacity="0.55"></path>
-            <path id="wavePath2" d="" fill="url(#waveGrad)" opacity="0.85"></path>
+            <path id="wavePath1" d="" fill="url(#waveGrad)" opacity="0.6"></path>
+            <path id="wavePath2" d="" fill="url(#waveGrad)" opacity="0.9"></path>
           </g>
         </g>
-        <circle cx="100" cy="100" r="90" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="3"/>
-        <circle cx="100" cy="100" r="90" fill="none" stroke="url(#ringGrad)" stroke-width="3.5"
+        <circle cx="100" cy="100" r="90" fill="none" stroke="#E2E8F0" stroke-width="6"/>
+        <circle cx="100" cy="100" r="90" fill="none" stroke="var(--gold)" stroke-width="8"
           stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${c - dash}"
           transform="rotate(-90 100 100)" style="transition:stroke-dashoffset 1s var(--ease-out, ease);"/>
       </svg>
       <div class="ring-center">
         <div class="ring-pct num">${pct.toFixed(0)}<span>%</span></div>
-        <div class="ring-label">${fmt(state.goal.target)} เป้าหมาย</div>
+        <div class="ring-label">${fmt(state.goal.target)}</div>
       </div>
     </div>
     <div class="goal-remain">${stats.balance >= state.goal.target
-      ? `🎉 <b>ถึงเป้าหมายแล้ว!</b>`
-      : `เหลืออีก <b class="num">${fmt(state.goal.target - stats.balance)}</b> ถึงเป้าหมาย`}</div>
+      ? `🎉 <b>ภารกิจสำเร็จแล้ว!</b>`
+      : `ฮึบๆ! ขาดอีก <b class="num">${fmt(state.goal.target - stats.balance)}</b>`}</div>
   `;
   buildWave(pct);
 }
 
 function buildWave(pct){
-  // seamless double sine wave, animated via CSS translateX loop
-  const w = 200, amp = 4, mid = 15;
-  let d1 = `M0 ${mid}`;
-  let d2 = `M0 ${mid}`;
+  const w = 200, amp = 5, mid = 15;
+  let d1 = `M0 ${mid}`, d2 = `M0 ${mid}`;
   for(let x=0; x<=w*2; x+=20){
     const y1 = mid + Math.sin((x/w)*Math.PI*2) * amp;
     const y2 = mid + Math.cos((x/w)*Math.PI*2) * amp;
-    d1 += ` L${x} ${y1.toFixed(1)}`;
-    d2 += ` L${x} ${y2.toFixed(1)}`;
+    d1 += ` L${x} ${y1.toFixed(1)}`; d2 += ` L${x} ${y2.toFixed(1)}`;
   }
-  d1 += ` L${w*2} 200 L0 200 Z`;
-  d2 += ` L${w*2} 200 L0 200 Z`;
+  d1 += ` L${w*2} 200 L0 200 Z`; d2 += ` L${w*2} 200 L0 200 Z`;
   const p1 = $('wavePath1'), p2 = $('wavePath2');
-  if(p1){ p1.setAttribute('d', d1); p1.style.animation = 'waveMove 6s linear infinite'; }
-  if(p2){ p2.setAttribute('d', d2); p2.style.animation = 'waveMove 9s linear infinite reverse'; }
+  if(p1){ p1.setAttribute('d', d1); p1.style.animation = 'waveMove 5s linear infinite'; }
+  if(p2){ p2.setAttribute('d', d2); p2.style.animation = 'waveMove 7s linear infinite reverse'; }
 }
 
-// wave keyframes injected once
 const styleTag = document.createElement('style');
 styleTag.textContent = `@keyframes waveMove{from{transform:translateX(0)}to{transform:translateX(-200px)}}`;
 document.head.appendChild(styleTag);
@@ -630,18 +897,16 @@ function renderTxList(stats){
   $('txCount').textContent = txs.length ? `${txs.length} รายการ` : '';
   if(!txs.length){
     list.innerHTML = `<div class="empty-state">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M16 3v8M8 3v8M3 11h18"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="4"/><path d="M16 3v8M8 3v8M3 11h18"/></svg>
       <b>ยังไม่มีรายการ</b>
-      <span>เริ่มบันทึกเงินเก็บของคุณได้เลยที่ปุ่มด้านล่าง</span>
+      <span>เริ่มออมเงินภารกิจแรกกันเลย!</span>
     </div>`;
     return;
   }
   list.innerHTML = txs.slice(0,40).map((t,i) => `
     <div class="tx-row" style="animation-delay:${Math.min(i*40,300)}ms">
-      <div class="tx-ic ${t.type}">
-        ${t.type==='save'
-          ? '<svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>'
-          : '<svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>'}
+      <div class="tx-ic">
+        ${t.type==='save' ? '🟢' : '🔴'}
       </div>
       <div class="tx-mid">
         <div class="tx-note">${escapeHtml(t.note || (t.type==='save' ? 'เก็บเงิน' : 'ใช้เงิน'))}</div>
@@ -649,7 +914,7 @@ function renderTxList(stats){
       </div>
       <div class="tx-amt ${t.type}">${t.type==='save'?'+':'-'}${fmt(t.amount)}</div>
       <button class="tx-del" data-key="${t.key}" aria-label="ลบ">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
       </button>
     </div>
   `).join('');
@@ -675,13 +940,15 @@ function escapeHtml(s){
 
 function renderAll(){
   const stats = computeStats();
+  renderHeroProfileBar(stats);
   renderGoalHero(stats);
+  renderMilestones(stats);
   renderStats(stats);
   renderTxList(stats);
   checkAchievement(stats);
 }
 
-/* ============================= ACHIEVEMENT ============================= */
+/* ============================= HERO ACHIEVEMENT ============================= */
 function checkAchievement(stats){
   if(!state.goal || state.goal.achieved) return;
   if(stats.balance >= state.goal.target && state.goal.target > 0){
@@ -695,16 +962,16 @@ function checkAchievement(stats){
 function showCelebration(stats){
   const wrap = document.createElement('div');
   wrap.className = 'confetti-wrap';
-  const colors = ['#34E8B0','#FFB648','#FF6B7A','#7EA6FF','#F3F5FA'];
-  for(let i=0;i<60;i++){
+  const emojis = ['⭐', '🚀', '💰', '🌟', '🦸‍♂️', '⚡'];
+  
+  for(let i=0;i<45;i++){
     const c = document.createElement('div');
     c.className = 'confetti';
-    const size = 6 + Math.random()*6;
-    c.style.width = size+'px'; c.style.height = (size*0.4)+'px';
-    c.style.left = Math.random()*100+'%';
-    c.style.background = colors[Math.floor(Math.random()*colors.length)];
-    c.style.animationDuration = (2.2 + Math.random()*1.6)+'s';
-    c.style.animationDelay = (Math.random()*0.5)+'s';
+    c.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    c.style.fontSize = (24 + Math.random()*16) + 'px';
+    c.style.left = (Math.random()*100)+'%';
+    c.style.animationDuration = (2 + Math.random()*1.5)+'s';
+    c.style.animationDelay = (Math.random()*0.4)+'s';
     wrap.appendChild(c);
   }
   document.body.appendChild(wrap);
@@ -712,10 +979,10 @@ function showCelebration(stats){
   const card = document.createElement('div');
   card.className = 'celeb-card';
   card.innerHTML = `
-    <div class="celeb-trophy"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0V4z"/><path d="M7 5H4a1 1 0 0 0-1 1v1a4 4 0 0 0 4 4M17 5h3a1 1 0 0 1 1 1v1a4 4 0 0 1-4 4"/></svg></div>
-    <div class="celeb-title">สำเร็จเป้าหมายแล้ว! 🎉</div>
-    <div class="celeb-sub">คุณเก็บเงินครบ <b>${fmt(state.goal.target)}</b><br>สำหรับ "${escapeHtml(state.goal.name)}" เรียบร้อย</div>
-    <button class="btn-primary" id="celebNewGoalBtn">ตั้งเป้าหมายใหม่</button>
+    <div class="celeb-trophy">🏆</div>
+    <div class="celeb-title">ยอดเยี่ยมมากฮีโร่! 🎉</div>
+    <div class="celeb-sub">สะสมพลังครบ <b>${fmt(state.goal.target)}</b><br>สำหรับ "${escapeHtml(state.goal.name)}" สำเร็จแล้ว!</div>
+    <button class="btn-primary" id="celebNewGoalBtn">ตั้งภารกิจใหม่</button>
     <button class="btn-secondary" id="celebCloseBtn">ปิดหน้าต่างนี้</button>
   `;
   document.body.appendChild(card);
@@ -738,19 +1005,14 @@ function addTransaction(type, amount, note){
   if(!amount || amount <= 0){ toast('กรุณาใส่จำนวนเงิน', true); return; }
   txCol.add({
     amount: Math.round(amount*100)/100,
-    type,
-    note: note || '',
-    date: Date.now(),
-    goalId: state.goal.id
+    type, note: note || '', date: Date.now(), goalId: state.goal.id
   }).then(()=>{
-    toast(type === 'save' ? 'บันทึกเงินเก็บแล้ว ✓' : 'บันทึกรายจ่ายแล้ว ✓');
+    toast(type === 'save' ? 'ยอดเยี่ยม! ออมเงินแล้ว ✓' : 'บันทึกการใช้จ่ายแล้ว ✓');
   }).catch(err => toast('เกิดข้อผิดพลาด: '+err.message, true));
 }
 
 function deleteTx(key){
-  txCol.doc(key).delete()
-    .then(()=> toast('ลบรายการแล้ว'))
-    .catch(err => toast('ลบไม่สำเร็จ', true));
+  txCol.doc(key).delete().then(()=> toast('ลบรายการแล้ว')).catch(err => toast('ลบไม่สำเร็จ', true));
 }
 
 function saveGoal(name, target, carryChoice){
@@ -761,16 +1023,15 @@ function saveGoal(name, target, carryChoice){
       if(carryAmount && carryAmount > 0){
         txCol.add({
           amount: Math.round(carryAmount*100)/100, type:'save',
-          note:'ยอดยกมาจากเป้าหมายก่อนหน้า', date: Date.now(), goalId: newId
+          note:'พลังสะสมจากภารกิจที่แล้ว', date: Date.now(), goalId: newId
         });
       }
       celebratedFor = null;
-      toast('บันทึกเป้าหมายแล้ว ✓');
+      toast('บันทึกภารกิจแล้ว ✓');
     }).catch(err => toast('เกิดข้อผิดพลาด', true));
   };
 
   if(state.goal && state.goal.achieved){
-    // archiving a completed goal into history
     const stats = computeStats();
     archCol.doc(state.goal.id).set({
       name: state.goal.name, target: state.goal.target,
@@ -779,10 +1040,7 @@ function saveGoal(name, target, carryChoice){
       doSet(carryChoice === 'carry' ? stats.balance : 0);
     });
   } else if(state.goal){
-    // editing an in-progress goal (not yet achieved) - keep same id & history
-    goalRef.update({name, target}).then(()=>{
-      toast('อัปเดตเป้าหมายแล้ว ✓');
-    });
+    goalRef.update({name, target}).then(()=>toast('อัปเดตภารกิจแล้ว ✓'));
   } else {
     doSet(0);
   }
@@ -802,8 +1060,8 @@ function openTxSheet(type){
   pendingTxType = type;
   $('typeSave').classList.toggle('active-save', type==='save');
   $('typeSpend').classList.toggle('active-spend', type==='spend');
-  $('txSheetTitle').textContent = type === 'save' ? 'บันทึกเงินเก็บ' : 'บันทึกรายจ่าย';
-  $('txSubmit').textContent = type === 'save' ? 'บันทึกเงินเก็บ' : 'บันทึกรายจ่าย';
+  $('txSheetTitle').textContent = type === 'save' ? 'บันทึกเงินเก็บ' : 'บันทึกการใช้จ่าย';
+  $('txSubmit').textContent = type === 'save' ? 'บันทึกยอดเยี่ยม!' : 'บันทึกรายจ่าย';
   $('txSubmit').classList.toggle('spend-mode', type==='spend');
   $('txAmount').value = '';
   $('txNote').value = '';
@@ -812,7 +1070,7 @@ function openTxSheet(type){
 }
 
 function openGoalSheet(isNewAfterAchieve, carryAmount){
-  $('goalSheetTitle').textContent = isNewAfterAchieve ? 'ตั้งเป้าหมายใหม่' : (state.goal ? 'แก้ไขเป้าหมาย' : 'ตั้งเป้าหมายแรก');
+  $('goalSheetTitle').textContent = isNewAfterAchieve ? 'ตั้งภารกิจใหม่' : (state.goal ? 'แก้ไขภารกิจ' : 'ตั้งภารกิจแรก');
   $('goalName').value = isNewAfterAchieve ? '' : (state.goal ? state.goal.name : '');
   $('goalTarget').value = isNewAfterAchieve ? '' : (state.goal ? state.goal.target : '');
   $('goalSubmit').dataset.afterAchieve = isNewAfterAchieve ? '1' : '0';
@@ -822,8 +1080,8 @@ function openGoalSheet(isNewAfterAchieve, carryAmount){
 }
 
 /* ============================= EVENT WIRING ============================= */
-$('typeSave').onclick = () => { pendingTxType='save'; $('typeSave').classList.add('active-save'); $('typeSpend').classList.remove('active-spend'); $('txSubmit').classList.remove('spend-mode'); $('txSheetTitle').textContent='บันทึกเงินเก็บ'; $('txSubmit').textContent='บันทึกเงินเก็บ'; };
-$('typeSpend').onclick = () => { pendingTxType='spend'; $('typeSpend').classList.add('active-spend'); $('typeSave').classList.remove('active-save'); $('txSubmit').classList.add('spend-mode'); $('txSheetTitle').textContent='บันทึกรายจ่าย'; $('txSubmit').textContent='บันทึกรายจ่าย'; };
+$('typeSave').onclick = () => { pendingTxType='save'; $('typeSave').classList.add('active-save'); $('typeSpend').classList.remove('active-spend'); $('txSubmit').classList.remove('spend-mode'); $('txSheetTitle').textContent='บันทึกเงินเก็บ'; $('txSubmit').textContent='บันทึกยอดเยี่ยม!'; };
+$('typeSpend').onclick = () => { pendingTxType='spend'; $('typeSpend').classList.add('active-spend'); $('typeSave').classList.remove('active-save'); $('txSubmit').classList.add('spend-mode'); $('txSheetTitle').textContent='บันทึกการใช้จ่าย'; $('txSubmit').textContent='บันทึกรายจ่าย'; };
 
 document.querySelectorAll('.chip').forEach(chip => {
   chip.onclick = () => {
@@ -841,6 +1099,8 @@ $('historyBtn').onclick = () => { renderHistory(); openSheet('overlayHist','shee
 $('overlayTx').onclick = () => closeSheet('overlayTx','sheetTx');
 $('overlayGoal').onclick = () => closeSheet('overlayGoal','sheetGoal');
 $('overlayHist').onclick = () => closeSheet('overlayHist','sheetHist');
+$('overlayBadges').onclick = () => closeSheet('overlayBadges','sheetBadges');
+$('closeBadgesBtn').onclick = () => closeSheet('overlayBadges','sheetBadges');
 
 $('txSubmit').onclick = () => {
   const amt = parseFloat($('txAmount').value);
@@ -851,8 +1111,8 @@ $('txSubmit').onclick = () => {
 $('goalSubmit').onclick = () => {
   const name = $('goalName').value.trim();
   const target = parseFloat($('goalTarget').value);
-  if(!name){ toast('กรุณาใส่ชื่อเป้าหมาย', true); return; }
-  if(!target || target <= 0){ toast('กรุณาใส่จำนวนเงินเป้าหมาย', true); return; }
+  if(!name){ toast('กรุณาตั้งชื่อภารกิจฮีโร่ก่อน!', true); return; }
+  if(!target || target <= 0){ toast('กรุณาใส่จำนวนเงินที่ต้องการ', true); return; }
   saveGoal(name, target, pendingCarryChoice);
   closeSheet('overlayGoal','sheetGoal');
 };
@@ -861,16 +1121,16 @@ function renderHistory(){
   const arr = Object.values(state.archivedGoals || {}).sort((a,b)=>b.completedAt - a.completedAt);
   const el = $('histList');
   if(!arr.length){
-    el.innerHTML = `<div class="empty-state" style="padding:24px 4px;">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l4 2"/></svg>
-      <span>ยังไม่มีเป้าหมายที่สำเร็จ</span>
+    el.innerHTML = `<div class="empty-state" style="padding:24px 4px;border:none;">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l4 2"/></svg>
+      <span>ยังไม่มีภารกิจที่สำเร็จ</span>
     </div>`;
     return;
   }
   el.innerHTML = arr.map(g => `
     <div class="hist-item">
       <div>
-        <div class="hist-name">🏆 ${escapeHtml(g.name)}</div>
+        <div class="hist-name">🌟 ${escapeHtml(g.name)}</div>
         <div class="hist-date">${new Date(g.completedAt).toLocaleDateString('th-TH',{day:'numeric',month:'short',year:'numeric'})}</div>
       </div>
       <div class="hist-amt num">${fmt(g.target)}</div>
@@ -921,7 +1181,6 @@ let dataReady = false;
 
 setTimeout(()=>{ splashMinTimeReached = true; tryHideSplash(); }, 1400);
 
-// fake progress fill for splash bar
 let fillPct = 0;
 const fillInterval = setInterval(()=>{
   fillPct = Math.min(92, fillPct + Math.random()*18);
@@ -957,11 +1216,10 @@ function showSkeletonThenContent(){
   }, 550);
 }
 
-// safety fallback in case Firebase is unreachable
 setTimeout(()=>{
   if(!dataReady){
     dataReady = true;
-    toast('เชื่อมต่อล่าช้า กำลังลองใหม่เรื่อยๆ...', true);
+    toast('ระบบเชื่อมต่อล่าช้า กำลังลองใหม่...', true);
     tryHideSplash();
   }
 }, 6000);
