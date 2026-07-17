@@ -10,9 +10,6 @@
 <style>
 /* ============================= DESIGN TOKENS ============================= */
 /* ใส่โค้ดนี้ไว้บรรทัดแรกของไฟล์ CSS */
-* {
-    outline: 1px solid red !important;
-}
 :root{
   --bg-deep: #F0F9FF;
   --bg-deep-2: #E0F2FE;
@@ -43,6 +40,7 @@ body{
   position:relative;
   background-image: radial-gradient(#CBD5E1 1px, transparent 1px);
   background-size: 20px 20px;
+  overscroll-behavior-y: contain;
 }
 h1,h2,h3,.display{font-family:'Prompt',sans-serif;}
 .num{font-family:'Space Grotesk','Prompt',sans-serif;font-variant-numeric:tabular-nums;}
