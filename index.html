@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1">
+<title>SaveGoal · เป้าหมายเงินออม</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&family=Sarabun:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================= DESIGN TOKENS ============================= */
+:root{
+  --bg-deep:#080B14;
+  --bg-deep-2:#0D1220;
+  --card:rgba(255,255,255,.055);
+  --card-strong:rgba(255,255,255,.09);
+  --card-solid:#121729;
+  --border-glass:rgba(255,255,255,.10);
+  --border-glass-strong:rgba(255,255,255,.18);
+  --mint:#34E8B0;
+  --mint-dim:#1E9E79;
+  --gold:#FFB648;
+  --coral:#FF6B7A;
+  --text-1:#F3F5FA;
+  --text-2:#8B93B0;
+  --text-3:#565E7C;
+  --shadow-glass:0 8px 32px rgba(0,0,0,.45);
+  --ease-spring:cubic-bezier(.34,1.56,.64,1);
+  --ease-out:cubic-bezier(.16,1,.3,1);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;}
+body{
+  font-family:'Sarabun',-apple-system,sans-serif;
+  background:var(--bg-deep);
+  color:var(--text-1);
+  overflow-x:hidden;
+  min-height:100vh;
+  position:relative;
+}
+h1,h2,h3,.display{font-family:'Prompt',sans-serif;}
+.num{font-family:'Space Grotesk','Prompt',sans-serif;font-variant-numeric:tabular-nums;}
+::selection{background:var(--mint);color:#08121000;}
+button{font-family:inherit;border:none;background:none;color:inherit;cursor:pointer;}
+input{font-family:inherit;color:inherit;}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important;}}
+
+/* ambient background mesh */
+.mesh{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;}
+.blob{position:absolute;border-radius:50%;filter:blur(70px);opacity:.35;}
+.blob1{width:480px;height:480px;background:radial-gradient(circle,#1E9E79,transparent 70%);top:-160px;left:-120px;animation:drift1 22s ease-in-out infinite;}
+.blob2{width:420px;height:420px;background:radial-gradient(circle,#3A4FE0,transparent 70%);bottom:-140px;right:-100px;animation:drift2 26s ease-in-out infinite;}
+.blob3{width:320px;height:320px;background:radial-gradient(circle,#FFB648,transparent 70%);top:40%;left:60%;opacity:.18;animation:drift3 30s ease-in-out infinite;}
+@keyframes drift1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(60px,80px) scale(1.15)}}
+@keyframes drift2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-70px,-50px) scale(1.1)}}
+@keyframes drift3{0%,100%{transform:translate(0,0)}50%{transform:translate(-40px,60px)}}
+
+/* ============================= SPLASH / OPENING LOADING ============================= */
+#splash{
+  position:fixed;inset:0;z-index:9999;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;
+  background:radial-gradient(120% 120% at 50% 20%,#101632 0%,#080B14 65%);
+  transition:opacity .6s var(--ease-out),transform .6s var(--ease-out);
+}
+#splash.hide{opacity:0;transform:scale(1.04);pointer-events:none;}
+.splash-mark{
+  width:88px;height:88px;border-radius:26px;
+  background:linear-gradient(150deg,rgba(255,255,255,.14),rgba(255,255,255,.02));
+  border:1px solid var(--border-glass-strong);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 20px 60px rgba(52,232,176,.18),inset 0 1px 0 rgba(255,255,255,.15);
+  animation:markPop 1s var(--ease-spring);
+}
+@keyframes markPop{0%{transform:scale(.4) rotate(-12deg);opacity:0}100%{transform:scale(1) rotate(0);opacity:1}}
+.splash-mark svg{width:44px;height:44px;}
+.splash-word{font-weight:700;font-size:22px;letter-spacing:.5px;opacity:0;animation:fadeUp .7s var(--ease-out) .25s forwards;}
+.splash-sub{font-size:13px;color:var(--text-2);opacity:0;animation:fadeUp .7s var(--ease-out) .4s forwards;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.splash-bar{width:160px;height:3px;border-radius:3px;background:rgba(255,255,255,.08);overflow:hidden;opacity:0;animation:fadeUp .6s var(--ease-out) .5s forwards;}
+.splash-bar-fill{height:100%;width:0%;border-radius:3px;background:linear-gradient(90deg,var(--mint),var(--gold));transition:width .25s var(--ease-out);}
+
+/* ============================= SHELL ============================= */
+#app{position:relative;z-index:1;max-width:520px;margin:0 auto;min-height:100vh;padding:14px 16px 120px;opacity:0;}
+#app.show{opacity:1;animation:fadeUp .5s var(--ease-out);}
+
+/* island header */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:6px 4px 18px;}
+.island{
+  display:flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,.06);border:1px solid var(--border-glass);
+  padding:8px 14px 8px 8px;border-radius:100px;backdrop-filter:blur(20px);
+}
+.island .dot{width:8px;height:8px;border-radius:50%;background:var(--mint);box-shadow:0 0 8px var(--mint);}
+.island .dot.off{background:var(--coral);box-shadow:0 0 8px var(--coral);}
+.island-logo{width:26px;height:26px;border-radius:8px;background:linear-gradient(150deg,var(--mint),var(--mint-dim));display:flex;align-items:center;justify-content:center;}
+.island-logo svg{width:15px;height:15px;}
+.island-text{font-size:13px;font-weight:600;font-family:'Prompt',sans-serif;}
+.icon-btn{
+  width:38px;height:38px;border-radius:50%;
+  background:rgba(255,255,255,.06);border:1px solid var(--border-glass);
+  display:flex;align-items:center;justify-content:center;
+  transition:transform .2s var(--ease-spring),background .2s;
+}
+.icon-btn:active{transform:scale(.88);background:rgba(255,255,255,.12);}
+.icon-btn svg{width:17px;height:17px;stroke:var(--text-1);}
+
+/* ============================= SKELETON ============================= */
+.skeleton-wrap{display:none;}
+.skeleton-wrap.show{display:block;}
+.sk{background:linear-gradient(100deg,rgba(255,255,255,.04) 30%,rgba(255,255,255,.10) 50%,rgba(255,255,255,.04) 70%);background-size:200% 100%;animation:shimmer 1.4s ease-in-out infinite;border-radius:20px;}
+@keyframes shimmer{0%{background-position:150% 0}100%{background-position:-50% 0}}
+.sk-ring{width:220px;height:220px;border-radius:50%;margin:20px auto 28px;}
+.sk-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;}
+.sk-stat{height:86px;border-radius:20px;}
+.sk-row{height:64px;border-radius:16px;margin-bottom:10px;}
+
+/* ============================= CONTENT ============================= */
+.content-wrap{display:none;}
+.content-wrap.show{display:block;animation:fadeUp .5s var(--ease-out);}
+
+/* liquid goal ring - signature element */
+.goal-hero{position:relative;display:flex;flex-direction:column;align-items:center;padding:8px 0 22px;}
+.goal-name{font-size:14px;color:var(--text-2);font-weight:500;margin-bottom:2px;}
+.ring-box{position:relative;width:226px;height:226px;margin:8px 0 14px;}
+.ring-box svg{width:100%;height:100%;transform:rotate(0deg);}
+.ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;}
+.ring-pct{font-size:38px;font-weight:700;letter-spacing:-1px;}
+.ring-pct span{font-size:18px;color:var(--text-2);font-weight:500;}
+.ring-label{font-size:12px;color:var(--text-2);}
+.ring-target-empty{width:100%;height:100%;display:flex;align-items:center;justify-content:center;}
+.ring-cta-empty{
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  background:rgba(255,255,255,.05);border:1.5px dashed var(--border-glass-strong);
+  width:186px;height:186px;border-radius:50%;transition:transform .2s var(--ease-spring);
+}
+.ring-cta-empty:active{transform:scale(.94);}
+.ring-cta-empty svg{width:30px;height:30px;stroke:var(--mint);}
+.ring-cta-empty span{font-size:13px;color:var(--text-2);font-weight:500;max-width:120px;text-align:center;line-height:1.4;}
+.goal-remain{font-size:13.5px;color:var(--text-2);text-align:center;}
+.goal-remain b{color:var(--text-1);font-weight:600;}
+
+/* stats */
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px;}
+.stat-card{
+  background:var(--card);border:1px solid var(--border-glass);border-radius:20px;
+  padding:14px 12px;backdrop-filter:blur(18px);
+  display:flex;flex-direction:column;gap:8px;
+  transition:transform .25s var(--ease-spring),background .2s;
+}
+.stat-card:active{transform:scale(.96);background:var(--card-strong);}
+.stat-icon{width:30px;height:30px;border-radius:10px;display:flex;align-items:center;justify-content:center;}
+.stat-icon svg{width:16px;height:16px;}
+.stat-icon.mint{background:rgba(52,232,176,.14);}
+.stat-icon.mint svg{stroke:var(--mint);}
+.stat-icon.gold{background:rgba(255,182,72,.14);}
+.stat-icon.gold svg{stroke:var(--gold);}
+.stat-icon.blue{background:rgba(90,140,255,.14);}
+.stat-icon.blue svg{stroke:#7EA6FF;}
+.stat-val{font-size:16.5px;font-weight:700;line-height:1.15;}
+.stat-val.neg{color:var(--coral);}
+.stat-lbl{font-size:11.5px;color:var(--text-2);}
+
+/* quick actions */
+.qa-row{display:flex;gap:10px;margin-bottom:22px;}
+.qa-btn{
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;
+  padding:14px 8px;border-radius:18px;
+  background:var(--card);border:1px solid var(--border-glass);backdrop-filter:blur(18px);
+  transition:transform .2s var(--ease-spring);
+}
+.qa-btn:active{transform:scale(.93);}
+.qa-btn .qa-ic{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+.qa-btn .qa-ic svg{width:18px;height:18px;}
+.qa-save .qa-ic{background:linear-gradient(150deg,var(--mint),var(--mint-dim));}
+.qa-save .qa-ic svg{stroke:#06231A;}
+.qa-spend .qa-ic{background:rgba(255,107,122,.16);border:1px solid rgba(255,107,122,.35);}
+.qa-spend .qa-ic svg{stroke:var(--coral);}
+.qa-goal .qa-ic{background:rgba(255,182,72,.16);border:1px solid rgba(255,182,72,.35);}
+.qa-goal .qa-ic svg{stroke:var(--gold);}
+.qa-btn span{font-size:12px;font-weight:600;color:var(--text-1);}
+
+/* section header */
+.sec-head{display:flex;align-items:center;justify-content:space-between;margin:4px 0 10px;padding:0 2px;}
+.sec-title{font-size:15px;font-weight:600;font-family:'Prompt',sans-serif;}
+.sec-link{font-size:12.5px;color:var(--mint);font-weight:600;}
+
+/* transaction list */
+.tx-list{display:flex;flex-direction:column;gap:9px;}
+.tx-row{
+  display:flex;align-items:center;gap:12px;
+  background:var(--card);border:1px solid var(--border-glass);border-radius:16px;
+  padding:12px 13px;backdrop-filter:blur(18px);
+  animation:txIn .45s var(--ease-out) both;
+  transition:transform .2s var(--ease-spring),background .2s;
+}
+.tx-row:active{transform:scale(.98);background:var(--card-strong);}
+@keyframes txIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.tx-ic{width:36px;height:36px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.tx-ic.save{background:rgba(52,232,176,.14);}
+.tx-ic.save svg{stroke:var(--mint);}
+.tx-ic.spend{background:rgba(255,107,122,.14);}
+.tx-ic.spend svg{stroke:var(--coral);}
+.tx-ic svg{width:16px;height:16px;}
+.tx-mid{flex:1;min-width:0;}
+.tx-note{font-size:13.5px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.tx-date{font-size:11px;color:var(--text-3);margin-top:1px;}
+.tx-amt{font-size:14.5px;font-weight:700;flex-shrink:0;}
+.tx-amt.save{color:var(--mint);}
+.tx-amt.spend{color:var(--coral);}
+.tx-del{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--text-3);flex-shrink:0;}
+.tx-del svg{width:13px;height:13px;}
+
+.empty-state{display:flex;flex-direction:column;align-items:center;gap:10px;padding:36px 20px;color:var(--text-2);text-align:center;}
+.empty-state svg{width:40px;height:40px;stroke:var(--text-3);}
+.empty-state b{color:var(--text-1);font-size:14px;}
+.empty-state span{font-size:12.5px;line-height:1.5;}
+
+/* FAB */
+.fab{
+  position:fixed;bottom:26px;left:50%;transform:translateX(-50%);
+  display:flex;align-items:center;gap:8px;
+  background:linear-gradient(150deg,var(--mint),var(--mint-dim));
+  color:#06231A;padding:14px 24px;border-radius:100px;
+  font-weight:700;font-size:14px;
+  box-shadow:0 12px 32px rgba(52,232,176,.35),0 2px 8px rgba(0,0,0,.3);
+  transition:transform .2s var(--ease-spring);
+  z-index:40;max-width:480px;width:calc(100% - 40px);justify-content:center;
+}
+.fab:active{transform:translateX(-50%) scale(.95);}
+.fab svg{width:18px;height:18px;}
+
+/* ============================= SHEETS / MODALS ============================= */
+.overlay{position:fixed;inset:0;background:rgba(4,6,12,.6);backdrop-filter:blur(6px);z-index:200;opacity:0;pointer-events:none;transition:opacity .3s var(--ease-out);}
+.overlay.show{opacity:1;pointer-events:auto;}
+.sheet{
+  position:fixed;left:0;right:0;bottom:0;z-index:201;
+  max-width:520px;margin:0 auto;
+  background:linear-gradient(180deg,#161C30,#0F1424);
+  border:1px solid var(--border-glass-strong);border-bottom:none;
+  border-radius:28px 28px 0 0;
+  padding:10px 20px calc(24px + env(safe-area-inset-bottom));
+  transform:translateY(105%);transition:transform .42s var(--ease-spring);
+  box-shadow:0 -20px 60px rgba(0,0,0,.5);
+}
+.sheet.show{transform:translateY(0);}
+.sheet-handle{width:38px;height:4px;border-radius:3px;background:rgba(255,255,255,.18);margin:6px auto 16px;}
+.sheet-title{font-size:18px;font-weight:700;font-family:'Prompt',sans-serif;margin-bottom:18px;}
+.field-lbl{font-size:12.5px;color:var(--text-2);margin-bottom:8px;font-weight:500;}
+.type-toggle{display:flex;gap:8px;margin-bottom:18px;}
+.type-opt{flex:1;text-align:center;padding:11px;border-radius:14px;background:rgba(255,255,255,.05);border:1.5px solid var(--border-glass);font-size:13.5px;font-weight:600;color:var(--text-2);transition:all .2s;}
+.type-opt.active-save{background:rgba(52,232,176,.14);border-color:var(--mint);color:var(--mint);}
+.type-opt.active-spend{background:rgba(255,107,122,.14);border-color:var(--coral);color:var(--coral);}
+.amt-input-wrap{display:flex;align-items:baseline;gap:6px;background:rgba(255,255,255,.05);border:1.5px solid var(--border-glass);border-radius:16px;padding:14px 16px;margin-bottom:14px;}
+.amt-input-wrap span{font-size:16px;color:var(--text-2);font-weight:600;}
+.amt-input{flex:1;background:none;border:none;outline:none;font-size:24px;font-weight:700;color:var(--text-1);font-family:'Space Grotesk',sans-serif;min-width:0;}
+.text-input{width:100%;background:rgba(255,255,255,.05);border:1.5px solid var(--border-glass);border-radius:14px;padding:13px 15px;font-size:14.5px;outline:none;margin-bottom:14px;transition:border-color .2s;}
+.text-input:focus{border-color:var(--mint);}
+.quick-chips{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;}
+.chip{padding:8px 14px;border-radius:100px;background:rgba(255,255,255,.05);border:1px solid var(--border-glass);font-size:12.5px;color:var(--text-2);font-weight:500;transition:all .15s var(--ease-spring);}
+.chip:active{transform:scale(.92);}
+.btn-primary{
+  width:100%;padding:15px;border-radius:16px;font-weight:700;font-size:15px;
+  background:linear-gradient(150deg,var(--mint),var(--mint-dim));color:#06231A;
+  transition:transform .2s var(--ease-spring);
+}
+.btn-primary:active{transform:scale(.97);}
+.btn-primary.spend-mode{background:linear-gradient(150deg,var(--coral),#C24756);color:#2A0509;}
+.btn-secondary{width:100%;padding:14px;border-radius:16px;font-weight:600;font-size:14px;background:rgba(255,255,255,.06);border:1px solid var(--border-glass);margin-top:10px;color:var(--text-1);transition:transform .2s var(--ease-spring);}
+.btn-secondary:active{transform:scale(.97);}
+
+/* celebration */
+.confetti-wrap{position:fixed;inset:0;z-index:300;pointer-events:none;overflow:hidden;}
+.confetti{position:absolute;top:-20px;border-radius:2px;animation:confettiFall linear forwards;}
+@keyframes confettiFall{to{transform:translateY(110vh) rotate(540deg);opacity:.3;}}
+.celeb-card{
+  position:fixed;left:50%;top:50%;transform:translate(-50%,-50%) scale(.7);z-index:301;
+  width:calc(100% - 56px);max-width:360px;
+  background:linear-gradient(160deg,#1A2138,#0F1424);
+  border:1px solid var(--border-glass-strong);border-radius:28px;
+  padding:32px 26px 26px;text-align:center;opacity:0;
+  box-shadow:0 30px 80px rgba(0,0,0,.5);
+  transition:opacity .4s var(--ease-out),transform .4s var(--ease-spring);
+}
+.celeb-card.show{opacity:1;transform:translate(-50%,-50%) scale(1);}
+.celeb-trophy{width:76px;height:76px;margin:0 auto 16px;border-radius:50%;background:linear-gradient(150deg,var(--gold),#C6821F);display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(255,182,72,.4);animation:trophyPop .7s var(--ease-spring) .1s both;}
+@keyframes trophyPop{0%{transform:scale(0) rotate(-30deg)}100%{transform:scale(1) rotate(0)}}
+.celeb-trophy svg{width:36px;height:36px;stroke:#2A1B02;}
+.celeb-title{font-size:20px;font-weight:700;font-family:'Prompt',sans-serif;margin-bottom:6px;}
+.celeb-sub{font-size:13.5px;color:var(--text-2);line-height:1.5;margin-bottom:22px;}
+.celeb-sub b{color:var(--gold);}
+
+/* toast */
+.toast{position:fixed;top:16px;left:50%;transform:translateX(-50%) translateY(-120%);z-index:400;background:rgba(20,24,40,.92);border:1px solid var(--border-glass-strong);backdrop-filter:blur(20px);padding:12px 18px;border-radius:14px;font-size:13px;font-weight:500;display:flex;align-items:center;gap:8px;transition:transform .4s var(--ease-spring);box-shadow:0 10px 30px rgba(0,0,0,.4);max-width:90%;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+.toast .dot2{width:7px;height:7px;border-radius:50%;background:var(--mint);flex-shrink:0;}
+.toast.err .dot2{background:var(--coral);}
+
+/* history modal */
+.hist-item{display:flex;align-items:center;justify-content:space-between;padding:13px 4px;border-bottom:1px solid var(--border-glass);}
+.hist-item:last-child{border-bottom:none;}
+.hist-name{font-size:13.5px;font-weight:600;}
+.hist-date{font-size:11px;color:var(--text-3);margin-top:2px;}
+.hist-amt{font-size:14px;font-weight:700;color:var(--gold);}
+
+.offline-banner{display:none;align-items:center;gap:8px;background:rgba(255,107,122,.12);border:1px solid rgba(255,107,122,.3);color:var(--coral);font-size:12.5px;font-weight:500;padding:9px 14px;border-radius:12px;margin-bottom:14px;}
+.offline-banner.show{display:flex;}
+.offline-banner svg{width:14px;height:14px;stroke:var(--coral);flex-shrink:0;}
+
+@media(max-width:360px){.ring-box{width:196px;height:196px;}.ring-pct{font-size:32px;}}
+</style>
+</head>
+<body>
+
+<div class="mesh"><div class="blob blob1"></div><div class="blob blob2"></div><div class="blob blob3"></div></div>
+
+<!-- ============ OPENING LOADING ============ -->
+<div id="splash">
+  <div class="splash-mark">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#34E8B0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+    </svg>
+  </div>
+  <div class="splash-word display">SaveGoal</div>
+  <div class="splash-sub">กำลังเตรียมข้อมูลของคุณ...</div>
+  <div class="splash-bar"><div class="splash-bar-fill" id="splashFill"></div></div>
+</div>
+
+<!-- ============ APP SHELL ============ -->
+<div id="app">
+  <div class="topbar">
+    <div class="island">
+      <div class="island-logo"><svg viewBox="0 0 24 24" fill="none" stroke="#06231A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+      <span class="island-text">SaveGoal</span>
+      <span class="dot" id="connDot"></span>
+    </div>
+    <button class="icon-btn" id="historyBtn" aria-label="ประวัติเป้าหมาย">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v5l4 2"/></svg>
+    </button>
+  </div>
+
+  <!-- SKELETON LOADING -->
+  <div class="skeleton-wrap" id="skeletonWrap">
+    <div class="sk sk-ring"></div>
+    <div class="sk-stats">
+      <div class="sk sk-stat"></div><div class="sk sk-stat"></div><div class="sk sk-stat"></div>
+    </div>
+    <div class="sk sk-row"></div>
+    <div class="sk sk-row"></div>
+    <div class="sk sk-row"></div>
+  </div>
+
+  <!-- REAL CONTENT -->
+  <div class="content-wrap" id="contentWrap">
+    <div class="offline-banner" id="offlineBanner">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 1l22 22M16.72 11.06A10.94 10.94 0 0 1 19 12.55M5 12.55a10.94 10.94 0 0 1 5.17-2.39M10.71 5.05A16 16 0 0 1 22.58 9M1.42 9a15.91 15.91 0 0 1 4.7-2.88M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/></svg>
+      <span>ออฟไลน์ — ข้อมูลจะซิงค์เมื่อเชื่อมต่ออีกครั้ง</span>
+    </div>
+
+    <!-- GOAL HERO -->
+    <div class="goal-hero" id="goalHero"></div>
+
+    <!-- STATS -->
+    <div class="stats-grid">
+      <div class="stat-card" id="statToday">
+        <div class="stat-icon mint"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V10M18 20V4M6 20v-4"/></svg></div>
+        <div class="stat-val num" id="valToday">฿0</div>
+        <div class="stat-lbl">วันนี้เก็บได้</div>
+      </div>
+      <div class="stat-card" id="statTotal">
+        <div class="stat-icon gold"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M8.5 9.5a2.5 2.5 0 0 1 2.5-1.5h1.5a2 2 0 0 1 0 4H11a2 2 0 0 0 0 4h1.5a2.5 2.5 0 0 0 2.5-1.5"/></svg></div>
+        <div class="stat-val num" id="valTotal">฿0</div>
+        <div class="stat-lbl">สะสมทั้งหมด</div>
+      </div>
+      <div class="stat-card" id="statBalance">
+        <div class="stat-icon blue"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="13" rx="2.5"/><path d="M2 10h20M6 15h4"/></svg></div>
+        <div class="stat-val num" id="valBalance">฿0</div>
+        <div class="stat-lbl">คงเหลือ</div>
+      </div>
+    </div>
+
+    <!-- QUICK ACTIONS -->
+    <div class="qa-row">
+      <button class="qa-btn qa-save" id="btnAddSave">
+        <div class="qa-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></div>
+        <span>เก็บเงิน</span>
+      </button>
+      <button class="qa-btn qa-spend" id="btnAddSpend">
+        <div class="qa-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></svg></div>
+        <span>ใช้เงิน</span>
+      </button>
+      <button class="qa-btn qa-goal" id="btnEditGoal">
+        <div class="qa-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></div>
+        <span>เป้าหมาย</span>
+      </button>
+    </div>
+
+    <!-- TRANSACTIONS -->
+    <div class="sec-head">
+      <span class="sec-title">รายการล่าสุด</span>
+      <span class="sec-link" id="txCount"></span>
+    </div>
+    <div class="tx-list" id="txList"></div>
+  </div>
+</div>
+
+<button class="fab" id="fabAdd">
+  <svg viewBox="0 0 24 24" fill="none" stroke="#06231A" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+  บันทึกรายการ
+</button>
+
+<!-- ============ ADD TRANSACTION SHEET ============ -->
+<div class="overlay" id="overlayTx"></div>
+<div class="sheet" id="sheetTx">
+  <div class="sheet-handle"></div>
+  <div class="sheet-title" id="txSheetTitle">บันทึกรายการ</div>
+  <div class="type-toggle">
+    <button class="type-opt active-save" id="typeSave" data-type="save">💰 เก็บเงิน</button>
+    <button class="type-opt" id="typeSpend" data-type="spend">🛒 ใช้เงิน</button>
+  </div>
+  <div class="field-lbl">จำนวนเงิน</div>
+  <div class="amt-input-wrap"><span>฿</span><input type="number" inputmode="decimal" class="amt-input" id="txAmount" placeholder="0"></div>
+  <div class="quick-chips" id="quickChips">
+    <button class="chip" data-v="20">+20</button>
+    <button class="chip" data-v="50">+50</button>
+    <button class="chip" data-v="100">+100</button>
+    <button class="chip" data-v="500">+500</button>
+  </div>
+  <div class="field-lbl">โน้ต (ไม่บังคับ)</div>
+  <input type="text" class="text-input" id="txNote" placeholder="เช่น เงินเดือน, ค่าขนม...">
+  <button class="btn-primary" id="txSubmit">บันทึกรายการ</button>
+</div>
+
+<!-- ============ GOAL SHEET ============ -->
+<div class="overlay" id="overlayGoal"></div>
+<div class="sheet" id="sheetGoal">
+  <div class="sheet-handle"></div>
+  <div class="sheet-title" id="goalSheetTitle">ตั้งเป้าหมาย</div>
+  <div class="field-lbl">ชื่อเป้าหมาย</div>
+  <input type="text" class="text-input" id="goalName" placeholder="เช่น ซื้อโน้ตบุ๊คใหม่">
+  <div class="field-lbl">จำนวนเงินเป้าหมาย</div>
+  <div class="amt-input-wrap"><span>฿</span><input type="number" inputmode="decimal" class="amt-input" id="goalTarget" placeholder="0"></div>
+  <button class="btn-primary" id="goalSubmit">บันทึกเป้าหมาย</button>
+</div>
+
+<!-- ============ HISTORY SHEET ============ -->
+<div class="overlay" id="overlayHist"></div>
+<div class="sheet" id="sheetHist">
+  <div class="sheet-handle"></div>
+  <div class="sheet-title">เป้าหมายที่สำเร็จแล้ว</div>
+  <div id="histList" style="max-height:50vh;overflow-y:auto;"></div>
+</div>
+
+<!-- toast -->
+<div class="toast" id="toast"><span class="dot2"></span><span id="toastMsg"></span></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script>
+/* ============================= FIREBASE INIT ============================= */
+const firebaseConfig = {
+  apiKey: "AIzaSyDwLUi_bnWNRIq_RELSyCQ1hlTUfuFUumM",
+  authDomain: "mygoalx1.firebaseapp.com",
+  projectId: "mygoalx1",
+  storageBucket: "mygoalx1.firebasestorage.app",
+  messagingSenderId: "679761307635",
+  appId: "1:679761307635:web:195aa4976236d0456bd486"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+// Firestore collections (namespaced with sg_ prefix so this app doesn't collide with other data in the same project)
+const goalRef = db.collection('sg_goal').doc('current');
+const txCol = db.collection('sg_transactions');
+const archCol = db.collection('sg_archived');
+
+/* ============================= STATE ============================= */
+let state = {
+  goal: null,            // {id,name,target,startAt,achieved}
+  transactions: {},       // {key: {amount,type,note,date,goalId}}
+  archivedGoals: {}
+};
+let firstLoadDone = false;
+let celebratedFor = null;
+let pendingTxType = 'save';
+let pendingCarryChoice = 'carry';
+
+/* ============================= HELPERS ============================= */
+const fmt = n => '฿' + Math.round(n).toLocaleString('th-TH');
+const todayStr = () => new Date().toDateString();
+const $ = id => document.getElementById(id);
+
+function toast(msg, isErr=false){
+  const t = $('toast');
+  $('toastMsg').textContent = msg;
+  t.classList.toggle('err', isErr);
+  t.classList.add('show');
+  clearTimeout(toast._h);
+  toast._h = setTimeout(()=>t.classList.remove('show'), 2400);
+}
+
+function txArrayForCurrentGoal(){
+  if(!state.goal) return [];
+  return Object.entries(state.transactions || {})
+    .filter(([k,v]) => v.goalId === state.goal.id)
+    .map(([k,v]) => ({key:k, ...v}))
+    .sort((a,b) => b.date - a.date);
+}
+
+function computeStats(){
+  const txs = txArrayForCurrentGoal();
+  let totalSaved = 0, totalSpent = 0, todaySaved = 0, todaySpent = 0;
+  const today = todayStr();
+  txs.forEach(t => {
+    if(t.type === 'save'){
+      totalSaved += t.amount;
+      if(new Date(t.date).toDateString() === today) todaySaved += t.amount;
+    } else {
+      totalSpent += t.amount;
+      if(new Date(t.date).toDateString() === today) todaySpent += t.amount;
+    }
+  });
+  const balance = totalSaved - totalSpent;
+  const todayNet = todaySaved - todaySpent;
+  return {totalSaved, totalSpent, balance, todayNet, txs};
+}
+
+/* ============================= RENDER ============================= */
+function renderGoalHero(stats){
+  const hero = $('goalHero');
+  if(!state.goal){
+    hero.innerHTML = `
+      <div class="ring-box"><div class="ring-target-empty">
+        <button class="ring-cta-empty" id="emptyGoalBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+          <span>ตั้งเป้าหมายแรกของคุณ</span>
+        </button>
+      </div></div>`;
+    $('emptyGoalBtn').onclick = () => openGoalSheet(false);
+    return;
+  }
+  const pct = Math.min(100, Math.max(0, (stats.balance / state.goal.target) * 100));
+  const r = 90, c = 2*Math.PI*r;
+  const dash = c * (pct/100);
+  hero.innerHTML = `
+    <div class="goal-name">🎯 ${escapeHtml(state.goal.name)}</div>
+    <div class="ring-box">
+      <svg viewBox="0 0 200 200">
+        <defs>
+          <clipPath id="liquidClip"><circle cx="100" cy="100" r="86"/></clipPath>
+          <linearGradient id="waveGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#34E8B0"/>
+            <stop offset="100%" stop-color="#1E9E79"/>
+          </linearGradient>
+          <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#34E8B0"/>
+            <stop offset="100%" stop-color="#FFB648"/>
+          </linearGradient>
+        </defs>
+        <circle cx="100" cy="100" r="86" fill="rgba(255,255,255,0.04)"/>
+        <g clip-path="url(#liquidClip)">
+          <g id="waveGroup" style="transform:translateY(${200 - 14 - (pct*1.6)}px);transition:transform 1s var(--ease-out, ease);">
+            <path id="wavePath1" d="" fill="url(#waveGrad)" opacity="0.55"></path>
+            <path id="wavePath2" d="" fill="url(#waveGrad)" opacity="0.85"></path>
+          </g>
+        </g>
+        <circle cx="100" cy="100" r="90" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="3"/>
+        <circle cx="100" cy="100" r="90" fill="none" stroke="url(#ringGrad)" stroke-width="3.5"
+          stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${c - dash}"
+          transform="rotate(-90 100 100)" style="transition:stroke-dashoffset 1s var(--ease-out, ease);"/>
+      </svg>
+      <div class="ring-center">
+        <div class="ring-pct num">${pct.toFixed(0)}<span>%</span></div>
+        <div class="ring-label">${fmt(state.goal.target)} เป้าหมาย</div>
+      </div>
+    </div>
+    <div class="goal-remain">${stats.balance >= state.goal.target
+      ? `🎉 <b>ถึงเป้าหมายแล้ว!</b>`
+      : `เหลืออีก <b class="num">${fmt(state.goal.target - stats.balance)}</b> ถึงเป้าหมาย`}</div>
+  `;
+  buildWave(pct);
+}
+
+function buildWave(pct){
+  // seamless double sine wave, animated via CSS translateX loop
+  const w = 200, amp = 4, mid = 15;
+  let d1 = `M0 ${mid}`;
+  let d2 = `M0 ${mid}`;
+  for(let x=0; x<=w*2; x+=20){
+    const y1 = mid + Math.sin((x/w)*Math.PI*2) * amp;
+    const y2 = mid + Math.cos((x/w)*Math.PI*2) * amp;
+    d1 += ` L${x} ${y1.toFixed(1)}`;
+    d2 += ` L${x} ${y2.toFixed(1)}`;
+  }
+  d1 += ` L${w*2} 200 L0 200 Z`;
+  d2 += ` L${w*2} 200 L0 200 Z`;
+  const p1 = $('wavePath1'), p2 = $('wavePath2');
+  if(p1){ p1.setAttribute('d', d1); p1.style.animation = 'waveMove 6s linear infinite'; }
+  if(p2){ p2.setAttribute('d', d2); p2.style.animation = 'waveMove 9s linear infinite reverse'; }
+}
+
+// wave keyframes injected once
+const styleTag = document.createElement('style');
+styleTag.textContent = `@keyframes waveMove{from{transform:translateX(0)}to{transform:translateX(-200px)}}`;
+document.head.appendChild(styleTag);
+
+function renderStats(stats){
+  animateNumber('valToday', stats.todayNet);
+  animateNumber('valTotal', stats.totalSaved);
+  animateNumber('valBalance', stats.balance);
+  $('valToday').classList.toggle('neg', stats.todayNet < 0);
+}
+
+function animateNumber(id, target){
+  const el = $(id);
+  const start = parseFloat(el.dataset.raw || 0);
+  const dur = 500, t0 = performance.now();
+  el.dataset.raw = target;
+  function step(t){
+    const p = Math.min(1, (t-t0)/dur);
+    const eased = 1 - Math.pow(1-p, 3);
+    const val = start + (target-start)*eased;
+    el.textContent = (val < 0 ? '-' : '') + fmt(Math.abs(val));
+    if(p < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+function renderTxList(stats){
+  const list = $('txList');
+  const txs = stats.txs;
+  $('txCount').textContent = txs.length ? `${txs.length} รายการ` : '';
+  if(!txs.length){
+    list.innerHTML = `<div class="empty-state">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M16 3v8M8 3v8M3 11h18"/></svg>
+      <b>ยังไม่มีรายการ</b>
+      <span>เริ่มบันทึกเงินเก็บของคุณได้เลยที่ปุ่มด้านล่าง</span>
+    </div>`;
+    return;
+  }
+  list.innerHTML = txs.slice(0,40).map((t,i) => `
+    <div class="tx-row" style="animation-delay:${Math.min(i*40,300)}ms">
+      <div class="tx-ic ${t.type}">
+        ${t.type==='save'
+          ? '<svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>'
+          : '<svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>'}
+      </div>
+      <div class="tx-mid">
+        <div class="tx-note">${escapeHtml(t.note || (t.type==='save' ? 'เก็บเงิน' : 'ใช้เงิน'))}</div>
+        <div class="tx-date">${formatDate(t.date)}</div>
+      </div>
+      <div class="tx-amt ${t.type}">${t.type==='save'?'+':'-'}${fmt(t.amount)}</div>
+      <button class="tx-del" data-key="${t.key}" aria-label="ลบ">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+  `).join('');
+  list.querySelectorAll('.tx-del').forEach(btn => {
+    btn.onclick = (e) => { e.stopPropagation(); deleteTx(btn.dataset.key); };
+  });
+}
+
+function formatDate(ts){
+  const d = new Date(ts);
+  const isToday = d.toDateString() === new Date().toDateString();
+  const y = new Date(); y.setDate(y.getDate()-1);
+  const isYesterday = d.toDateString() === y.toDateString();
+  const time = d.toLocaleTimeString('th-TH', {hour:'2-digit', minute:'2-digit'});
+  if(isToday) return `วันนี้ · ${time}`;
+  if(isYesterday) return `เมื่อวาน · ${time}`;
+  return d.toLocaleDateString('th-TH', {day:'numeric', month:'short'}) + ` · ${time}`;
+}
+
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function renderAll(){
+  const stats = computeStats();
+  renderGoalHero(stats);
+  renderStats(stats);
+  renderTxList(stats);
+  checkAchievement(stats);
+}
+
+/* ============================= ACHIEVEMENT ============================= */
+function checkAchievement(stats){
+  if(!state.goal || state.goal.achieved) return;
+  if(stats.balance >= state.goal.target && state.goal.target > 0){
+    if(celebratedFor === state.goal.id) return;
+    celebratedFor = state.goal.id;
+    goalRef.update({achieved:true});
+    showCelebration(stats);
+  }
+}
+
+function showCelebration(stats){
+  const wrap = document.createElement('div');
+  wrap.className = 'confetti-wrap';
+  const colors = ['#34E8B0','#FFB648','#FF6B7A','#7EA6FF','#F3F5FA'];
+  for(let i=0;i<60;i++){
+    const c = document.createElement('div');
+    c.className = 'confetti';
+    const size = 6 + Math.random()*6;
+    c.style.width = size+'px'; c.style.height = (size*0.4)+'px';
+    c.style.left = Math.random()*100+'%';
+    c.style.background = colors[Math.floor(Math.random()*colors.length)];
+    c.style.animationDuration = (2.2 + Math.random()*1.6)+'s';
+    c.style.animationDelay = (Math.random()*0.5)+'s';
+    wrap.appendChild(c);
+  }
+  document.body.appendChild(wrap);
+
+  const card = document.createElement('div');
+  card.className = 'celeb-card';
+  card.innerHTML = `
+    <div class="celeb-trophy"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0V4z"/><path d="M7 5H4a1 1 0 0 0-1 1v1a4 4 0 0 0 4 4M17 5h3a1 1 0 0 1 1 1v1a4 4 0 0 1-4 4"/></svg></div>
+    <div class="celeb-title">สำเร็จเป้าหมายแล้ว! 🎉</div>
+    <div class="celeb-sub">คุณเก็บเงินครบ <b>${fmt(state.goal.target)}</b><br>สำหรับ "${escapeHtml(state.goal.name)}" เรียบร้อย</div>
+    <button class="btn-primary" id="celebNewGoalBtn">ตั้งเป้าหมายใหม่</button>
+    <button class="btn-secondary" id="celebCloseBtn">ปิดหน้าต่างนี้</button>
+  `;
+  document.body.appendChild(card);
+  requestAnimationFrame(()=>card.classList.add('show'));
+
+  function cleanup(){
+    card.classList.remove('show');
+    setTimeout(()=>{ card.remove(); wrap.remove(); }, 400);
+  }
+  $('celebCloseBtn').onclick = cleanup;
+  card.querySelector('#celebNewGoalBtn').onclick = () => {
+    cleanup();
+    setTimeout(()=> openGoalSheet(true, stats.balance), 300);
+  };
+}
+
+/* ============================= FIREBASE ACTIONS ============================= */
+function addTransaction(type, amount, note){
+  if(!state.goal){ toast('กรุณาตั้งเป้าหมายก่อน', true); return; }
+  if(!amount || amount <= 0){ toast('กรุณาใส่จำนวนเงิน', true); return; }
+  txCol.add({
+    amount: Math.round(amount*100)/100,
+    type,
+    note: note || '',
+    date: Date.now(),
+    goalId: state.goal.id
+  }).then(()=>{
+    toast(type === 'save' ? 'บันทึกเงินเก็บแล้ว ✓' : 'บันทึกรายจ่ายแล้ว ✓');
+  }).catch(err => toast('เกิดข้อผิดพลาด: '+err.message, true));
+}
+
+function deleteTx(key){
+  txCol.doc(key).delete()
+    .then(()=> toast('ลบรายการแล้ว'))
+    .catch(err => toast('ลบไม่สำเร็จ', true));
+}
+
+function saveGoal(name, target, carryChoice){
+  const doSet = (carryAmount) => {
+    const newId = db.collection('sg_goal').doc().id;
+    const newGoal = { id:newId, name, target, startAt: Date.now(), achieved:false };
+    goalRef.set(newGoal).then(()=>{
+      if(carryAmount && carryAmount > 0){
+        txCol.add({
+          amount: Math.round(carryAmount*100)/100, type:'save',
+          note:'ยอดยกมาจากเป้าหมายก่อนหน้า', date: Date.now(), goalId: newId
+        });
+      }
+      celebratedFor = null;
+      toast('บันทึกเป้าหมายแล้ว ✓');
+    }).catch(err => toast('เกิดข้อผิดพลาด', true));
+  };
+
+  if(state.goal && state.goal.achieved){
+    // archiving a completed goal into history
+    const stats = computeStats();
+    archCol.doc(state.goal.id).set({
+      name: state.goal.name, target: state.goal.target,
+      finalBalance: stats.balance, completedAt: Date.now()
+    }).then(()=>{
+      doSet(carryChoice === 'carry' ? stats.balance : 0);
+    });
+  } else if(state.goal){
+    // editing an in-progress goal (not yet achieved) - keep same id & history
+    goalRef.update({name, target}).then(()=>{
+      toast('อัปเดตเป้าหมายแล้ว ✓');
+    });
+  } else {
+    doSet(0);
+  }
+}
+
+/* ============================= SHEET CONTROLS ============================= */
+function openSheet(overlayId, sheetId){
+  $(overlayId).classList.add('show');
+  requestAnimationFrame(()=> $(sheetId).classList.add('show'));
+}
+function closeSheet(overlayId, sheetId){
+  $(sheetId).classList.remove('show');
+  $(overlayId).classList.remove('show');
+}
+
+function openTxSheet(type){
+  pendingTxType = type;
+  $('typeSave').classList.toggle('active-save', type==='save');
+  $('typeSpend').classList.toggle('active-spend', type==='spend');
+  $('txSheetTitle').textContent = type === 'save' ? 'บันทึกเงินเก็บ' : 'บันทึกรายจ่าย';
+  $('txSubmit').textContent = type === 'save' ? 'บันทึกเงินเก็บ' : 'บันทึกรายจ่าย';
+  $('txSubmit').classList.toggle('spend-mode', type==='spend');
+  $('txAmount').value = '';
+  $('txNote').value = '';
+  openSheet('overlayTx','sheetTx');
+  setTimeout(()=> $('txAmount').focus(), 350);
+}
+
+function openGoalSheet(isNewAfterAchieve, carryAmount){
+  $('goalSheetTitle').textContent = isNewAfterAchieve ? 'ตั้งเป้าหมายใหม่' : (state.goal ? 'แก้ไขเป้าหมาย' : 'ตั้งเป้าหมายแรก');
+  $('goalName').value = isNewAfterAchieve ? '' : (state.goal ? state.goal.name : '');
+  $('goalTarget').value = isNewAfterAchieve ? '' : (state.goal ? state.goal.target : '');
+  $('goalSubmit').dataset.afterAchieve = isNewAfterAchieve ? '1' : '0';
+  $('goalSubmit').dataset.carry = carryAmount || 0;
+  openSheet('overlayGoal','sheetGoal');
+  setTimeout(()=> $('goalName').focus(), 350);
+}
+
+/* ============================= EVENT WIRING ============================= */
+$('typeSave').onclick = () => { pendingTxType='save'; $('typeSave').classList.add('active-save'); $('typeSpend').classList.remove('active-spend'); $('txSubmit').classList.remove('spend-mode'); $('txSheetTitle').textContent='บันทึกเงินเก็บ'; $('txSubmit').textContent='บันทึกเงินเก็บ'; };
+$('typeSpend').onclick = () => { pendingTxType='spend'; $('typeSpend').classList.add('active-spend'); $('typeSave').classList.remove('active-save'); $('txSubmit').classList.add('spend-mode'); $('txSheetTitle').textContent='บันทึกรายจ่าย'; $('txSubmit').textContent='บันทึกรายจ่าย'; };
+
+document.querySelectorAll('.chip').forEach(chip => {
+  chip.onclick = () => {
+    const cur = parseFloat($('txAmount').value) || 0;
+    $('txAmount').value = cur + parseFloat(chip.dataset.v);
+  };
+});
+
+$('btnAddSave').onclick = () => openTxSheet('save');
+$('btnAddSpend').onclick = () => openTxSheet('spend');
+$('fabAdd').onclick = () => openTxSheet('save');
+$('btnEditGoal').onclick = () => openGoalSheet(false);
+$('historyBtn').onclick = () => { renderHistory(); openSheet('overlayHist','sheetHist'); };
+
+$('overlayTx').onclick = () => closeSheet('overlayTx','sheetTx');
+$('overlayGoal').onclick = () => closeSheet('overlayGoal','sheetGoal');
+$('overlayHist').onclick = () => closeSheet('overlayHist','sheetHist');
+
+$('txSubmit').onclick = () => {
+  const amt = parseFloat($('txAmount').value);
+  addTransaction(pendingTxType, amt, $('txNote').value.trim());
+  closeSheet('overlayTx','sheetTx');
+};
+
+$('goalSubmit').onclick = () => {
+  const name = $('goalName').value.trim();
+  const target = parseFloat($('goalTarget').value);
+  if(!name){ toast('กรุณาใส่ชื่อเป้าหมาย', true); return; }
+  if(!target || target <= 0){ toast('กรุณาใส่จำนวนเงินเป้าหมาย', true); return; }
+  saveGoal(name, target, pendingCarryChoice);
+  closeSheet('overlayGoal','sheetGoal');
+};
+
+function renderHistory(){
+  const arr = Object.values(state.archivedGoals || {}).sort((a,b)=>b.completedAt - a.completedAt);
+  const el = $('histList');
+  if(!arr.length){
+    el.innerHTML = `<div class="empty-state" style="padding:24px 4px;">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l4 2"/></svg>
+      <span>ยังไม่มีเป้าหมายที่สำเร็จ</span>
+    </div>`;
+    return;
+  }
+  el.innerHTML = arr.map(g => `
+    <div class="hist-item">
+      <div>
+        <div class="hist-name">🏆 ${escapeHtml(g.name)}</div>
+        <div class="hist-date">${new Date(g.completedAt).toLocaleDateString('th-TH',{day:'numeric',month:'short',year:'numeric'})}</div>
+      </div>
+      <div class="hist-amt num">${fmt(g.target)}</div>
+    </div>
+  `).join('');
+}
+
+/* ============================= FIREBASE LISTENERS ============================= */
+function updateConnDot(connected){
+  $('connDot').classList.toggle('off', !connected);
+  $('offlineBanner').classList.toggle('show', !connected);
+}
+updateConnDot(navigator.onLine);
+window.addEventListener('online', ()=> updateConnDot(true));
+window.addEventListener('offline', ()=> updateConnDot(false));
+
+let loadFlags = {goal:false, tx:false, arch:false};
+
+goalRef.onSnapshot(doc => {
+  state.goal = doc.exists ? doc.data() : null;
+  loadFlags.goal = true; tryFinishLoad();
+  onDataChange();
+}, err => { console.error(err); loadFlags.goal = true; tryFinishLoad(); });
+
+txCol.onSnapshot(snap => {
+  const obj = {};
+  snap.forEach(d => obj[d.id] = d.data());
+  state.transactions = obj;
+  loadFlags.tx = true; tryFinishLoad();
+  onDataChange();
+}, err => { console.error(err); loadFlags.tx = true; tryFinishLoad(); });
+
+archCol.onSnapshot(snap => {
+  const obj = {};
+  snap.forEach(d => obj[d.id] = d.data());
+  state.archivedGoals = obj;
+  loadFlags.arch = true; tryFinishLoad();
+  onDataChange();
+}, err => { console.error(err); loadFlags.arch = true; tryFinishLoad(); });
+
+function onDataChange(){
+  if(firstLoadDone) renderAll();
+}
+
+/* ============================= LOADING ORCHESTRATION ============================= */
+let splashMinTimeReached = false;
+let dataReady = false;
+
+setTimeout(()=>{ splashMinTimeReached = true; tryHideSplash(); }, 1400);
+
+// fake progress fill for splash bar
+let fillPct = 0;
+const fillInterval = setInterval(()=>{
+  fillPct = Math.min(92, fillPct + Math.random()*18);
+  $('splashFill').style.width = fillPct + '%';
+  if(fillPct >= 92) clearInterval(fillInterval);
+}, 180);
+
+function tryFinishLoad(){
+  if(loadFlags.goal && loadFlags.tx && loadFlags.arch){
+    dataReady = true;
+    $('splashFill').style.width = '100%';
+    tryHideSplash();
+  }
+}
+
+function tryHideSplash(){
+  if(!splashMinTimeReached || !dataReady) return;
+  $('splash').classList.add('hide');
+  setTimeout(()=>{
+    $('splash').style.display = 'none';
+    $('app').classList.add('show');
+    showSkeletonThenContent();
+  }, 550);
+}
+
+function showSkeletonThenContent(){
+  $('skeletonWrap').classList.add('show');
+  setTimeout(()=>{
+    firstLoadDone = true;
+    renderAll();
+    $('skeletonWrap').classList.remove('show');
+    $('contentWrap').classList.add('show');
+  }, 550);
+}
+
+// safety fallback in case Firebase is unreachable
+setTimeout(()=>{
+  if(!dataReady){
+    dataReady = true;
+    toast('เชื่อมต่อล่าช้า กำลังลองใหม่เรื่อยๆ...', true);
+    tryHideSplash();
+  }
+}, 6000);
+</script>
+</body>
+</html>
