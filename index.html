@@ -179,44 +179,6 @@ input{font-family:inherit;color:inherit;}
 .qa-goal .qa-ic svg{stroke:var(--gold);}
 .qa-btn span{font-size:12px;font-weight:600;color:var(--text-1);}
 
-/* goal tabs (multi-goal switcher) */
-.goal-tabs{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 14px;scrollbar-width:none;-webkit-overflow-scrolling:touch;}
-.goal-tabs::-webkit-scrollbar{display:none;}
-.goal-chip{flex-shrink:0;display:flex;align-items:center;gap:5px;padding:8px 15px;border-radius:100px;background:rgba(255,255,255,.05);border:1.5px solid var(--border-glass);font-size:12.5px;font-weight:600;color:var(--text-2);white-space:nowrap;transition:transform .2s var(--ease-spring),background .2s,border-color .2s,color .2s;}
-.goal-chip:active{transform:scale(.93);}
-.goal-chip.active{background:rgba(52,232,176,.14);border-color:var(--mint);color:var(--mint);}
-.goal-chip-add{color:var(--gold);border-color:rgba(255,182,72,.3);background:rgba(255,182,72,.07);border-style:dashed;}
-.goal-total{font-size:12px;color:var(--text-2);text-align:center;margin-top:2px;}
-.goal-total b{color:var(--gold);font-weight:700;}
-.streak-chip{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:700;color:var(--gold);background:rgba(255,182,72,.12);border:1px solid rgba(255,182,72,.28);padding:4px 11px;border-radius:100px;margin-top:8px;}
-.mood-emoji{font-size:16px;margin-left:4px;}
-.goal-badge-done{font-size:10.5px;font-weight:700;color:#2A1B02;background:linear-gradient(150deg,var(--gold),#C6821F);padding:2px 8px;border-radius:100px;margin-left:2px;}
-
-/* date field (custom date picker) */
-.date-input-wrap{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.05);border:1.5px solid var(--border-glass);border-radius:14px;padding:12px 15px;margin-bottom:14px;transition:border-color .2s;}
-.date-input-wrap:focus-within{border-color:var(--mint);}
-.date-input-wrap svg{width:16px;height:16px;stroke:var(--text-2);flex-shrink:0;}
-.date-input{flex:1;background:none;border:none;outline:none;font-size:14px;font-weight:500;color:var(--text-1);min-width:0;color-scheme:dark;}
-.date-quick{display:flex;gap:8px;margin-bottom:14px;}
-.date-quick button{flex:1;padding:8px 6px;border-radius:12px;background:rgba(255,255,255,.05);border:1px solid var(--border-glass);font-size:11.5px;font-weight:600;color:var(--text-2);transition:all .15s var(--ease-spring);}
-.date-quick button.active-date{background:rgba(52,232,176,.14);border-color:var(--mint);color:var(--mint);}
-.date-quick button:active{transform:scale(.94);}
-
-/* reminder / settings sheet */
-.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:4px 2px 16px;}
-.toggle-row .t-lbl{font-size:14px;font-weight:600;}
-.toggle-row .t-sub{font-size:12px;color:var(--text-2);margin-top:2px;}
-.switch{width:46px;height:26px;border-radius:100px;background:rgba(255,255,255,.12);position:relative;transition:background .25s;flex-shrink:0;}
-.switch.on{background:var(--mint);}
-.switch .knob{position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .25s var(--ease-spring);box-shadow:0 2px 6px rgba(0,0,0,.3);}
-.switch.on .knob{transform:translateX(20px);}
-.hour-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:8px;}
-.hour-opt{padding:10px 4px;border-radius:12px;background:rgba(255,255,255,.05);border:1.5px solid var(--border-glass);font-size:13px;font-weight:600;color:var(--text-2);transition:all .15s var(--ease-spring);}
-.hour-opt.active-hour{background:rgba(52,232,176,.14);border-color:var(--mint);color:var(--mint);}
-.hour-opt:active{transform:scale(.93);}
-.reminder-note{font-size:11.5px;color:var(--text-3);line-height:1.6;background:rgba(255,255,255,.04);border:1px solid var(--border-glass);border-radius:12px;padding:11px 13px;margin-top:4px;}
-.reminder-note b{color:var(--text-2);}
-
 /* section header */
 .sec-head{display:flex;align-items:center;justify-content:space-between;margin:4px 0 10px;padding:0 2px;}
 .sec-title{font-size:15px;font-weight:600;font-family:'Prompt',sans-serif;}
@@ -371,14 +333,9 @@ input{font-family:inherit;color:inherit;}
       <span class="island-text">SaveGoal</span>
       <span class="dot" id="connDot"></span>
     </div>
-    <div style="display:flex;gap:8px;">
-      <button class="icon-btn" id="reminderBtn" aria-label="ตั้งเตือนความจำ">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-      </button>
-      <button class="icon-btn" id="historyBtn" aria-label="ประวัติเป้าหมาย">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v5l4 2"/></svg>
-      </button>
-    </div>
+    <button class="icon-btn" id="historyBtn" aria-label="ประวัติเป้าหมาย">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v5l4 2"/></svg>
+    </button>
   </div>
 
   <!-- SKELETON LOADING -->
@@ -470,16 +427,6 @@ input{font-family:inherit;color:inherit;}
   </div>
   <div class="field-lbl">โน้ต (ไม่บังคับ)</div>
   <input type="text" class="text-input" id="txNote" placeholder="เช่น เงินเดือน, ค่าขนม...">
-  <div class="field-lbl">วันที่ทำรายการ</div>
-  <div class="date-quick" id="dateQuick">
-    <button data-d="0" class="active-date">วันนี้</button>
-    <button data-d="-1">เมื่อวาน</button>
-    <button data-d="custom">เลือกวันที่</button>
-  </div>
-  <div class="date-input-wrap">
-    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>
-    <input type="date" class="date-input" id="txDate">
-  </div>
   <button class="btn-primary" id="txSubmit">บันทึกรายการ</button>
 </div>
 
@@ -493,8 +440,6 @@ input{font-family:inherit;color:inherit;}
   <div class="field-lbl">จำนวนเงินเป้าหมาย</div>
   <div class="amt-input-wrap"><span>฿</span><input type="number" inputmode="decimal" class="amt-input" id="goalTarget" placeholder="0"></div>
   <button class="btn-primary" id="goalSubmit">บันทึกเป้าหมาย</button>
-  <button class="btn-secondary" id="goalArchiveBtn" style="display:none;">🏆 เก็บเป้าหมายนี้เข้าประวัติ</button>
-  <button class="btn-secondary" id="goalDeleteBtn" style="display:none;color:var(--coral);">ลบเป้าหมายนี้</button>
 </div>
 
 <!-- ============ HISTORY SHEET ============ -->
@@ -503,29 +448,6 @@ input{font-family:inherit;color:inherit;}
   <div class="sheet-handle"></div>
   <div class="sheet-title">เป้าหมายที่สำเร็จแล้ว</div>
   <div id="histList" style="max-height:50vh;overflow-y:auto;"></div>
-</div>
-
-<!-- ============ REMINDER SHEET ============ -->
-<div class="overlay" id="overlayRemind"></div>
-<div class="sheet" id="sheetRemind">
-  <div class="sheet-handle"></div>
-  <div class="sheet-title">🔔 เตือนให้เก็บเงิน</div>
-  <div class="toggle-row">
-    <div>
-      <div class="t-lbl">แจ้งเตือนทุกวัน</div>
-      <div class="t-sub">เผื่อวันไหนลืมกดเก็บเงิน เดี๋ยวพี่มาเตือนเอง</div>
-    </div>
-    <button class="switch" id="remindSwitch"><div class="knob"></div></button>
-  </div>
-  <div class="field-lbl">เตือนตอนกี่โมง</div>
-  <div class="hour-grid" id="hourGrid">
-    <button class="hour-opt" data-h="12">12:00</button>
-    <button class="hour-opt" data-h="18">18:00</button>
-    <button class="hour-opt active-hour" data-h="20">20:00</button>
-    <button class="hour-opt" data-h="21">21:00</button>
-  </div>
-  <div class="reminder-note">💡 <b>หมายเหตุ:</b> การแจ้งเตือนนี้ทำงานผ่านเบราว์เซอร์ของคุณ จึงควรเปิดแท็บนี้ทิ้งไว้ หรือเข้าแอปอย่างน้อยวันละครั้งเพื่อให้ระบบเช็กให้ (ยังไม่รองรับการส่งแจ้งเตือนจากเซิร์ฟเวอร์แบบเต็มรูปแบบ)</div>
-  <button class="btn-secondary" id="remindTestBtn" style="margin-top:14px;">ทดสอบการแจ้งเตือน</button>
 </div>
 
 <!-- toast -->
@@ -546,71 +468,25 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 // Firestore collections (namespaced with sg_ prefix so this app doesn't collide with other data in the same project)
-const goalsCol = db.collection('sg_goals');
+const goalRef = db.collection('sg_goal').doc('current');
 const txCol = db.collection('sg_transactions');
 const archCol = db.collection('sg_archived');
 
 /* ============================= STATE ============================= */
 let state = {
-  goals: {},              // {id: {id,name,target,startAt,achieved}} - MULTIPLE active goals at once
+  goal: null,            // {id,name,target,startAt,achieved}
   transactions: {},       // {key: {amount,type,note,date,goalId}}
   archivedGoals: {}
 };
 let firstLoadDone = false;
-let celebratedGoalIds = new Set();
+let celebratedFor = null;
 let pendingTxType = 'save';
 let pendingCarryChoice = 'carry';
-let activeGoalId = localStorage.getItem('sg_activeGoalId') || null;
-let pendingTxDateMode = '0'; // '0'=today, '-1'=yesterday, 'custom'=user picked date
 
 /* ============================= HELPERS ============================= */
 const fmt = n => '฿' + Math.round(n).toLocaleString('th-TH');
 const todayStr = () => new Date().toDateString();
 const $ = id => document.getElementById(id);
-
-function goalsSorted(){
-  return Object.values(state.goals).sort((a,b) => a.startAt - b.startAt);
-}
-function activeGoal(){
-  return (activeGoalId && state.goals[activeGoalId]) ? state.goals[activeGoalId] : null;
-}
-function ensureActiveGoal(){
-  const list = goalsSorted();
-  if(!list.length){ activeGoalId = null; return; }
-  if(!activeGoalId || !state.goals[activeGoalId]){
-    activeGoalId = list[0].id;
-  }
-  localStorage.setItem('sg_activeGoalId', activeGoalId);
-}
-function setActiveGoal(id){
-  activeGoalId = id;
-  localStorage.setItem('sg_activeGoalId', id);
-  renderAll();
-}
-function moodEmoji(pct){
-  if(pct >= 100) return '🤩';
-  if(pct >= 75) return '😄';
-  if(pct >= 25) return '🙂';
-  return '😴';
-}
-function currentStreak(goalId){
-  // consecutive days (including today or yesterday) with at least one 'save' transaction for this goal
-  const days = new Set();
-  Object.values(state.transactions || {}).forEach(t => {
-    if(t.goalId === goalId && t.type === 'save') days.add(new Date(t.date).toDateString());
-  });
-  let streak = 0;
-  let cursor = new Date();
-  // allow streak to still count if today has no entry yet but yesterday does (streak not broken until a day is fully skipped)
-  if(!days.has(cursor.toDateString())){
-    cursor.setDate(cursor.getDate()-1);
-  }
-  while(days.has(cursor.toDateString())){
-    streak++;
-    cursor.setDate(cursor.getDate()-1);
-  }
-  return streak;
-}
 
 function toast(msg, isErr=false){
   const t = $('toast');
@@ -622,10 +498,9 @@ function toast(msg, isErr=false){
 }
 
 function txArrayForCurrentGoal(){
-  const g = activeGoal();
-  if(!g) return [];
+  if(!state.goal) return [];
   return Object.entries(state.transactions || {})
-    .filter(([k,v]) => v.goalId === g.id)
+    .filter(([k,v]) => v.goalId === state.goal.id)
     .map(([k,v]) => ({key:k, ...v}))
     .sort((a,b) => b.date - a.date);
 }
@@ -648,46 +523,10 @@ function computeStats(){
   return {totalSaved, totalSpent, balance, todayNet, txs};
 }
 
-// balance across ALL active (non-archived) goals, for the "รวมทุกเป้าหมาย" line
-function totalBalanceAllGoals(){
-  const perGoal = {};
-  Object.values(state.transactions || {}).forEach(t => {
-    if(!perGoal[t.goalId]) perGoal[t.goalId] = 0;
-    perGoal[t.goalId] += (t.type === 'save' ? t.amount : -t.amount);
-  });
-  let sum = 0;
-  Object.keys(state.goals).forEach(id => { sum += (perGoal[id] || 0); });
-  return sum;
-}
-
 /* ============================= RENDER ============================= */
-function renderGoalTabs(){
-  const list = goalsSorted();
-  if(!list.length) return '';
-  const chips = list.map(g => `
-    <button class="goal-chip ${g.id===activeGoalId?'active':''}" data-id="${g.id}">
-      ${g.achieved ? '🏆 ' : ''}${escapeHtml(g.name)}
-    </button>
-  `).join('');
-  return `<div class="goal-tabs" id="goalTabs">${chips}
-    <button class="goal-chip goal-chip-add" id="addGoalChip">+ เป้าหมายใหม่</button>
-  </div>`;
-}
-
-function wireGoalTabs(){
-  const wrap = $('goalTabs');
-  if(!wrap) return;
-  wrap.querySelectorAll('.goal-chip[data-id]').forEach(chip => {
-    chip.onclick = () => setActiveGoal(chip.dataset.id);
-  });
-  const addBtn = $('addGoalChip');
-  if(addBtn) addBtn.onclick = () => openGoalSheet({mode:'new'});
-}
-
 function renderGoalHero(stats){
   const hero = $('goalHero');
-  const g = activeGoal();
-  if(!g){
+  if(!state.goal){
     hero.innerHTML = `
       <div class="ring-box"><div class="ring-target-empty">
         <button class="ring-cta-empty" id="emptyGoalBtn">
@@ -695,17 +534,14 @@ function renderGoalHero(stats){
           <span>ตั้งเป้าหมายแรกของคุณ</span>
         </button>
       </div></div>`;
-    $('emptyGoalBtn').onclick = () => openGoalSheet({mode:'new'});
+    $('emptyGoalBtn').onclick = () => openGoalSheet(false);
     return;
   }
-  const pct = Math.min(100, Math.max(0, (stats.balance / g.target) * 100));
+  const pct = Math.min(100, Math.max(0, (stats.balance / state.goal.target) * 100));
   const r = 90, c = 2*Math.PI*r;
   const dash = c * (pct/100);
-  const streak = currentStreak(g.id);
-  const goalCount = goalsSorted().length;
   hero.innerHTML = `
-    ${renderGoalTabs()}
-    <div class="goal-name">🎯 ${escapeHtml(g.name)}${g.achieved ? '<span class="goal-badge-done">สำเร็จแล้ว</span>' : ''}<span class="mood-emoji">${moodEmoji(pct)}</span></div>
+    <div class="goal-name">🎯 ${escapeHtml(state.goal.name)}</div>
     <div class="ring-box">
       <svg viewBox="0 0 200 200">
         <defs>
@@ -733,16 +569,13 @@ function renderGoalHero(stats){
       </svg>
       <div class="ring-center">
         <div class="ring-pct num">${pct.toFixed(0)}<span>%</span></div>
-        <div class="ring-label">${fmt(g.target)} เป้าหมาย</div>
+        <div class="ring-label">${fmt(state.goal.target)} เป้าหมาย</div>
       </div>
     </div>
-    <div class="goal-remain">${stats.balance >= g.target
+    <div class="goal-remain">${stats.balance >= state.goal.target
       ? `🎉 <b>ถึงเป้าหมายแล้ว!</b>`
-      : `เหลืออีก <b class="num">${fmt(g.target - stats.balance)}</b> ถึงเป้าหมาย`}</div>
-    ${streak >= 2 ? `<div class="streak-chip">🔥 เก็บติดต่อกัน ${streak} วัน ลุยต่อ!</div>` : ''}
-    ${goalCount > 1 ? `<div class="goal-total">รวมทุกเป้าหมาย <b class="num">${fmt(totalBalanceAllGoals())}</b></div>` : ''}
+      : `เหลืออีก <b class="num">${fmt(state.goal.target - stats.balance)}</b> ถึงเป้าหมาย`}</div>
   `;
-  wireGoalTabs();
   buildWave(pct);
 }
 
@@ -850,17 +683,16 @@ function renderAll(){
 
 /* ============================= ACHIEVEMENT ============================= */
 function checkAchievement(stats){
-  const g = activeGoal();
-  if(!g || g.achieved) return;
-  if(stats.balance >= g.target && g.target > 0){
-    if(celebratedGoalIds.has(g.id)) return;
-    celebratedGoalIds.add(g.id);
-    goalsCol.doc(g.id).update({achieved:true});
-    showCelebration(stats, g);
+  if(!state.goal || state.goal.achieved) return;
+  if(stats.balance >= state.goal.target && state.goal.target > 0){
+    if(celebratedFor === state.goal.id) return;
+    celebratedFor = state.goal.id;
+    goalRef.update({achieved:true});
+    showCelebration(stats);
   }
 }
 
-function showCelebration(stats, goal){
+function showCelebration(stats){
   const wrap = document.createElement('div');
   wrap.className = 'confetti-wrap';
   const colors = ['#34E8B0','#FFB648','#FF6B7A','#7EA6FF','#F3F5FA'];
@@ -882,8 +714,8 @@ function showCelebration(stats, goal){
   card.innerHTML = `
     <div class="celeb-trophy"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0V4z"/><path d="M7 5H4a1 1 0 0 0-1 1v1a4 4 0 0 0 4 4M17 5h3a1 1 0 0 1 1 1v1a4 4 0 0 1-4 4"/></svg></div>
     <div class="celeb-title">สำเร็จเป้าหมายแล้ว! 🎉</div>
-    <div class="celeb-sub">นายเก็บเงินครบ <b>${fmt(goal.target)}</b><br>สำหรับ "${escapeHtml(goal.name)}" เรียบร้อย เก่งมาก!</div>
-    <button class="btn-primary" id="celebNewGoalBtn">เก็บเข้าประวัติ + ตั้งเป้าใหม่</button>
+    <div class="celeb-sub">คุณเก็บเงินครบ <b>${fmt(state.goal.target)}</b><br>สำหรับ "${escapeHtml(state.goal.name)}" เรียบร้อย</div>
+    <button class="btn-primary" id="celebNewGoalBtn">ตั้งเป้าหมายใหม่</button>
     <button class="btn-secondary" id="celebCloseBtn">ปิดหน้าต่างนี้</button>
   `;
   document.body.appendChild(card);
@@ -896,37 +728,22 @@ function showCelebration(stats, goal){
   $('celebCloseBtn').onclick = cleanup;
   card.querySelector('#celebNewGoalBtn').onclick = () => {
     cleanup();
-    setTimeout(()=> openGoalSheet({mode:'afterAchieve', goalId: goal.id, carryAmount: stats.balance}), 300);
+    setTimeout(()=> openGoalSheet(true, stats.balance), 300);
   };
 }
 
 /* ============================= FIREBASE ACTIONS ============================= */
-function resolveTxDate(dateInputVal){
-  // dateInputVal is 'YYYY-MM-DD' from the <input type="date">
-  const todayD = new Date();
-  const todayVal = todayD.toISOString().slice(0,10);
-  if(!dateInputVal || dateInputVal === todayVal){
-    return Date.now(); // today - use exact current time
-  }
-  // past date chosen - anchor at noon local time so display/sorting stays sane across timezones
-  const [y,m,d] = dateInputVal.split('-').map(Number);
-  const picked = new Date(y, m-1, d, 12, 0, 0);
-  // never allow a future date to sneak in
-  return Math.min(picked.getTime(), Date.now());
-}
-
-function addTransaction(type, amount, note, dateInputVal){
-  const g = activeGoal();
-  if(!g){ toast('กรุณาตั้งเป้าหมายก่อน', true); return; }
+function addTransaction(type, amount, note){
+  if(!state.goal){ toast('กรุณาตั้งเป้าหมายก่อน', true); return; }
   if(!amount || amount <= 0){ toast('กรุณาใส่จำนวนเงิน', true); return; }
   txCol.add({
     amount: Math.round(amount*100)/100,
     type,
     note: note || '',
-    date: resolveTxDate(dateInputVal),
-    goalId: g.id
+    date: Date.now(),
+    goalId: state.goal.id
   }).then(()=>{
-    toast(type === 'save' ? 'บันทึกเงินเก็บแล้ว ✓ เก่งมาก!' : 'บันทึกรายจ่ายแล้ว ✓');
+    toast(type === 'save' ? 'บันทึกเงินเก็บแล้ว ✓' : 'บันทึกรายจ่ายแล้ว ✓');
   }).catch(err => toast('เกิดข้อผิดพลาด: '+err.message, true));
 }
 
@@ -936,61 +753,39 @@ function deleteTx(key){
     .catch(err => toast('ลบไม่สำเร็จ', true));
 }
 
-function createGoal(name, target, carryAmount){
-  const newId = goalsCol.doc().id;
-  const newGoal = { id:newId, name, target, startAt: Date.now(), achieved:false };
-  return goalsCol.doc(newId).set(newGoal).then(()=>{
-    if(carryAmount && carryAmount > 0){
-      txCol.add({
-        amount: Math.round(carryAmount*100)/100, type:'save',
-        note:'ยอดยกมาจากเป้าหมายก่อนหน้า', date: Date.now(), goalId: newId
-      });
-    }
-    setActiveGoal(newId);
-    toast('ตั้งเป้าหมายใหม่แล้ว ✓ ลุยเลย!');
-  });
-}
+function saveGoal(name, target, carryChoice){
+  const doSet = (carryAmount) => {
+    const newId = db.collection('sg_goal').doc().id;
+    const newGoal = { id:newId, name, target, startAt: Date.now(), achieved:false };
+    goalRef.set(newGoal).then(()=>{
+      if(carryAmount && carryAmount > 0){
+        txCol.add({
+          amount: Math.round(carryAmount*100)/100, type:'save',
+          note:'ยอดยกมาจากเป้าหมายก่อนหน้า', date: Date.now(), goalId: newId
+        });
+      }
+      celebratedFor = null;
+      toast('บันทึกเป้าหมายแล้ว ✓');
+    }).catch(err => toast('เกิดข้อผิดพลาด', true));
+  };
 
-function archiveGoal(goalId){
-  const g = state.goals[goalId];
-  if(!g) return Promise.resolve();
-  const balance = Object.values(state.transactions || {})
-    .filter(t => t.goalId === goalId)
-    .reduce((sum,t) => sum + (t.type==='save' ? t.amount : -t.amount), 0);
-  return archCol.doc(goalId).set({
-    name: g.name, target: g.target, finalBalance: balance, completedAt: Date.now()
-  }).then(() => goalsCol.doc(goalId).delete());
-}
-
-// mode: 'new' (add another goal, no relation to any other), 'edit' (update the given goal),
-// 'afterAchieve' (archive the finished goal, then create a fresh one, optionally carrying its balance)
-function saveGoal(name, target, carryChoice, mode, goalId, carryAmount){
-  if(mode === 'edit'){
-    goalsCol.doc(goalId).update({name, target}).then(()=>{
+  if(state.goal && state.goal.achieved){
+    // archiving a completed goal into history
+    const stats = computeStats();
+    archCol.doc(state.goal.id).set({
+      name: state.goal.name, target: state.goal.target,
+      finalBalance: stats.balance, completedAt: Date.now()
+    }).then(()=>{
+      doSet(carryChoice === 'carry' ? stats.balance : 0);
+    });
+  } else if(state.goal){
+    // editing an in-progress goal (not yet achieved) - keep same id & history
+    goalRef.update({name, target}).then(()=>{
       toast('อัปเดตเป้าหมายแล้ว ✓');
-    }).catch(()=> toast('เกิดข้อผิดพลาด', true));
-    return;
+    });
+  } else {
+    doSet(0);
   }
-  if(mode === 'afterAchieve'){
-    archiveGoal(goalId).then(()=>{
-      createGoal(name, target, carryChoice === 'carry' ? carryAmount : 0);
-    }).catch(()=> toast('เกิดข้อผิดพลาด', true));
-    return;
-  }
-  // mode === 'new'
-  createGoal(name, target, 0).catch(()=> toast('เกิดข้อผิดพลาด', true));
-}
-
-function deleteGoalWithTransactions(goalId){
-  const batch = db.batch();
-  Object.entries(state.transactions || {}).forEach(([key,t]) => {
-    if(t.goalId === goalId) batch.delete(txCol.doc(key));
-  });
-  batch.delete(goalsCol.doc(goalId));
-  return batch.commit().then(()=>{
-    if(activeGoalId === goalId){ activeGoalId = null; ensureActiveGoal(); }
-    toast('ลบเป้าหมายแล้ว');
-  }).catch(()=> toast('ลบไม่สำเร็จ', true));
 }
 
 /* ============================= SHEET CONTROLS ============================= */
@@ -1003,12 +798,6 @@ function closeSheet(overlayId, sheetId){
   $(overlayId).classList.remove('show');
 }
 
-function todayDateVal(){ return new Date().toISOString().slice(0,10); }
-function dateValOffset(daysAgo){
-  const d = new Date(); d.setDate(d.getDate()-daysAgo);
-  return d.toISOString().slice(0,10);
-}
-
 function openTxSheet(type){
   pendingTxType = type;
   $('typeSave').classList.toggle('active-save', type==='save');
@@ -1018,36 +807,16 @@ function openTxSheet(type){
   $('txSubmit').classList.toggle('spend-mode', type==='spend');
   $('txAmount').value = '';
   $('txNote').value = '';
-  $('txDate').value = todayDateVal();
-  $('txDate').max = todayDateVal();
-  $('dateQuick').querySelectorAll('button').forEach(b => b.classList.toggle('active-date', b.dataset.d==='0'));
   openSheet('overlayTx','sheetTx');
   setTimeout(()=> $('txAmount').focus(), 350);
 }
 
-// mode: 'new' | 'edit' | 'afterAchieve'
-function openGoalSheet(opts){
-  opts = opts || {mode:'new'};
-  const mode = opts.mode;
-  const editingGoal = mode === 'edit' ? activeGoal() : null;
-  const titleMap = { new: goalsSorted().length ? 'ตั้งเป้าหมายใหม่' : 'ตั้งเป้าหมายแรก', edit: 'แก้ไขเป้าหมาย', afterAchieve: 'ตั้งเป้าหมายใหม่' };
-  $('goalSheetTitle').textContent = titleMap[mode];
-  $('goalName').value = editingGoal ? editingGoal.name : '';
-  $('goalTarget').value = editingGoal ? editingGoal.target : '';
-  $('goalSubmit').dataset.mode = mode;
-  $('goalSubmit').dataset.goalId = mode === 'afterAchieve' ? opts.goalId : (editingGoal ? editingGoal.id : '');
-  $('goalSubmit').dataset.carry = opts.carryAmount || 0;
-
-  const archiveBtn = $('goalArchiveBtn');
-  const deleteBtn = $('goalDeleteBtn');
-  if(mode === 'edit' && editingGoal){
-    archiveBtn.style.display = editingGoal.achieved ? 'block' : 'none';
-    deleteBtn.style.display = 'block';
-  } else {
-    archiveBtn.style.display = 'none';
-    deleteBtn.style.display = 'none';
-  }
-
+function openGoalSheet(isNewAfterAchieve, carryAmount){
+  $('goalSheetTitle').textContent = isNewAfterAchieve ? 'ตั้งเป้าหมายใหม่' : (state.goal ? 'แก้ไขเป้าหมาย' : 'ตั้งเป้าหมายแรก');
+  $('goalName').value = isNewAfterAchieve ? '' : (state.goal ? state.goal.name : '');
+  $('goalTarget').value = isNewAfterAchieve ? '' : (state.goal ? state.goal.target : '');
+  $('goalSubmit').dataset.afterAchieve = isNewAfterAchieve ? '1' : '0';
+  $('goalSubmit').dataset.carry = carryAmount || 0;
   openSheet('overlayGoal','sheetGoal');
   setTimeout(()=> $('goalName').focus(), 350);
 }
@@ -1066,36 +835,16 @@ document.querySelectorAll('.chip').forEach(chip => {
 $('btnAddSave').onclick = () => openTxSheet('save');
 $('btnAddSpend').onclick = () => openTxSheet('spend');
 $('fabAdd').onclick = () => openTxSheet('save');
-$('btnEditGoal').onclick = () => { if(activeGoal()) openGoalSheet({mode:'edit'}); else openGoalSheet({mode:'new'}); };
+$('btnEditGoal').onclick = () => openGoalSheet(false);
 $('historyBtn').onclick = () => { renderHistory(); openSheet('overlayHist','sheetHist'); };
-$('reminderBtn').onclick = () => { openSheet('overlayRemind','sheetRemind'); };
 
 $('overlayTx').onclick = () => closeSheet('overlayTx','sheetTx');
 $('overlayGoal').onclick = () => closeSheet('overlayGoal','sheetGoal');
 $('overlayHist').onclick = () => closeSheet('overlayHist','sheetHist');
-$('overlayRemind').onclick = () => closeSheet('overlayRemind','sheetRemind');
-
-/* --- custom date picker wiring --- */
-$('dateQuick').querySelectorAll('button').forEach(btn => {
-  btn.onclick = () => {
-    $('dateQuick').querySelectorAll('button').forEach(b => b.classList.remove('active-date'));
-    btn.classList.add('active-date');
-    if(btn.dataset.d === '0') $('txDate').value = todayDateVal();
-    else if(btn.dataset.d === '-1') $('txDate').value = dateValOffset(1);
-    else setTimeout(()=> { try{ $('txDate').showPicker && $('txDate').showPicker(); }catch(e){} }, 50);
-  };
-});
-$('txDate').addEventListener('change', () => {
-  const val = $('txDate').value;
-  $('dateQuick').querySelectorAll('button').forEach(b => b.classList.remove('active-date'));
-  if(val === todayDateVal()) $('dateQuick').querySelector('[data-d="0"]').classList.add('active-date');
-  else if(val === dateValOffset(1)) $('dateQuick').querySelector('[data-d="-1"]').classList.add('active-date');
-  else $('dateQuick').querySelector('[data-d="custom"]').classList.add('active-date');
-});
 
 $('txSubmit').onclick = () => {
   const amt = parseFloat($('txAmount').value);
-  addTransaction(pendingTxType, amt, $('txNote').value.trim(), $('txDate').value);
+  addTransaction(pendingTxType, amt, $('txNote').value.trim());
   closeSheet('overlayTx','sheetTx');
 };
 
@@ -1104,28 +853,7 @@ $('goalSubmit').onclick = () => {
   const target = parseFloat($('goalTarget').value);
   if(!name){ toast('กรุณาใส่ชื่อเป้าหมาย', true); return; }
   if(!target || target <= 0){ toast('กรุณาใส่จำนวนเงินเป้าหมาย', true); return; }
-  const mode = $('goalSubmit').dataset.mode || 'new';
-  const goalId = $('goalSubmit').dataset.goalId;
-  const carryAmount = parseFloat($('goalSubmit').dataset.carry) || 0;
-  saveGoal(name, target, pendingCarryChoice, mode, goalId, carryAmount);
-  closeSheet('overlayGoal','sheetGoal');
-};
-
-$('goalArchiveBtn').onclick = () => {
-  const goalId = $('goalSubmit').dataset.goalId;
-  if(!goalId) return;
-  archiveGoal(goalId).then(()=>{
-    if(activeGoalId === goalId){ activeGoalId = null; ensureActiveGoal(); }
-    toast('เก็บเข้าประวัติแล้ว ✓');
-  }).catch(()=> toast('เกิดข้อผิดพลาด', true));
-  closeSheet('overlayGoal','sheetGoal');
-};
-
-$('goalDeleteBtn').onclick = () => {
-  const goalId = $('goalSubmit').dataset.goalId;
-  if(!goalId) return;
-  if(!confirm('ลบเป้าหมายนี้และรายการทั้งหมดที่เกี่ยวข้อง? การลบนี้กู้คืนไม่ได้')) return;
-  deleteGoalWithTransactions(goalId);
+  saveGoal(name, target, pendingCarryChoice);
   closeSheet('overlayGoal','sheetGoal');
 };
 
@@ -1161,11 +889,8 @@ window.addEventListener('offline', ()=> updateConnDot(false));
 
 let loadFlags = {goal:false, tx:false, arch:false};
 
-goalsCol.onSnapshot(snap => {
-  const obj = {};
-  snap.forEach(d => obj[d.id] = d.data());
-  state.goals = obj;
-  ensureActiveGoal();
+goalRef.onSnapshot(doc => {
+  state.goal = doc.exists ? doc.data() : null;
   loadFlags.goal = true; tryFinishLoad();
   onDataChange();
 }, err => { console.error(err); loadFlags.goal = true; tryFinishLoad(); });
@@ -1231,106 +956,6 @@ function showSkeletonThenContent(){
     $('contentWrap').classList.add('show');
   }, 550);
 }
-
-/* ============================= REMINDERS (LOCAL NOTIFICATIONS) =============================
-   Note: without a backend push server, a browser can't wake up and notify a fully-closed tab.
-   This gives a best-effort daily reminder that fires while the app/tab is open (or backgrounded
-   but not killed), checked on load and every couple of minutes after that. For guaranteed
-   notifications when the app is fully closed, this app would need Firebase Cloud Messaging +
-   a small server/Cloud Function to trigger the push - that's a natural next step, not included here. */
-let swRegistration = null;
-if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('sw.js').then(reg => { swRegistration = reg; }).catch(()=>{});
-}
-
-function remindPrefs(){
-  return {
-    on: localStorage.getItem('sg_remindOn') === '1',
-    hour: parseInt(localStorage.getItem('sg_remindHour') || '20', 10)
-  };
-}
-function setRemindPrefs(on, hour){
-  localStorage.setItem('sg_remindOn', on ? '1' : '0');
-  if(hour != null) localStorage.setItem('sg_remindHour', String(hour));
-}
-
-function renderRemindUI(){
-  const p = remindPrefs();
-  $('remindSwitch').classList.toggle('on', p.on);
-  $('hourGrid').querySelectorAll('.hour-opt').forEach(b => {
-    b.classList.toggle('active-hour', parseInt(b.dataset.h,10) === p.hour);
-  });
-}
-renderRemindUI();
-
-$('remindSwitch').onclick = () => {
-  const p = remindPrefs();
-  if(!p.on){
-    if(!('Notification' in window)){ toast('เบราว์เซอร์นี้ไม่รองรับการแจ้งเตือน', true); return; }
-    Notification.requestPermission().then(perm => {
-      if(perm === 'granted'){
-        setRemindPrefs(true, p.hour);
-        renderRemindUI();
-        toast('เปิดแจ้งเตือนแล้ว 🔔');
-      } else {
-        toast('ต้องอนุญาตการแจ้งเตือนก่อนนะ', true);
-      }
-    });
-  } else {
-    setRemindPrefs(false, p.hour);
-    renderRemindUI();
-    toast('ปิดแจ้งเตือนแล้ว');
-  }
-};
-
-$('hourGrid').querySelectorAll('.hour-opt').forEach(btn => {
-  btn.onclick = () => {
-    const p = remindPrefs();
-    setRemindPrefs(p.on, parseInt(btn.dataset.h,10));
-    renderRemindUI();
-  };
-});
-
-function fireReminderNotification(){
-  const title = 'ถึงเวลาเก็บเงินแล้ว! 💰';
-  const body = 'แวะมากดเก็บเงินของนายหน่อย อย่าลืมเป้าหมายที่ตั้งไว้นะ';
-  if(swRegistration && swRegistration.showNotification){
-    swRegistration.showNotification(title, { body, tag:'sg-daily', icon: undefined });
-  } else if('Notification' in window && Notification.permission === 'granted'){
-    new Notification(title, { body, tag:'sg-daily' });
-  }
-}
-
-$('remindTestBtn').onclick = () => {
-  if(!('Notification' in window)){ toast('เบราว์เซอร์นี้ไม่รองรับการแจ้งเตือน', true); return; }
-  if(Notification.permission !== 'granted'){
-    Notification.requestPermission().then(perm => {
-      if(perm === 'granted') fireReminderNotification();
-      else toast('ต้องอนุญาตการแจ้งเตือนก่อนนะ', true);
-    });
-  } else {
-    fireReminderNotification();
-  }
-};
-
-function savedAnythingToday(){
-  const today = todayStr();
-  return Object.values(state.transactions || {}).some(t => t.type==='save' && new Date(t.date).toDateString() === today);
-}
-
-function checkReminderTick(){
-  const p = remindPrefs();
-  if(!p.on || !('Notification' in window) || Notification.permission !== 'granted') return;
-  const now = new Date();
-  if(now.getHours() < p.hour) return;
-  if(savedAnythingToday()) return;
-  const lastShown = localStorage.getItem('sg_remindLastShown');
-  if(lastShown === todayStr()) return;
-  localStorage.setItem('sg_remindLastShown', todayStr());
-  fireReminderNotification();
-}
-setInterval(checkReminderTick, 3 * 60 * 1000); // re-check every 3 minutes while the app is open
-setTimeout(checkReminderTick, 4000); // also check shortly after load
 
 // safety fallback in case Firebase is unreachable
 setTimeout(()=>{
