@@ -2,7 +2,9 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="description" content="SaveGoal แอปติดตามเป้าหมายเงินออม บันทึกรายรับรายจ่าย ตั้งเป้าหมาย และดูความคืบหน้าการออมเงินแบบเรียลไทม์">
+<meta name="theme-color" content="#38BDF8">
 <title>SaveGoal · เป้าหมายเงินออม</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -30,6 +32,7 @@
   --ease-out: cubic-bezier(.16,1,.3,1);
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
 html,body{min-height: 100%;}
 body{
   font-family:'Sarabun',-apple-system,sans-serif;
@@ -263,7 +266,7 @@ input{font-family:inherit;color:inherit;}
 .sheet.show{transform:translateY(0);}
 .sheet-handle{width:48px;height:6px;border-radius:6px;background:#E2E8F0;margin:8px auto 20px;}
 .sheet-title{font-size:20px;font-weight:800;font-family:'Prompt',sans-serif;margin-bottom:20px;color:var(--text-1);text-align:center;}
-.field-lbl{font-size:14px;color:var(--text-1);margin-bottom:10px;font-weight:700;}
+.field-lbl{display:block;font-size:14px;color:var(--text-1);margin-bottom:10px;font-weight:700;}
 .type-toggle{display:flex;gap:12px;margin-bottom:20px;}
 .type-opt{flex:1;text-align:center;padding:14px;border-radius:18px;background:#F1F5F9;border:2px solid #E2E8F0;font-size:15px;font-weight:700;color:var(--text-2);transition:all .2s;box-shadow:0 4px 0 #E2E8F0;}
 .type-opt:active{transform:translateY(4px);box-shadow:0 0 0 transparent;}
@@ -347,13 +350,14 @@ input{font-family:inherit;color:inherit;}
 </style>
 </head>
 <body>
+<h1 class="sr-only">SaveGoal · แอปติดตามเป้าหมายเงินออม</h1>
 
 <div class="mesh"><div class="blob blob1"></div><div class="blob blob2"></div></div>
 
 <!-- ============ OPENING LOADING ============ -->
 <div id="splash">
   <div class="splash-mark">
-    <svg viewBox="0 0 24 24" fill="none" stroke="#38BDF8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#38BDF8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
       <path d="M12 2.5c2.8 1.6 5 5.4 5 9 0 2.3-.9 4.3-2 5.6l-.6 3.4-2.4-2-2.4 2-.6-3.4c-1.1-1.3-2-3.3-2-5.6 0-3.6 2.2-7.4 5-9z"/>
       <circle cx="12" cy="10" r="2"/>
     </svg>
@@ -367,12 +371,12 @@ input{font-family:inherit;color:inherit;}
 <div id="app">
   <div class="topbar">
     <div class="island">
-      <div class="island-logo"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5c2.8 1.6 5 5.4 5 9 0 2.3-.9 4.3-2 5.6l-.6 3.4-2.4-2-2.4 2-.6-3.4c-1.1-1.3-2-3.3-2-5.6 0-3.6 2.2-7.4 5-9z"/></svg></div>
+      <div class="island-logo"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.5c2.8 1.6 5 5.4 5 9 0 2.3-.9 4.3-2 5.6l-.6 3.4-2.4-2-2.4 2-.6-3.4c-1.1-1.3-2-3.3-2-5.6 0-3.6 2.2-7.4 5-9z"/></svg></div>
       <span class="island-text">SaveGoal</span>
       <span class="dot" id="connDot"></span>
     </div>
     <button class="icon-btn" id="historyBtn" aria-label="ประวัติเป้าหมาย">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v5l4 2"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v5l4 2"/></svg>
     </button>
   </div>
 
@@ -383,7 +387,7 @@ input{font-family:inherit;color:inherit;}
 
   <div class="content-wrap" id="contentWrap">
     <div class="offline-banner" id="offlineBanner">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 1l22 22M16.72 11.06A10.94 10.94 0 0 1 19 12.55M5 12.55a10.94 10.94 0 0 1 5.17-2.39M10.71 5.05A16 16 0 0 1 22.58 9M1.42 9a15.91 15.91 0 0 1 4.7-2.88M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 1l22 22M16.72 11.06A10.94 10.94 0 0 1 19 12.55M5 12.55a10.94 10.94 0 0 1 5.17-2.39M10.71 5.05A16 16 0 0 1 22.58 9M1.42 9a15.91 15.91 0 0 1 4.7-2.88M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/></svg>
       <span>ออฟไลน์ — ข้อมูลจะซิงค์เมื่อต่อเน็ตนะ!</span>
     </div>
 
@@ -402,17 +406,17 @@ input{font-family:inherit;color:inherit;}
     <!-- STATS -->
     <div class="stats-grid">
       <div class="stat-card" id="statToday">
-        <div class="stat-icon mint"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V10M18 20V4M6 20v-4"/></svg></div>
+        <div class="stat-icon mint"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20V10M18 20V4M6 20v-4"/></svg></div>
         <div class="stat-val num" id="valToday">฿0</div>
         <div class="stat-lbl">วันนี้เก็บได้</div>
       </div>
       <div class="stat-card" id="statTotal">
-        <div class="stat-icon gold"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M8.5 9.5a2.5 2.5 0 0 1 2.5-1.5h1.5a2 2 0 0 1 0 4H11a2 2 0 0 0 0 4h1.5a2.5 2.5 0 0 0 2.5-1.5"/></svg></div>
+        <div class="stat-icon gold"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M8.5 9.5a2.5 2.5 0 0 1 2.5-1.5h1.5a2 2 0 0 1 0 4H11a2 2 0 0 0 0 4h1.5a2.5 2.5 0 0 0 2.5-1.5"/></svg></div>
         <div class="stat-val num" id="valTotal">฿0</div>
         <div class="stat-lbl">ยอดรวมฮีโร่</div>
       </div>
       <div class="stat-card" id="statBalance">
-        <div class="stat-icon blue"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="13" rx="2.5"/><path d="M2 10h20M6 15h4"/></svg></div>
+        <div class="stat-icon blue"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="6" width="20" height="13" rx="2.5"/><path d="M2 10h20M6 15h4"/></svg></div>
         <div class="stat-val num" id="valBalance">฿0</div>
         <div class="stat-lbl">คงเหลือ</div>
       </div>
@@ -421,22 +425,22 @@ input{font-family:inherit;color:inherit;}
     <!-- QUICK ACTIONS -->
     <div class="qa-row">
       <button class="qa-btn qa-save" id="btnAddSave">
-        <div class="qa-ic"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></div>
+        <div class="qa-ic"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></div>
         <span>เก็บเงิน</span>
       </button>
       <button class="qa-btn qa-spend" id="btnAddSpend">
-        <div class="qa-ic"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></svg></div>
+        <div class="qa-ic"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/></svg></div>
         <span>ใช้เงิน</span>
       </button>
       <button class="qa-btn qa-goal" id="btnEditGoal">
-        <div class="qa-ic"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></div>
+        <div class="qa-ic"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></div>
         <span>เป้าหมาย</span>
       </button>
     </div>
 
     <!-- TRANSACTIONS -->
     <div class="sec-head">
-      <span class="sec-title">ภารกิจล่าสุด</span>
+      <h2 class="sec-title">ภารกิจล่าสุด</h2>
       <span class="sec-link" id="txCount"></span>
     </div>
     <div class="tx-list" id="txList"></div>
@@ -444,38 +448,40 @@ input{font-family:inherit;color:inherit;}
 </div>
 
 <button class="fab" id="fabAdd">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
   บันทึกภารกิจ
 </button>
 
 <!-- ============ ADD TRANSACTION SHEET ============ -->
 <div class="overlay" id="overlayTx"></div>
-<div class="sheet" id="sheetTx">
+<div class="sheet" id="sheetTx" role="dialog" aria-modal="true" aria-labelledby="txSheetTitle">
   <div class="sheet-handle"></div>
-  <div class="sheet-title" id="txSheetTitle">บันทึกเงินเก็บ</div>
+  <h2 class="sheet-title" id="txSheetTitle">บันทึกเงินเก็บ</h2>
   <div class="type-toggle">
     <button class="type-opt active-save" id="typeSave" data-type="save">💰 เก็บเงิน</button>
     <button class="type-opt" id="typeSpend" data-type="spend">🛒 ใช้เงิน</button>
   </div>
-  <div class="field-lbl">จำนวนเงิน</div>
-  <div class="amt-input-wrap"><span>฿</span><input type="number" inputmode="decimal" class="amt-input" id="txAmount" placeholder="0"></div>
+  <label class="field-lbl" for="txAmount">จำนวนเงิน</label>
+  <div class="amt-input-wrap"><span aria-hidden="true">฿</span><input type="number" inputmode="decimal" class="amt-input" id="txAmount" placeholder="0" aria-label="จำนวนเงิน (บาท)"></div>
   <div class="quick-chips" id="quickChips">
     <button class="chip" data-v="10">+10</button>
     <button class="chip" data-v="20">+20</button>
     <button class="chip" data-v="50">+50</button>
     <button class="chip" data-v="100">+100</button>
   </div>
-  <div class="field-lbl">บันทึกช่วยจำ (ไม่บังคับ)</div>
+  <label class="field-lbl" for="txDate">วันที่ทำรายการ</label>
+  <input type="date" class="text-input" id="txDate" aria-label="วันที่ทำรายการ (สามารถเลือกวันย้อนหลังได้)">
+  <label class="field-lbl" for="txNote">บันทึกช่วยจำ (ไม่บังคับ)</label>
   <input type="text" class="text-input" id="txNote" placeholder="เช่น ค่าขนม, ซื้อของเล่น...">
   <button class="btn-primary" id="txSubmit">บันทึกยอดเยี่ยม!</button>
 </div>
 
 <!-- ============ GOAL SHEET (UPDATED FOR COMPONENTS) ============ -->
 <div class="overlay" id="overlayGoal"></div>
-<div class="sheet" id="sheetGoal">
+<div class="sheet" id="sheetGoal" role="dialog" aria-modal="true" aria-labelledby="goalSheetTitle">
   <div class="sheet-handle"></div>
-  <div class="sheet-title" id="goalSheetTitle">ตั้งเป้าหมายฮีโร่</div>
-  <div class="field-lbl">ชื่อเป้าหมายหลัก</div>
+  <h2 class="sheet-title" id="goalSheetTitle">ตั้งเป้าหมายฮีโร่</h2>
+  <label class="field-lbl" for="goalName">ชื่อเป้าหมายหลัก</label>
   <input type="text" class="text-input" id="goalName" placeholder="เช่น สร้างคอมพิวเตอร์ในฝัน">
   
   <div class="field-lbl" style="display:flex; justify-content:space-between;">
@@ -485,25 +491,25 @@ input{font-family:inherit;color:inherit;}
   <div id="compEditList" style="display:flex; flex-direction:column; gap:8px; margin-bottom:12px;"></div>
   <button class="btn-secondary" id="btnAddDraftComp" style="margin-top:0; margin-bottom:16px;">+ เพิ่มชิ้นส่วนย่อย</button>
   
-  <div class="field-lbl">จำนวนเงินรวมที่ต้องใช้</div>
-  <div class="amt-input-wrap"><span>฿</span><input type="number" inputmode="decimal" class="amt-input" id="goalTarget" placeholder="0"></div>
+  <label class="field-lbl" for="goalTarget">จำนวนเงินรวมที่ต้องใช้</label>
+  <div class="amt-input-wrap"><span aria-hidden="true">฿</span><input type="number" inputmode="decimal" class="amt-input" id="goalTarget" placeholder="0" aria-label="จำนวนเงินรวมที่ต้องใช้ (บาท)"></div>
   <button class="btn-primary" id="goalSubmit">เริ่มภารกิจ!</button>
 </div>
 
 <!-- ============ BADGES SHEET ============ -->
 <div class="overlay" id="overlayBadges"></div>
-<div class="sheet" id="sheetBadges">
+<div class="sheet" id="sheetBadges" role="dialog" aria-modal="true" aria-labelledby="badgesSheetTitle">
   <div class="sheet-handle"></div>
-  <div class="sheet-title">เข็มกลัดเกียรติยศฮีโร่ 🏅</div>
+  <h2 class="sheet-title" id="badgesSheetTitle">เข็มกลัดเกียรติยศฮีโร่ 🏅</h2>
   <div class="badge-grid" id="badgeGridList"></div>
   <button class="btn-secondary" id="closeBadgesBtn">ปิดหน้าต่างนี้</button>
 </div>
 
 <!-- ============ HISTORY SHEET ============ -->
 <div class="overlay" id="overlayHist"></div>
-<div class="sheet" id="sheetHist">
+<div class="sheet" id="sheetHist" role="dialog" aria-modal="true" aria-labelledby="histSheetTitle">
   <div class="sheet-handle"></div>
-  <div class="sheet-title">ภารกิจที่สำเร็จแล้ว ⭐</div>
+  <h2 class="sheet-title" id="histSheetTitle">ภารกิจที่สำเร็จแล้ว ⭐</h2>
   <button class="btn-secondary" id="btnResetAll" style="color: #9F1239; border-color: var(--coral); background: #FFE4E6; margin-bottom: 16px;">
     🗑️ รีเซตแอปและลบประวัติทั้งหมด (ต้องใส่รหัส)
   </button>
@@ -511,7 +517,7 @@ input{font-family:inherit;color:inherit;}
 </div>
 
 <!-- toast -->
-<div class="toast" id="toast"><span class="dot2"></span><span id="toastMsg"></span></div>
+<div class="toast" id="toast" role="status" aria-live="polite"><span class="dot2" aria-hidden="true"></span><span id="toastMsg"></span></div>
 
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
@@ -545,6 +551,98 @@ const fmt = n => '฿' + Math.round(n).toLocaleString('th-TH');
 const todayStr = () => new Date().toDateString();
 const $ = id => document.getElementById(id);
 
+// คืนค่าวันที่ปัจจุบันในรูปแบบ yyyy-mm-dd (ใช้กับ input[type=date] โดยอิง local time ไม่ใช่ UTC)
+function todayISO(){
+  const d = new Date();
+  const mm = String(d.getMonth()+1).padStart(2,'0');
+  const dd = String(d.getDate()).padStart(2,'0');
+  return `${d.getFullYear()}-${mm}-${dd}`;
+}
+
+// แปลงค่าจาก input[type=date] (yyyy-mm-dd) ให้เป็น timestamp โดยคงเวลาปัจจุบัน (ชม./นาที) ไว้
+// เพื่อให้รายการยังเรียงลำดับตามเวลาที่บันทึกจริงได้อย่างสมเหตุสมผลภายในวันเดียวกัน
+function dateInputToTimestamp(dateStr){
+  if(!dateStr) return Date.now();
+  const now = new Date();
+  const [y, m, d] = dateStr.split('-').map(Number);
+  if(!y || !m || !d) return Date.now();
+  return new Date(y, m-1, d, now.getHours(), now.getMinutes(), now.getSeconds(), now.getMilliseconds()).getTime();
+}
+
+/* ============================= SOUND MANAGER (Web Audio API) =============================
+   สังเคราะห์เสียงเองแบบ real-time ด้วย Web Audio API — ไม่มีการโหลดไฟล์เสียงจากภายนอกเลย
+   - ไม่มีปัญหาลิขสิทธิ์ เพราะคลื่นเสียงถูกสร้างขึ้นเองในเบราว์เซอร์ ไม่ใช่ไฟล์ของใคร จึง "ฟรีตลอดชีพ" แน่นอน
+   - ไม่มี latency จากการโหลดไฟล์เสียง/รอ CDN ตอบกลับ เล่นได้ทันทีที่สั่ง (เหมาะกับ UI ที่ต้องการความไว)
+   - ทำงานได้แม้ออฟไลน์ ไม่ต้องพึ่งลิงก์ภายนอกที่อาจหมดอายุหรือใช้งานไม่ได้ในอนาคต
+*/
+const SoundManager = (() => {
+  let ctx = null;
+  let enabled = true;
+
+  function getCtx(){
+    if(!ctx){
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if(!AC) return null;
+      ctx = new AC();
+    }
+    if(ctx.state === 'suspended') ctx.resume();
+    return ctx;
+  }
+  // เบราว์เซอร์ส่วนใหญ่ต้องมี user gesture ก่อนถึงจะเล่นเสียงได้ (autoplay policy)
+  // จึงปลุก/สร้าง AudioContext ทันทีที่ผู้ใช้แตะหน้าจอ/คลิก/กดคีย์บอร์ดครั้งแรก
+  ['pointerdown', 'touchstart', 'keydown'].forEach(ev =>
+    document.addEventListener(ev, getCtx, {once:true, passive:true})
+  );
+
+  function tone(freq, start, dur, type='sine', peakGain=0.16){
+    const c = getCtx();
+    if(!c || !enabled) return;
+    const t0 = c.currentTime + start;
+    const osc = c.createOscillator();
+    const gain = c.createGain();
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, t0);
+    gain.gain.setValueAtTime(0.0001, t0);
+    gain.gain.exponentialRampToValueAtTime(peakGain, t0 + 0.012);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    osc.connect(gain).connect(c.destination);
+    osc.start(t0);
+    osc.stop(t0 + dur + 0.03);
+  }
+
+  function sweep(freqFrom, freqTo, start, dur, type='sine', peakGain=0.13){
+    const c = getCtx();
+    if(!c || !enabled) return;
+    const t0 = c.currentTime + start;
+    const osc = c.createOscillator();
+    const gain = c.createGain();
+    osc.type = type;
+    osc.frequency.setValueAtTime(freqFrom, t0);
+    osc.frequency.exponentialRampToValueAtTime(freqTo, t0 + dur);
+    gain.gain.setValueAtTime(0.0001, t0);
+    gain.gain.exponentialRampToValueAtTime(peakGain, t0 + 0.015);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    osc.connect(gain).connect(c.destination);
+    osc.start(t0);
+    osc.stop(t0 + dur + 0.03);
+  }
+
+  return {
+    tap(){ tone(720, 0, 0.05, 'sine', 0.09); },                                   // แตะปุ่มทั่วไป
+    toggle(){ tone(560, 0, 0.06, 'triangle', 0.11); },                            // สลับ เก็บเงิน/ใช้เงิน
+    confirm(){ tone(700, 0, 0.07, 'sine', 0.13); tone(980, 0.06, 0.12, 'sine', 0.12); }, // บันทึกภารกิจสำเร็จ
+    save(){ tone(660, 0, 0.09, 'sine', 0.16); tone(880, 0.07, 0.14, 'sine', 0.16); tone(1180, 0.14, 0.18, 'sine', 0.14); }, // ออมเงินสำเร็จ
+    spend(){ tone(480, 0, 0.10, 'sine', 0.14); tone(360, 0.08, 0.16, 'sine', 0.12); },   // ใช้จ่ายสำเร็จ
+    error(){ tone(300, 0, 0.09, 'square', 0.09); tone(220, 0.09, 0.14, 'square', 0.09); }, // แจ้งเตือนผิดพลาด
+    delete(){ sweep(500, 220, 0, 0.14, 'sine', 0.11); },                          // ลบรายการ
+    unlock(){ tone(760, 0, 0.08, 'sine', 0.13); tone(1140, 0.07, 0.16, 'triangle', 0.13); }, // ปลดล็อกชิ้นส่วน
+    open(){ sweep(420, 760, 0, 0.13, 'sine', 0.09); },                            // เปิดหน้าต่าง/ชีท
+    close(){ sweep(600, 320, 0, 0.11, 'sine', 0.07); },                           // ปิดหน้าต่าง/ชีท
+    achieve(){ [660, 880, 1100, 1320].forEach((f,i) => tone(f, i*0.11, 0.22, 'triangle', 0.16)); }, // สำเร็จเป้าหมาย
+    setEnabled(v){ enabled = v; }
+  };
+})();
+
 function toast(msg, isErr=false){
   const t = $('toast');
   $('toastMsg').textContent = msg;
@@ -552,7 +650,16 @@ function toast(msg, isErr=false){
   t.classList.add('show');
   clearTimeout(toast._h);
   toast._h = setTimeout(()=>t.classList.remove('show'), 2400);
+  if(isErr) SoundManager.error(); // จุดเดียวที่ดักเสียงแจ้งเตือน error ได้ครบทุกจุดในแอป เพราะ toast(...,true) ถูกเรียกจากทุก error path
 }
+
+// ปุ่ม/องค์ประกอบที่คลิกได้ทั่วไปซึ่งยังไม่มีเสียงเฉพาะของตัวเอง (ไม่รวม .chip และ .type-opt ที่ผูกเสียงไว้เฉพาะจุดแล้ว
+// เพื่อไม่ให้เสียง "แตะ" ซ้ำสองครั้งในคลิกเดียว) ใช้ event delegation จุดเดียวคลุมทุกปุ่มในแอปรวมถึงปุ่มที่ generate ทีหลัง
+document.addEventListener('click', (e) => {
+  if(e.target.closest('.icon-btn, .qa-btn, .fab, .hero-bar, .ring-cta-empty, .comp-btn, .tx-del, .btn-primary, .btn-secondary')){
+    SoundManager.tap();
+  }
+}, {passive:true});
 
 function txArrayForCurrentGoal(){
   if(!state.goal) return [];
@@ -636,7 +743,7 @@ function renderComponents(stats) {
 
   cont.innerHTML = `
     <div class="comp-wrap">
-      <div class="comp-title"><span>🧩 ชิ้นส่วนประกอบ (Micro-wins)</span> <span style="font-size:12px;color:var(--text-3);">${comps.filter(c=>c.unlocked).length}/${comps.length}</span></div>
+      <h3 class="comp-title"><span>🧩 ชิ้นส่วนประกอบ (Micro-wins)</span> <span style="font-size:12px;color:var(--text-3);">${comps.filter(c=>c.unlocked).length}/${comps.length}</span></h3>
       <div class="comp-list">${compHTML}</div>
     </div>
   `;
@@ -646,6 +753,7 @@ window.unlockComponent = function(compId) {
   if(!state.goal || !state.goal.components) return;
   const newComps = state.goal.components.map(c => c.id === compId ? {...c, unlocked:true} : c);
   goalRef.update({components: newComps}).then(() => {
+    SoundManager.unlock();
     toast('🎉 ปลดล็อกชิ้นส่วนสำเร็จแล้วฮีโร่!');
     showMiniCelebration();
   });
@@ -677,7 +785,7 @@ function renderDraftComps(){
   }
   list.innerHTML = draftComps.map((c, i) => `
     <div style="display:flex;gap:8px;">
-      <input type="text" class="text-input" style="margin-bottom:0;flex:2;padding:10px 14px;" placeholder="ชื่อ (เช่น RAM)" value="${c.name}" oninput="draftComps[${i}].name=this.value">
+      <input type="text" class="text-input" style="margin-bottom:0;flex:2;padding:10px 14px;" placeholder="ชื่อ (เช่น RAM)" value="${escapeHtml(c.name)}" oninput="draftComps[${i}].name=this.value">
       <input type="number" class="text-input" style="margin-bottom:0;flex:1;padding:10px 14px;" placeholder="ราคา" value="${c.price || ''}" oninput="draftComps[${i}].price=parseFloat(this.value)||0; updateDraftTarget();">
       <button class="tx-del" style="background:#FFE4E6;color:#9F1239;border-radius:12px;width:42px;" onclick="draftComps.splice(${i},1);renderDraftComps();updateDraftTarget();">✕</button>
     </div>
@@ -707,14 +815,19 @@ function renderProjection(stats) {
   const bal = stats.balance;
   const remaining = target - bal;
   
-  // คำนวณวันเฉลี่ย (ถ้าเพิ่งสร้างเป้าหมายในวันนี้ ให้ถือว่าเป็น 1 วันเพื่อป้องกันหาร 0)
-  const daysSinceStart = Math.max(1, (Date.now() - state.goal.startAt) / (1000 * 60 * 60 * 24));
+  // คำนวณวันเฉลี่ย: ใช้วันที่ของรายการที่เก่าที่สุด (รองรับการบันทึกย้อนหลัง) แทนการอิง
+  // เฉพาะ state.goal.startAt อย่างเดียว เพราะถ้าผู้ใช้บันทึกรายการย้อนหลังไปก่อนวันตั้งเป้าหมาย
+  // การหารด้วยจำนวนวันที่สั้นเกินจริงจะทำให้ค่าเฉลี่ยต่อวัน (เช่น ฿500/วัน) พองเกินจริง
+  // (ถ้าเพิ่งสร้างเป้าหมายในวันนี้และยังไม่มีรายการ ให้ถือว่าเป็น 1 วันเพื่อป้องกันหาร 0)
+  const earliestTxDate = stats.txs.length ? Math.min(...stats.txs.map(t => t.date)) : Date.now();
+  const effectiveStart = Math.min(state.goal.startAt, earliestTxDate);
+  const daysSinceStart = Math.max(1, (Date.now() - effectiveStart) / (1000 * 60 * 60 * 24));
   const avgDaily = bal / daysSinceStart;
 
   if(avgDaily <= 0) {
     cont.innerHTML = `
       <div class="proj-wrap">
-        <div class="proj-title">🔮 พยากรณ์วันสำเร็จ</div>
+        <h3 class="proj-title">🔮 พยากรณ์วันสำเร็จ</h3>
         <div class="proj-text">เริ่มออมเงินภารกิจนี้ เพื่อดูระบบพยากรณ์วันสำเร็จแบบ Real-time กันเถอะ!</div>
       </div>`;
     return;
@@ -725,7 +838,7 @@ function renderProjection(stats) {
 
   cont.innerHTML = `
     <div class="proj-wrap">
-      <div class="proj-title">🔮 พยากรณ์วันสำเร็จล่วงหน้า</div>
+      <h3 class="proj-title">🔮 พยากรณ์วันสำเร็จล่วงหน้า</h3>
       <div class="proj-text">จากสถิติปัจจุบัน คุณเก็บได้เฉลี่ย <b>${fmt(avgDaily)}/วัน</b><br>เป้าหมายนี้จะสำเร็จประมาณวันที่ <b>${estDate}</b></div>
       <div class="proj-input-group">
         <span>🔥 ถ้าเก็บเพิ่มอีกวันละ</span>
@@ -900,7 +1013,7 @@ function renderGoalHero(stats){
     hero.innerHTML = `
       <div class="ring-box" style="border:none;box-shadow:none;"><div class="ring-target-empty">
         <button class="ring-cta-empty" id="emptyGoalBtn">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
           <span>ตั้งเป้าหมายแรกของคุณกันเถอะฮีโร่!</span>
         </button>
       </div></div>`;
@@ -912,7 +1025,7 @@ function renderGoalHero(stats){
   hero.innerHTML = `
     <div class="goal-name">🚀 ${escapeHtml(state.goal.name)}</div>
     <div class="ring-box">
-      <svg viewBox="0 0 200 200">
+      <svg viewBox="0 0 200 200" aria-hidden="true">
         <defs>
           <clipPath id="liquidClip"><circle cx="100" cy="100" r="86"/></clipPath>
           <linearGradient id="waveGrad" x1="0" y1="0" x2="0" y2="1">
@@ -990,7 +1103,7 @@ function renderTxList(stats){
   $('txCount').textContent = txs.length ? `${txs.length} รายการ` : '';
   if(!txs.length){
     list.innerHTML = `<div class="empty-state">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="4"/><path d="M16 3v8M8 3v8M3 11h18"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="4"/><path d="M16 3v8M8 3v8M3 11h18"/></svg>
       <b>ยังไม่มีรายการ</b>
       <span>เริ่มออมเงินภารกิจแรกกันเลย!</span>
     </div>`;
@@ -1004,7 +1117,7 @@ function renderTxList(stats){
         <div class="tx-date">${formatDate(t.date)}</div>
       </div>
       <div class="tx-amt ${t.type}">${t.type==='save'?'+':'-'}${fmt(t.amount)}</div>
-      <button class="tx-del" data-key="${t.key}" aria-label="ลบ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+      <button class="tx-del" data-key="${t.key}" aria-label="ลบ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
     </div>
   `).join('');
   list.querySelectorAll('.tx-del').forEach(btn => {
@@ -1050,6 +1163,7 @@ function checkAchievement(stats){
 }
 
 function showCelebration(stats){
+  SoundManager.achieve();
   const wrap = document.createElement('div');
   wrap.className = 'confetti-wrap';
   const emojis = ['⭐', '🚀', '💰', '🌟', '🦸‍♂️', '⚡'];
@@ -1070,7 +1184,7 @@ function showCelebration(stats){
   card.className = 'celeb-card';
   card.innerHTML = `
     <div class="celeb-trophy">🏆</div>
-    <div class="celeb-title">ยอดเยี่ยมมากฮีโร่! 🎉</div>
+    <h2 class="celeb-title">ยอดเยี่ยมมากฮีโร่! 🎉</h2>
     <div class="celeb-sub">สะสมพลังครบ <b>${fmt(state.goal.target)}</b><br>สำหรับ "${escapeHtml(state.goal.name)}" สำเร็จแล้ว!</div>
     <button class="btn-primary" id="celebNewGoalBtn">ตั้งภารกิจใหม่</button>
     <button class="btn-secondary" id="celebCloseBtn">ปิดหน้าต่างนี้</button>
@@ -1090,13 +1204,14 @@ function showCelebration(stats){
 }
 
 /* ============================= FIREBASE ACTIONS ============================= */
-function addTransaction(type, amount, note){
+function addTransaction(type, amount, note, date){
   if(!state.goal){ toast('กรุณาตั้งเป้าหมายก่อน', true); return; }
   if(!amount || amount <= 0){ toast('กรุณาใส่จำนวนเงิน', true); return; }
   txCol.add({
     amount: Math.round(amount*100)/100,
-    type, note: note || '', date: Date.now(), goalId: state.goal.id
+    type, note: note || '', date: date || Date.now(), goalId: state.goal.id
   }).then(()=>{
+    type === 'save' ? SoundManager.save() : SoundManager.spend();
     toast(type === 'save' ? 'ยอดเยี่ยม! ออมเงินแล้ว ✓' : 'บันทึกการใช้จ่ายแล้ว ✓');
   }).catch(err => toast('เกิดข้อผิดพลาด: '+err.message, true));
 }
@@ -1104,7 +1219,7 @@ function addTransaction(type, amount, note){
 function deleteTx(key){
   const pin = prompt("กรุณาใส่รหัสผ่าน (PIN) เพื่อลบรายการนี้:");
   if (pin === ADMIN_PIN) {
-    txCol.doc(key).delete().then(()=> toast('ลบรายการแล้ว')).catch(err => toast('ลบไม่สำเร็จ', true));
+    txCol.doc(key).delete().then(()=>{ SoundManager.delete(); toast('ลบรายการแล้ว'); }).catch(err => toast('ลบไม่สำเร็จ', true));
   } else if (pin !== null) {
     toast('รหัสผ่านไม่ถูกต้อง!', true);
   }
@@ -1119,6 +1234,7 @@ function saveGoal(name, target, carryChoice, components){
         txCol.add({ amount: Math.round(carryAmount*100)/100, type:'save', note:'พลังสะสมจากภารกิจที่แล้ว', date: Date.now(), goalId: newId });
       }
       celebratedFor = null;
+      SoundManager.confirm();
       toast('บันทึกภารกิจแล้ว ✓');
     }).catch(err => toast('เกิดข้อผิดพลาด', true));
   };
@@ -1132,7 +1248,7 @@ function saveGoal(name, target, carryChoice, components){
       doSet(carryChoice === 'carry' ? stats.balance : 0);
     });
   } else if(state.goal){
-    goalRef.update({name, target, components: components || []}).then(()=>toast('อัปเดตภารกิจแล้ว ✓'));
+    goalRef.update({name, target, components: components || []}).then(()=>{ SoundManager.confirm(); toast('อัปเดตภารกิจแล้ว ✓'); });
   } else {
     doSet(0);
   }
@@ -1140,10 +1256,12 @@ function saveGoal(name, target, carryChoice, components){
 
 /* ============================= SHEET CONTROLS ============================= */
 function openSheet(overlayId, sheetId){
+  SoundManager.open();
   $(overlayId).classList.add('show');
   requestAnimationFrame(()=> $(sheetId).classList.add('show'));
 }
 function closeSheet(overlayId, sheetId){
+  SoundManager.close();
   $(sheetId).classList.remove('show');
   $(overlayId).classList.remove('show');
 }
@@ -1157,6 +1275,8 @@ function openTxSheet(type){
   $('txSubmit').classList.toggle('spend-mode', type==='spend');
   $('txAmount').value = '';
   $('txNote').value = '';
+  $('txDate').value = todayISO();
+  $('txDate').max = todayISO(); // กันเลือกวันที่ในอนาคต แต่ไม่จำกัดวันย้อนหลัง (ไม่มี min)
   openSheet('overlayTx','sheetTx');
   setTimeout(()=> $('txAmount').focus(), 350);
 }
@@ -1177,11 +1297,12 @@ function openGoalSheet(isNewAfterAchieve, carryAmount){
 }
 
 /* ============================= EVENT WIRING ============================= */
-$('typeSave').onclick = () => { pendingTxType='save'; $('typeSave').classList.add('active-save'); $('typeSpend').classList.remove('active-spend'); $('txSubmit').classList.remove('spend-mode'); $('txSheetTitle').textContent='บันทึกเงินเก็บ'; $('txSubmit').textContent='บันทึกยอดเยี่ยม!'; };
-$('typeSpend').onclick = () => { pendingTxType='spend'; $('typeSpend').classList.add('active-spend'); $('typeSave').classList.remove('active-save'); $('txSubmit').classList.add('spend-mode'); $('txSheetTitle').textContent='บันทึกการใช้จ่าย'; $('txSubmit').textContent='บันทึกรายจ่าย'; };
+$('typeSave').onclick = () => { SoundManager.toggle(); pendingTxType='save'; $('typeSave').classList.add('active-save'); $('typeSpend').classList.remove('active-spend'); $('txSubmit').classList.remove('spend-mode'); $('txSheetTitle').textContent='บันทึกเงินเก็บ'; $('txSubmit').textContent='บันทึกยอดเยี่ยม!'; };
+$('typeSpend').onclick = () => { SoundManager.toggle(); pendingTxType='spend'; $('typeSpend').classList.add('active-spend'); $('typeSave').classList.remove('active-save'); $('txSubmit').classList.add('spend-mode'); $('txSheetTitle').textContent='บันทึกการใช้จ่าย'; $('txSubmit').textContent='บันทึกรายจ่าย'; };
 
 document.querySelectorAll('.chip').forEach(chip => {
   chip.onclick = () => {
+    SoundManager.tap();
     const cur = parseFloat($('txAmount').value) || 0;
     $('txAmount').value = cur + parseFloat(chip.dataset.v);
   };
@@ -1199,6 +1320,15 @@ $('overlayHist').onclick = () => closeSheet('overlayHist','sheetHist');
 $('overlayBadges').onclick = () => closeSheet('overlayBadges','sheetBadges');
 $('closeBadgesBtn').onclick = () => closeSheet('overlayBadges','sheetBadges');
 
+// รองรับปิด sheet ด้วยปุ่ม Escape เพื่อการเข้าถึงด้วยคีย์บอร์ด
+document.addEventListener('keydown', (e) => {
+  if(e.key !== 'Escape') return;
+  const sheetPairs = [['overlayTx','sheetTx'], ['overlayGoal','sheetGoal'], ['overlayHist','sheetHist'], ['overlayBadges','sheetBadges']];
+  for(const [overlayId, sheetId] of sheetPairs){
+    if($(sheetId).classList.contains('show')){ closeSheet(overlayId, sheetId); break; }
+  }
+});
+
 $('btnResetAll').onclick = () => {
   const pin = prompt("⚠️ อันตราย: คุณกำลังจะลบเป้าหมาย, เงินออม และประวัติ 'ทั้งหมด'!\n\nกรุณาใส่รหัสผ่าน (PIN) เพื่อยืนยันการรีเซต:");
   if (pin === ADMIN_PIN) {
@@ -1214,6 +1344,7 @@ $('btnResetAll').onclick = () => {
       })
     ).then(() => goalRef.delete()
     ).then(() => {
+      SoundManager.confirm();
       toast('รีเซตข้อมูลสำเร็จ! ✨');
       closeSheet('overlayHist', 'sheetHist');
       setTimeout(() => location.reload(), 1500);
@@ -1225,7 +1356,8 @@ $('btnResetAll').onclick = () => {
 
 $('txSubmit').onclick = () => {
   const amt = parseFloat($('txAmount').value);
-  addTransaction(pendingTxType, amt, $('txNote').value.trim());
+  const ts = dateInputToTimestamp($('txDate').value);
+  addTransaction(pendingTxType, amt, $('txNote').value.trim(), ts);
   closeSheet('overlayTx','sheetTx');
 };
 
@@ -1248,7 +1380,7 @@ function renderHistory(){
   const el = $('histList');
   if(!arr.length){
     el.innerHTML = `<div class="empty-state" style="padding:24px 4px;border:none;">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l4 2"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l4 2"/></svg>
       <span>ยังไม่มีภารกิจที่สำเร็จ</span>
     </div>`;
     return;
