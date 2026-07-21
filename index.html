@@ -537,6 +537,48 @@ const goalRef = db.collection('sg_goal').doc('current');
 const txCol = db.collection('sg_transactions');
 const archCol = db.collection('sg_archived');
 
+/* ============================= DISCORD NOTIFICATIONS [เพิ่มใหม่ทั้งบล็อก] ============================= */
+// Webhook URL ของ Discord — ใช้แจ้งเตือนกิจกรรมต่างๆ ในแอป
+// หมายเหตุ: ฝัง Webhook ไว้ฝั่ง client เหมาะสำหรับรันใช้งานส่วนตัวแบบ local เท่านั้น (ไม่ publish เป็นสาธารณะ)
+const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1529166672278192319/iQUUkTxQe9cMV2gagVrbVBb93RD-Jl9u4huidk137IHRS3gPUGnNthUV7wuNCH45TlSm";
+
+// ฟังก์ชันกลางสำหรับยิง Discord Embed — ทุกจุดแจ้งเตือนในแอปเรียกผ่านฟังก์ชันนี้ฟังก์ชันเดียว
+// options: { title, description, color, fields, keepalive }
+function notifyDiscord({ title, description = '', color = 0x38BDF8, fields = null, keepalive = false }){
+  const embed = {
+    title,
+    description,
+    color,
+    footer: { text: 'SaveGoal Notification' },
+    timestamp: new Date().toISOString()
+  };
+  if(fields) embed.fields = fields;
+
+  return fetch(DISCORD_WEBHOOK_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ embeds: [embed] }),
+    keepalive // สำคัญ: ต้องเป็น true เฉพาะตอนออกจากเว็บ (pagehide) กันเบราว์เซอร์ตัดการทำงานก่อนส่งสำเร็จ
+  }).catch(err => console.error('Discord notify error:', err));
+}
+
+/* ============================= PRESENCE ALERT (เข้า/ออกเว็บ) [เพิ่มใหม่] ============================= */
+document.addEventListener('DOMContentLoaded', () => {
+  console.log('App is sending logs to Discord Owner'); // แจ้งใน console เพื่อความโปร่งใสว่าแอปนี้ส่ง log ไปหาเจ้าของ
+  notifyDiscord({
+    title: '🟢 มีผู้ใช้งานเข้าสู่เว็บไซต์',
+    color: 0x4ADE80 // เขียว
+  });
+});
+
+window.addEventListener('pagehide', () => {
+  notifyDiscord({
+    title: '🔴 มีผู้ใช้งานออกจากเว็บไซต์',
+    color: 0xFB7185, // แดง
+    keepalive: true // กันเบราว์เซอร์ตัดการเชื่อมต่อก่อนส่งคำขอเสร็จตอนปิดแท็บ
+  });
+});
+
 /* ============================= STATE ============================= */
 const ADMIN_PIN = "1234";
 let state = { goal: null, transactions: {}, archivedGoals: {} };
@@ -1159,6 +1201,15 @@ function checkAchievement(stats){
     celebratedFor = state.goal.id;
     goalRef.update({achieved:true});
     showCelebration(stats);
+    // [เพิ่มใหม่] แจ้งเตือน Discord ระดับพิเศษเมื่อบรรลุเป้าหมายการออม 100%
+    notifyDiscord({
+      title: '🏆 ยินดีด้วย! บรรลุเป้าหมายการออมเงินแล้ว!',
+      color: 0xFBBF24, // ทอง/เหลืองสด
+      fields: [
+        { name: 'ชื่อเป้าหมาย', value: state.goal.name, inline: true },
+        { name: 'ยอดเงินรวมที่ทำสำเร็จ', value: fmt(stats.balance), inline: true }
+      ]
+    });
   }
 }
 
@@ -1213,13 +1264,27 @@ function addTransaction(type, amount, note, date){
   }).then(()=>{
     type === 'save' ? SoundManager.save() : SoundManager.spend();
     toast(type === 'save' ? 'ยอดเยี่ยม! ออมเงินแล้ว ✓' : 'บันทึกการใช้จ่ายแล้ว ✓');
+    // [เพิ่มใหม่] แจ้งเตือน Discord เมื่อบันทึกรายการการเงินสำเร็จ
+    notifyDiscord({
+      title: type === 'save' ? '🎉 มีการออมเงินใหม่!' : '💸 มีการใช้จ่ายใหม่',
+      color: type === 'save' ? 0x4ADE80 : 0xFB7185, // เขียว / แดง
+      fields: [
+        { name: 'จำนวนเงิน', value: fmt(amount), inline: true },
+        { name: 'บันทึกรายการ', value: (note && note.trim()) ? note.trim() : 'ไม่ได้ระบุ', inline: true }
+      ]
+    });
   }).catch(err => toast('เกิดข้อผิดพลาด: '+err.message, true));
 }
 
 function deleteTx(key){
   const pin = prompt("กรุณาใส่รหัสผ่าน (PIN) เพื่อลบรายการนี้:");
   if (pin === ADMIN_PIN) {
-    txCol.doc(key).delete().then(()=>{ SoundManager.delete(); toast('ลบรายการแล้ว'); }).catch(err => toast('ลบไม่สำเร็จ', true));
+    txCol.doc(key).delete().then(()=>{
+      SoundManager.delete();
+      toast('ลบรายการแล้ว');
+      // [เพิ่มใหม่] แจ้งเตือน Discord เมื่อมีการลบรายการการเงิน
+      notifyDiscord({ title: '🗑️ มีการลบรายการการเงิน', color: 0xF97316 }); // ส้ม
+    }).catch(err => toast('ลบไม่สำเร็จ', true));
   } else if (pin !== null) {
     toast('รหัสผ่านไม่ถูกต้อง!', true);
   }
@@ -1347,6 +1412,8 @@ $('btnResetAll').onclick = () => {
       SoundManager.confirm();
       toast('รีเซตข้อมูลสำเร็จ! ✨');
       closeSheet('overlayHist', 'sheetHist');
+      // [เพิ่มใหม่] แจ้งเตือน Discord ระดับสำคัญเมื่อมีการรีเซ็ตระบบ/ลบเป้าหมายทั้งหมด
+      notifyDiscord({ title: '🚨 มีการรีเซ็ตระบบ / ลบเป้าหมาย', color: 0x991B1B }); // แดงเข้ม
       setTimeout(() => location.reload(), 1500);
     }).catch(err => toast('เกิดข้อผิดพลาดในการรีเซต', true));
   } else if (pin !== null) {
