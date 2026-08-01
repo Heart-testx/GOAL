@@ -4,349 +4,416 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="description" content="SaveGoal แอปติดตามเป้าหมายเงินออม บันทึกรายรับรายจ่าย ตั้งเป้าหมาย และดูความคืบหน้าการออมเงินแบบเรียลไทม์">
-<meta name="theme-color" content="#38BDF8">
+<meta name="theme-color" content="#12312A">
 <title>SaveGoal · เป้าหมายเงินออม</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700;800&family=Sarabun:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Thai:wght@500;600;700;800&family=Sarabun:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
 /* ============================= DESIGN TOKENS ============================= */
-/* ใส่โค้ดนี้ไว้บรรทัดแรกของไฟล์ CSS */
 :root{
-  --bg-deep: #F0F9FF;
-  --bg-deep-2: #E0F2FE;
-  --card: #FFFFFF;
-  --border-glass: #CBD5E1;
-  --border-glass-strong: #94A3B8;
-  --mint: #38BDF8;
-  --mint-dim: #0284C7;
-  --gold: #FBBF24;
-  --coral: #FB7185;
-  --volt: #4ADE80;
-  --text-1: #1E293B;
-  --text-2: #64748B;
-  --text-3: #94A3B8;
-  --shadow-chunky: 0 4px 0 #CBD5E1;
-  --shadow-chunky-active: 0 0px 0 #CBD5E1;
-  --ease-spring: cubic-bezier(.34,1.56,.64,1);
+  --bg: #F6F2E9;
+  --bg-2: #EFE8D8;
+  --paper: #FFFEFB;
+  --paper-2: #FBF7EE;
+  --line: #E4DBC5;
+  --line-strong: #CBBE9E;
+  --ink: #1D2420;
+  --ink-soft: #5C6459;
+  --ink-faint: #8D9285;
+
+  --pine: #1F5E4C;
+  --pine-deep: #123B30;
+  --pine-soft: #E4EEE7;
+  --amber: #B9852F;
+  --amber-deep: #8C6321;
+  --amber-soft: #F6ECD7;
+  --clay: #B2543A;
+  --clay-deep: #813B29;
+  --clay-soft: #F5E5DD;
+  --sage: #3F7D5C;
+
+  --shadow-1: 0 1px 1px rgba(29,36,32,.04), 0 2px 6px rgba(29,36,32,.05);
+  --shadow-2: 0 2px 4px rgba(29,36,32,.05), 0 12px 28px rgba(29,36,32,.09);
+  --shadow-press: 0 1px 2px rgba(29,36,32,.08) inset;
+  --edge: 0 1px 0 rgba(255,255,255,.6) inset, 0 -1px 0 rgba(29,36,32,.04) inset;
+
+  --ease-spring: cubic-bezier(.22,1.15,.44,1.02);
   --ease-out: cubic-bezier(.16,1,.3,1);
+  --ease-soft: cubic-bezier(.4,0,.2,1);
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
-html,body{min-height: 100%;}
+html,body{min-height:100%;}
 body{
   font-family:'Sarabun',-apple-system,sans-serif;
-  background:var(--bg-deep);
-  color:var(--text-1);
+  background:var(--bg);
+  color:var(--ink);
   overflow-x:hidden;
-  min-height: 100dvh;
+  min-height:100dvh;
   position:relative;
-  background-image: radial-gradient(#CBD5E1 1px, transparent 1px);
-  background-size: 20px 20px;
-  overscroll-behavior-y: contain;
+  overscroll-behavior-y:contain;
+  letter-spacing:.1px;
 }
-h1,h2,h3,.display{font-family:'Prompt',sans-serif;}
-.num{font-family:'Space Grotesk','Prompt',sans-serif;font-variant-numeric:tabular-nums;}
-::selection{background:var(--mint);color:#fff;}
-button{font-family:inherit;border:none;background:none;color:inherit;cursor:pointer;}
+h1,h2,h3,.display{font-family:'Noto Serif Thai',serif;}
+.num{font-family:'Space Grotesk','Noto Serif Thai',sans-serif;font-variant-numeric:tabular-nums;letter-spacing:.2px;}
+::selection{background:var(--pine);color:#fff;}
+button{font-family:inherit;border:none;background:none;color:inherit;cursor:pointer;-webkit-user-select:none;user-select:none;}
 input{font-family:inherit;color:inherit;}
+:focus-visible{outline:2.5px solid var(--pine);outline-offset:2px;border-radius:8px;}
 @media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important;}}
 
-/* ambient background meshes */
+/* ambient texture */
 .mesh{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;}
-.blob{position:absolute;border-radius:50%;filter:blur(60px);opacity:.6;}
-.blob1{width:400px;height:400px;background:#BAE6FD;top:-100px;left:-100px;animation:drift1 20s ease-in-out infinite;}
-.blob2{width:400px;height:400px;background:#FEF08A;bottom:-100px;right:-100px;opacity:0.4;animation:drift2 24s ease-in-out infinite;}
-@keyframes drift1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(40px,50px) scale(1.1)}}
-@keyframes drift2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-50px,-40px) scale(1.15)}}
+.mesh::before{
+  content:'';position:absolute;inset:0;
+  background-image:radial-gradient(rgba(29,36,32,.05) 1px, transparent 1px);
+  background-size:22px 22px;mask-image:radial-gradient(ellipse 100% 60% at 50% 0%, black 40%, transparent 90%);
+}
+.blob{position:absolute;border-radius:50%;filter:blur(70px);}
+.blob1{width:420px;height:420px;background:radial-gradient(circle, #CFE3D5 0%, transparent 70%);top:-140px;left:-120px;animation:drift1 22s ease-in-out infinite;}
+.blob2{width:380px;height:380px;background:radial-gradient(circle, #F0DDB8 0%, transparent 70%);bottom:-120px;right:-110px;animation:drift2 26s ease-in-out infinite;}
+@keyframes drift1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(30px,40px) scale(1.08)}}
+@keyframes drift2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-40px,-30px) scale(1.1)}}
 
 /* ============================= SPLASH & SHELL ============================= */
 #splash{
   position:fixed;inset:0;z-index:9999;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;
-  background:var(--bg-deep-2);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;
+  background:linear-gradient(180deg,var(--pine-deep),#0D2820);
   transition:opacity .6s var(--ease-out),transform .6s var(--ease-out);
 }
-#splash.hide{opacity:0;transform:scale(1.04);pointer-events:none;}
+#splash.hide{opacity:0;transform:scale(1.03);pointer-events:none;}
 .splash-mark{
-  width:96px;height:96px;border-radius:30px;
-  background:white; border:3px solid var(--mint);
+  width:90px;height:90px;border-radius:26px;
+  background:var(--paper);
   display:flex;align-items:center;justify-content:center;
-  box-shadow:0 8px 0 var(--mint);
+  box-shadow:0 14px 34px rgba(0,0,0,.35);
   animation:markPop 1s var(--ease-spring);
 }
-@keyframes markPop{0%{transform:scale(.4) rotate(-12deg);opacity:0}100%{transform:scale(1) rotate(0);opacity:1}}
-.splash-mark svg{width:50px;height:50px;}
-.splash-word{font-weight:800;font-size:26px;color:var(--mint-dim);letter-spacing:.5px;opacity:0;animation:fadeUp .7s var(--ease-out) .25s forwards;}
-.splash-sub{font-size:14px;color:var(--text-2);font-weight:600;opacity:0;animation:fadeUp .7s var(--ease-out) .4s forwards;}
-@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-.splash-bar{width:180px;height:6px;border-radius:6px;background:white;border:1px solid #CBD5E1;overflow:hidden;opacity:0;animation:fadeUp .6s var(--ease-out) .5s forwards;}
-.splash-bar-fill{height:100%;width:0%;border-radius:6px;background:linear-gradient(90deg,var(--mint),var(--volt));transition:width .25s var(--ease-out);}
+@keyframes markPop{0%{transform:scale(.4) rotate(-10deg);opacity:0}100%{transform:scale(1) rotate(0);opacity:1}}
+.splash-mark svg{width:44px;height:44px;}
+.splash-word{font-weight:700;font-size:25px;color:#F6F2E9;letter-spacing:.3px;opacity:0;animation:fadeUp .7s var(--ease-out) .25s forwards;}
+.splash-sub{font-size:13.5px;color:#B9C9BF;font-weight:500;opacity:0;animation:fadeUp .7s var(--ease-out) .4s forwards;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.splash-bar{width:160px;height:4px;border-radius:6px;background:rgba(255,255,255,.14);overflow:hidden;opacity:0;animation:fadeUp .6s var(--ease-out) .5s forwards;}
+.splash-bar-fill{height:100%;width:0%;border-radius:6px;background:linear-gradient(90deg,var(--amber),#E0B25E);transition:width .25s var(--ease-out);}
 
-#app{position:relative;z-index:1;max-width:520px;margin:0 auto;min-height:100vh;min-height:100dvh;padding:14px 16px calc(120px + env(safe-area-inset-bottom));opacity:0;}
+#app{position:relative;z-index:1;max-width:520px;margin:0 auto;min-height:100vh;min-height:100dvh;padding:16px 16px calc(126px + env(safe-area-inset-bottom));opacity:0;}
 #app.show{opacity:1;animation:fadeUp .5s var(--ease-out);}
 
-.topbar{display:flex;align-items:center;justify-content:space-between;padding:6px 4px 14px;}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:4px 2px 16px;}
 .island{
-  display:flex;align-items:center;gap:10px;
-  background:white;border:2px solid var(--border-glass);
-  padding:6px 16px 6px 6px;border-radius:100px;
-  box-shadow:var(--shadow-chunky);
+  display:flex;align-items:center;gap:9px;
+  background:var(--paper);border:1px solid var(--line);
+  padding:5px 15px 5px 5px;border-radius:100px;
+  box-shadow:var(--shadow-1);
 }
-.island .dot{width:10px;height:10px;border-radius:50%;background:var(--volt);box-shadow:0 0 0 2px rgba(74,222,128,0.3);}
-.island .dot.off{background:var(--coral);box-shadow:0 0 0 2px rgba(251,113,133,0.3);}
-.island-logo{width:32px;height:32px;border-radius:50%;background:var(--mint);display:flex;align-items:center;justify-content:center;border:2px solid #0284C7;}
-.island-logo svg{width:16px;height:16px;stroke:white;}
-.island-text{font-size:14px;font-weight:700;font-family:'Prompt',sans-serif;color:var(--text-1);}
+.island .dot{width:8px;height:8px;border-radius:50%;background:var(--sage);box-shadow:0 0 0 3px rgba(63,125,92,.16);}
+.island .dot.off{background:var(--clay);box-shadow:0 0 0 3px rgba(178,84,58,.16);}
+.island-logo{width:30px;height:30px;border-radius:50%;background:var(--pine);display:flex;align-items:center;justify-content:center;}
+.island-logo svg{width:15px;height:15px;stroke:#fff;}
+.island-text{font-size:13.5px;font-weight:700;font-family:'Noto Serif Thai',serif;color:var(--ink);}
 .icon-btn{
-  width:42px;height:42px;border-radius:14px;
-  background:white;border:2px solid var(--border-glass);
+  width:40px;height:40px;border-radius:13px;
+  background:var(--paper);border:1px solid var(--line);
   display:flex;align-items:center;justify-content:center;
-  box-shadow:var(--shadow-chunky); transition:all .15s var(--ease-spring);
+  box-shadow:var(--shadow-1);transition:transform .18s var(--ease-spring),box-shadow .18s var(--ease-spring),background .18s var(--ease-soft);
 }
-.icon-btn:active{transform:translateY(4px);box-shadow:var(--shadow-chunky-active);background:#F8FAFC;}
-.icon-btn svg{width:20px;height:20px;stroke:var(--text-1);}
+.icon-btn:hover{transform:translateY(-1px);box-shadow:var(--shadow-2);}
+.icon-btn:active{transform:translateY(1px) scale(.97);background:var(--paper-2);box-shadow:var(--shadow-press);}
+.icon-btn svg{width:18px;height:18px;stroke:var(--ink-soft);}
 
 /* ============================= HERO PROFILE & GOAL HERO ============================= */
 .hero-bar{
-  background:white;border:2px solid var(--border-glass);border-radius:24px;
-  padding:14px 16px;margin-bottom:16px; box-shadow:var(--shadow-chunky);
+  background:var(--paper);border:1px solid var(--line);border-radius:20px;
+  padding:14px 16px;margin-bottom:14px;box-shadow:var(--shadow-1);
   display:flex;align-items:center;justify-content:space-between;gap:12px;
-  cursor:pointer;transition:all .15s var(--ease-spring);
+  cursor:pointer;transition:transform .18s var(--ease-spring),box-shadow .18s var(--ease-spring);
 }
-.hero-bar:active{transform:translateY(3px);box-shadow:var(--shadow-chunky-active);background:#F8FAFC;}
+.hero-bar:hover{transform:translateY(-1px);box-shadow:var(--shadow-2);}
+.hero-bar:active{transform:translateY(1px) scale(.995);box-shadow:var(--shadow-press);}
 .hero-level-info{display:flex;align-items:center;gap:12px;flex:1;min-width:0;}
-.hero-rank-ic{font-size:28px;width:48px;height:48px;border-radius:16px;background:#FEF9C3;border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.hero-rank-ic{font-size:24px;width:44px;height:44px;border-radius:14px;background:var(--amber-soft);border:1px solid #E7CE9C;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .hero-rank-text{flex:1;min-width:0;}
-.hero-title{font-size:15px;font-weight:800;font-family:'Prompt',sans-serif;color:var(--text-1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.hero-xp-wrap{display:flex;align-items:center;gap:8px;margin-top:4px;}
-.xp-bar{flex:1;height:8px;background:#F1F5F9;border-radius:10px;border:1px solid #E2E8F0;overflow:hidden;}
-.xp-fill{height:100%;background:linear-gradient(90deg,var(--gold),#F59E0B);width:0%;border-radius:10px;transition:width .5s var(--ease-out);}
-.xp-txt{font-size:11px;font-weight:700;color:var(--text-3);}
+.hero-title{font-size:14px;font-weight:700;font-family:'Noto Serif Thai',serif;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.hero-xp-wrap{display:flex;align-items:center;gap:8px;margin-top:5px;}
+.xp-bar{flex:1;height:6px;background:var(--bg-2);border-radius:10px;overflow:hidden;}
+.xp-fill{height:100%;background:linear-gradient(90deg,var(--amber),#D6A94F);width:0%;border-radius:10px;transition:width .6s var(--ease-out);}
+.xp-txt{font-size:10.5px;font-weight:600;color:var(--ink-faint);white-space:nowrap;}
 .badge-pill{
-  background:#F0F9FF;border:2px solid var(--mint);border-radius:100px;
+  background:var(--pine-soft);border:1px solid #C6DBCE;border-radius:100px;
   padding:6px 12px;display:flex;align-items:center;gap:6px;flex-shrink:0;
-  font-size:13px;font-weight:700;color:var(--mint-dim);
+  font-size:12.5px;font-weight:700;color:var(--pine-deep);
 }
 
-.goal-hero{position:relative;display:flex;flex-direction:column;align-items:center;padding:8px 0 16px;}
-.goal-name{font-size:16px;color:var(--text-1);font-weight:700;margin-bottom:4px;background:white;padding:6px 16px;border-radius:100px;border:2px solid var(--border-glass);box-shadow:var(--shadow-chunky);}
-.ring-box{position:relative;width:230px;height:230px;margin:12px 0 16px;background:white;border-radius:50%;box-shadow:0 12px 30px rgba(56,189,248,0.2), inset 0 4px 12px rgba(0,0,0,0.05);border:4px solid white;}
-.ring-box svg{width:100%;height:100%;transform:rotate(0deg);}
-.ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;z-index:10;}
-.ring-pct{font-size:44px;font-weight:800;color:var(--text-1);letter-spacing:-1px;text-shadow:0 2px 4px rgba(255,255,255,0.8);}
-.ring-pct span{font-size:20px;color:var(--text-2);font-weight:600;}
-.ring-label{font-size:13px;color:var(--text-2);font-weight:600;background:rgba(255,255,255,0.8);padding:2px 8px;border-radius:100px;backdrop-filter:blur(4px);}
+.goal-hero{position:relative;display:flex;flex-direction:column;align-items:center;padding:10px 0 18px;}
+.goal-name{font-size:15px;color:var(--ink);font-weight:600;margin-bottom:6px;background:var(--paper);padding:7px 18px;border-radius:100px;border:1px solid var(--line);box-shadow:var(--shadow-1);font-family:'Noto Serif Thai',serif;}
+.ring-box{position:relative;width:228px;height:228px;margin:14px 0 18px;background:var(--paper);border-radius:50%;box-shadow:0 18px 40px rgba(18,59,48,.15), var(--edge);border:5px solid var(--paper);}
+.ring-box svg{width:100%;height:100%;}
+.ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;z-index:10;}
+.ring-pct{font-size:42px;font-weight:700;color:var(--ink);letter-spacing:-1px;}
+.ring-pct span{font-size:19px;color:var(--ink-faint);font-weight:600;}
+.ring-label{font-size:12.5px;color:var(--ink-soft);font-weight:600;background:rgba(255,255,255,.85);padding:3px 10px;border-radius:100px;}
 .ring-target-empty{width:100%;height:100%;display:flex;align-items:center;justify-content:center;}
 .ring-cta-empty{
-  display:flex;flex-direction:column;align-items:center;gap:8px;
-  background:white;border:2px dashed var(--mint);
-  width:190px;height:190px;border-radius:50%;transition:all .2s var(--ease-spring);
+  display:flex;flex-direction:column;align-items:center;gap:9px;
+  background:var(--paper);border:2px dashed var(--pine);
+  width:186px;height:186px;border-radius:50%;transition:transform .2s var(--ease-spring),background .2s var(--ease-soft);
 }
-.ring-cta-empty:active{transform:scale(.94);background:#F0F9FF;}
-.ring-cta-empty svg{width:36px;height:36px;stroke:var(--mint);}
-.ring-cta-empty span{font-size:14px;color:var(--mint-dim);font-weight:700;max-width:120px;text-align:center;line-height:1.4;}
-.goal-remain{font-size:14.5px;color:var(--text-2);text-align:center;font-weight:600;background:white;padding:8px 16px;border-radius:14px;border:2px solid var(--border-glass);}
-.goal-remain b{color:var(--mint-dim);font-weight:800;font-size:16px;}
+.ring-cta-empty:hover{transform:scale(1.02);}
+.ring-cta-empty:active{transform:scale(.95);background:var(--pine-soft);}
+.ring-cta-empty svg{width:32px;height:32px;stroke:var(--pine);}
+.ring-cta-empty span{font-size:13px;color:var(--pine-deep);font-weight:600;max-width:120px;text-align:center;line-height:1.4;}
+.goal-remain{font-size:14px;color:var(--ink-soft);text-align:center;font-weight:500;background:var(--paper);padding:9px 18px;border-radius:14px;border:1px solid var(--line);box-shadow:var(--shadow-1);}
+.goal-remain b{color:var(--pine-deep);font-weight:700;font-size:15.5px;}
 
 /* ============================= SYSTEM 1: COMPONENTS ============================= */
-.comp-wrap { background:white; border-radius:22px; padding:16px; margin:12px 0; border:2px solid var(--border-glass); box-shadow:var(--shadow-chunky); }
-.comp-title { font-size:15px; font-family:'Prompt',sans-serif; font-weight:700; margin-bottom:12px; display:flex; align-items:center; justify-content:space-between;}
-.comp-list { display:flex; flex-direction:column; gap:10px; }
-.comp-item { display:flex; align-items:center; justify-content:space-between; padding:12px 14px; background:#F8FAFC; border:2px solid #E2E8F0; border-radius:16px; transition:all 0.3s;}
-.comp-item.unlocked { background:#DCFCE7; border-color:var(--volt); }
-.comp-item.ready { background:#FEF9C3; border-color:var(--gold); }
-.comp-info { flex:1; min-width:0;}
-.comp-name { font-weight:700; font-size:14.5px; color:var(--text-1); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
-.comp-price { font-size:12.5px; font-weight:600; color:var(--text-2); margin-top:2px;}
-.comp-item.unlocked .comp-price { color:#166534; }
-.comp-btn { padding:8px 14px; border-radius:12px; font-weight:700; font-size:13px; cursor:pointer; flex-shrink:0; transition:all 0.2s;}
-.comp-btn.lock { background:#E2E8F0; color:var(--text-3); cursor:not-allowed; border:2px solid transparent;}
-.comp-btn.unlock { background:var(--gold); color:#854D0E; border:2px solid #CA8A04; box-shadow:0 4px 0 #CA8A04; animation:pulseBtn 1.5s infinite; }
-.comp-btn.unlock:active { transform:translateY(4px); box-shadow:0 0 0 transparent; }
-.comp-btn.done { background:#22C55E; color:white; border:2px solid #16A34A; }
-@keyframes pulseBtn{ 0%,100%{transform:scale(1)} 50%{transform:scale(1.05)} }
+.comp-wrap{background:var(--paper);border-radius:20px;padding:16px;margin:12px 0;border:1px solid var(--line);box-shadow:var(--shadow-1);}
+.comp-title{font-size:14.5px;font-family:'Noto Serif Thai',serif;font-weight:700;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;}
+.comp-list{display:flex;flex-direction:column;gap:9px;}
+.comp-item{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--paper-2);border:1px solid var(--line);border-radius:15px;transition:background .3s var(--ease-soft),border-color .3s var(--ease-soft);}
+.comp-item.unlocked{background:var(--pine-soft);border-color:#C6DBCE;}
+.comp-item.ready{background:var(--amber-soft);border-color:#E7CE9C;}
+.comp-info{flex:1;min-width:0;}
+.comp-name{font-weight:600;font-size:14px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.comp-price{font-size:12px;font-weight:500;color:var(--ink-faint);margin-top:2px;}
+.comp-item.unlocked .comp-price{color:var(--pine-deep);}
+.comp-btn{padding:8px 14px;border-radius:11px;font-weight:700;font-size:12.5px;cursor:pointer;flex-shrink:0;transition:transform .15s var(--ease-spring),box-shadow .15s var(--ease-spring);}
+.comp-btn.lock{background:var(--bg-2);color:var(--ink-faint);cursor:not-allowed;}
+.comp-btn.unlock{background:var(--amber);color:#3B2A0D;box-shadow:0 3px 0 var(--amber-deep);}
+.comp-btn.unlock:hover{transform:translateY(-1px);}
+.comp-btn.unlock:active{transform:translateY(3px);box-shadow:0 0 0 transparent;}
+.comp-btn.done{background:var(--sage);color:#fff;}
+@keyframes pulseBtn{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+.comp-btn.unlock{animation:pulseBtn 1.8s infinite;}
 
 /* ============================= SYSTEM 2: PROJECTION ============================= */
-.proj-wrap { background:white; border-radius:22px; padding:16px; margin:12px 0 24px; border:2px dashed var(--mint-dim); background-image: linear-gradient(to bottom, #F0F9FF, white); }
-.proj-title { font-size:15px; font-family:'Prompt',sans-serif; font-weight:700; color:var(--mint-dim); margin-bottom:10px; display:flex; align-items:center; gap:8px;}
-.proj-text { font-size:14px; font-weight:500; color:var(--text-1); line-height:1.6; }
-.proj-input-group { display:flex; align-items:center; gap:8px; margin-top:12px; background:#E0F2FE; padding:10px 14px; border-radius:14px; border:1px solid #BAE6FD;}
-.proj-input { width:65px; padding:6px 8px; border-radius:10px; border:2px solid var(--mint); font-weight:800; text-align:center; font-size:16px; outline:none; font-family:'Space Grotesk',sans-serif;}
-.proj-result { margin-top:12px; font-size:13.5px; font-weight:700; color:#0369A1; padding:10px 14px; background:#E0F2FE; border-radius:12px; line-height:1.5;}
-.proj-result.wow { color:#166534; background:#DCFCE7; border:1px solid var(--volt); animation:fadeUp 0.3s ease-out;}
+.proj-wrap{background:linear-gradient(180deg,var(--pine-soft),var(--paper) 60%);border-radius:20px;padding:16px;margin:12px 0 24px;border:1px dashed #B6CFC0;}
+.proj-title{font-size:14.5px;font-family:'Noto Serif Thai',serif;font-weight:700;color:var(--pine-deep);margin-bottom:9px;display:flex;align-items:center;gap:8px;}
+.proj-text{font-size:13.5px;font-weight:500;color:var(--ink-soft);line-height:1.65;}
+.proj-input-group{display:flex;align-items:center;gap:8px;margin-top:12px;background:var(--paper);padding:10px 14px;border-radius:14px;border:1px solid var(--line);}
+.proj-input{width:60px;padding:6px 8px;border-radius:9px;border:1.5px solid var(--pine);font-weight:700;text-align:center;font-size:15px;outline:none;font-family:'Space Grotesk',sans-serif;background:var(--paper);}
+.proj-result{margin-top:12px;font-size:13px;font-weight:600;color:var(--pine-deep);padding:10px 14px;background:var(--paper);border-radius:12px;line-height:1.55;border:1px solid var(--line);}
+.proj-result.wow{color:var(--pine-deep);background:var(--pine-soft);border-color:#C6DBCE;animation:fadeUp .3s ease-out;}
+
+/* ============================= SYSTEM 3: STREAK CALENDAR ============================= */
+.streak-wrap{background:var(--paper);border-radius:20px;padding:16px;margin:12px 0;border:1px solid var(--line);box-shadow:var(--shadow-1);}
+.streak-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.streak-title{font-size:14.5px;font-family:'Noto Serif Thai',serif;font-weight:700;color:var(--ink);}
+.streak-sub{font-size:11.5px;color:var(--ink-faint);font-weight:600;}
+.streak-grid-scroll{overflow-x:auto;padding-bottom:2px;-webkit-overflow-scrolling:touch;}
+.streak-grid{display:grid;grid-auto-flow:column;grid-template-rows:repeat(7,1fr);gap:4px;width:max-content;}
+.streak-cell{width:13px;height:13px;border-radius:4px;background:var(--bg-2);transition:transform .12s var(--ease-spring);}
+.streak-cell:hover{transform:scale(1.25);}
+.streak-cell.l1{background:#CBE1D3;}
+.streak-cell.l2{background:#8FC1A5;}
+.streak-cell.l3{background:#4F9873;}
+.streak-cell.l4{background:var(--pine-deep);}
+.streak-cell.today{box-shadow:0 0 0 1.5px var(--amber);}
+.streak-legend{display:flex;align-items:center;gap:5px;margin-top:10px;justify-content:flex-end;font-size:10.5px;color:var(--ink-faint);font-weight:600;}
+.streak-legend .streak-cell{width:11px;height:11px;}
+.streak-stats-row{display:flex;gap:8px;margin-top:12px;}
+.streak-stat-chip{flex:1;text-align:center;background:var(--paper-2);border:1px solid var(--line);border-radius:13px;padding:8px 4px;}
+.streak-stat-chip b{display:block;font-size:16px;font-weight:700;color:var(--pine-deep);font-family:'Space Grotesk',sans-serif;}
+.streak-stat-chip span{font-size:10.5px;color:var(--ink-faint);font-weight:600;}
+
+/* ============================= SYSTEM 4: WEEKLY QUEST ============================= */
+.quest-wrap{background:linear-gradient(180deg,var(--amber-soft),var(--paper) 65%);border-radius:20px;padding:16px;margin:12px 0;border:1px dashed #E7CE9C;}
+.quest-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.quest-title{font-size:14.5px;font-family:'Noto Serif Thai',serif;font-weight:700;color:var(--amber-deep);display:flex;align-items:center;gap:8px;}
+.quest-edit{font-size:11px;font-weight:700;color:var(--amber-deep);background:var(--paper);padding:5px 11px;border-radius:100px;border:1px solid #E7CE9C;transition:transform .15s var(--ease-spring);}
+.quest-edit:hover{transform:translateY(-1px);}
+.quest-edit:active{transform:translateY(1px);}
+.quest-bar-row{display:flex;align-items:center;gap:10px;margin-top:6px;}
+.quest-bar{flex:1;height:12px;background:var(--paper);border:1px solid var(--line);border-radius:10px;overflow:hidden;}
+.quest-fill{height:100%;background:linear-gradient(90deg,var(--amber),#D6A94F);width:0%;border-radius:10px;transition:width .6s var(--ease-out);}
+.quest-fill.done{background:linear-gradient(90deg,var(--pine),var(--sage));}
+.quest-pct{font-size:12.5px;font-weight:700;color:var(--amber-deep);font-family:'Space Grotesk',sans-serif;flex-shrink:0;width:40px;text-align:right;}
+.quest-text{font-size:12.5px;color:var(--ink-soft);font-weight:500;margin-top:9px;line-height:1.5;}
+.quest-text b{color:var(--amber-deep);font-weight:700;}
+.quest-empty-btn{width:100%;text-align:center;padding:10px;border-radius:14px;background:var(--paper);border:1.5px dashed var(--amber);color:var(--amber-deep);font-size:13px;font-weight:700;margin-top:4px;transition:transform .15s var(--ease-spring);}
+.quest-empty-btn:hover{transform:translateY(-1px);}
+.quest-empty-btn:active{transform:translateY(1px);}
 
 /* stats */
-.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;}
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px;}
 .stat-card{
-  background:var(--card);border:2px solid var(--border-glass);border-radius:24px;
-  padding:16px 12px;display:flex;flex-direction:column;gap:8px;
-  box-shadow:var(--shadow-chunky);transition:all .15s var(--ease-spring);
+  background:var(--paper);border:1px solid var(--line);border-radius:20px;
+  padding:15px 11px;display:flex;flex-direction:column;gap:8px;
+  box-shadow:var(--shadow-1);transition:transform .18s var(--ease-spring),box-shadow .18s var(--ease-spring);
 }
-.stat-card:active{transform:translateY(4px);box-shadow:var(--shadow-chunky-active);background:#F8FAFC;}
-.stat-icon{width:34px;height:34px;border-radius:12px;display:flex;align-items:center;justify-content:center;border:2px solid;}
-.stat-icon svg{width:18px;height:18px;stroke-width:2.5;}
-.stat-icon.mint{background:#DCFCE7;border-color:var(--volt);}
-.stat-icon.mint svg{stroke:#166534;}
-.stat-icon.gold{background:#FEF9C3;border-color:var(--gold);}
-.stat-icon.gold svg{stroke:#854D0E;}
-.stat-icon.blue{background:#E0F2FE;border-color:var(--mint);}
-.stat-icon.blue svg{stroke:#0369A1;}
-.stat-val{font-size:18px;font-weight:800;line-height:1.15;color:var(--text-1);}
-.stat-val.neg{color:var(--coral);}
-.stat-lbl{font-size:12px;color:var(--text-2);font-weight:600;}
+.stat-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-2);}
+.stat-card:active{transform:translateY(1px);box-shadow:var(--shadow-press);}
+.stat-icon{width:32px;height:32px;border-radius:11px;display:flex;align-items:center;justify-content:center;}
+.stat-icon svg{width:16px;height:16px;stroke-width:2.25;}
+.stat-icon.mint{background:var(--pine-soft);}
+.stat-icon.mint svg{stroke:var(--pine-deep);}
+.stat-icon.gold{background:var(--amber-soft);}
+.stat-icon.gold svg{stroke:var(--amber-deep);}
+.stat-icon.blue{background:#E7EEF4;}
+.stat-icon.blue svg{stroke:#2F5A7A;}
+.stat-val{font-size:17px;font-weight:700;line-height:1.15;color:var(--ink);}
+.stat-val.neg{color:var(--clay-deep);}
+.stat-lbl{font-size:11.5px;color:var(--ink-faint);font-weight:500;}
 
 /* quick actions & lists */
-.qa-row{display:flex;gap:12px;margin-bottom:26px;}
+.qa-row{display:flex;gap:10px;margin-bottom:26px;}
 .qa-btn{
   flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;
-  padding:16px 8px;border-radius:22px;background:white;border:2px solid var(--border-glass);
-  box-shadow:var(--shadow-chunky);transition:all .15s var(--ease-spring);
+  padding:15px 8px;border-radius:19px;background:var(--paper);border:1px solid var(--line);
+  box-shadow:var(--shadow-1);transition:transform .18s var(--ease-spring),box-shadow .18s var(--ease-spring);
 }
-.qa-btn:active{transform:translateY(4px);box-shadow:var(--shadow-chunky-active);background:#F8FAFC;}
-.qa-btn .qa-ic{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid;}
-.qa-btn .qa-ic svg{width:20px;height:20px;stroke-width:2.5;}
-.qa-save .qa-ic{background:#DCFCE7;border-color:var(--volt);}
-.qa-save .qa-ic svg{stroke:#166534;}
-.qa-spend .qa-ic{background:#FFE4E6;border-color:var(--coral);}
-.qa-spend .qa-ic svg{stroke:#9F1239;}
-.qa-goal .qa-ic{background:#FEF9C3;border-color:var(--gold);}
-.qa-goal .qa-ic svg{stroke:#854D0E;}
-.qa-btn span{font-size:13.5px;font-weight:700;color:var(--text-1);}
+.qa-btn:hover{transform:translateY(-2px);box-shadow:var(--shadow-2);}
+.qa-btn:active{transform:translateY(1px);box-shadow:var(--shadow-press);}
+.qa-btn .qa-ic{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+.qa-btn .qa-ic svg{width:18px;height:18px;stroke-width:2.25;}
+.qa-save .qa-ic{background:var(--pine-soft);}
+.qa-save .qa-ic svg{stroke:var(--pine-deep);}
+.qa-spend .qa-ic{background:var(--clay-soft);}
+.qa-spend .qa-ic svg{stroke:var(--clay-deep);}
+.qa-goal .qa-ic{background:var(--amber-soft);}
+.qa-goal .qa-ic svg{stroke:var(--amber-deep);}
+.qa-btn span{font-size:12.5px;font-weight:600;color:var(--ink);}
 
-.sec-head{display:flex;align-items:center;justify-content:space-between;margin:8px 0 12px;padding:0 4px;}
-.sec-title{font-size:17px;font-weight:700;font-family:'Prompt',sans-serif;color:var(--text-1);}
-.sec-link{font-size:13px;color:var(--mint-dim);font-weight:700;background:white;padding:4px 10px;border-radius:100px;border:2px solid var(--border-glass);}
+.sec-head{display:flex;align-items:center;justify-content:space-between;margin:6px 0 12px;padding:0 2px;}
+.sec-title{font-size:16.5px;font-weight:700;font-family:'Noto Serif Thai',serif;color:var(--ink);}
+.sec-link{font-size:12px;color:var(--pine-deep);font-weight:700;background:var(--paper);padding:4px 10px;border-radius:100px;border:1px solid var(--line);}
 
-.tx-list{display:flex;flex-direction:column;gap:12px;}
+.tx-list{display:flex;flex-direction:column;gap:10px;}
 .tx-row{
-  display:flex;align-items:center;gap:14px;background:white;border:2px solid var(--border-glass);border-radius:20px;
-  padding:14px 16px;box-shadow:var(--shadow-chunky);animation:txIn .45s var(--ease-out) both;
-  transition:all .15s var(--ease-spring);
+  display:flex;align-items:center;gap:13px;background:var(--paper);border:1px solid var(--line);border-radius:18px;
+  padding:13px 15px;box-shadow:var(--shadow-1);animation:txIn .45s var(--ease-out) both;
+  transition:transform .18s var(--ease-spring),box-shadow .18s var(--ease-spring);
 }
-.tx-row:active{transform:translateY(3px);box-shadow:var(--shadow-chunky-active);background:#F8FAFC;}
-@keyframes txIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-.tx-ic{width:42px;height:42px;border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px;background:#F1F5F9;}
+.tx-row:hover{transform:translateY(-1px);box-shadow:var(--shadow-2);}
+.tx-row:active{transform:translateY(1px);box-shadow:var(--shadow-press);}
+@keyframes txIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.tx-ic{width:38px;height:38px;border-radius:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:17px;background:var(--bg-2);}
 .tx-mid{flex:1;min-width:0;}
-.tx-note{font-size:15px;font-weight:700;color:var(--text-1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.tx-date{font-size:12px;color:var(--text-3);font-weight:600;margin-top:2px;}
-.tx-amt{font-size:16px;font-weight:800;flex-shrink:0;}
-.tx-amt.save{color:var(--volt);}
-.tx-amt.spend{color:var(--coral);}
-.tx-del{width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--text-3);flex-shrink:0;background:#F1F5F9;border:2px solid transparent;}
-.tx-del:active{background:#E2E8F0;border-color:#CBD5E1;}
-.tx-del svg{width:16px;height:16px;stroke-width:2.5;}
+.tx-note{font-size:14.5px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.tx-date{font-size:11.5px;color:var(--ink-faint);font-weight:500;margin-top:2px;}
+.tx-amt{font-size:15px;font-weight:700;flex-shrink:0;}
+.tx-amt.save{color:var(--sage);}
+.tx-amt.spend{color:var(--clay-deep);}
+.tx-del{width:30px;height:30px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--ink-faint);flex-shrink:0;background:var(--bg-2);transition:background .15s,color .15s;}
+.tx-del:hover{background:var(--clay-soft);color:var(--clay-deep);}
+.tx-del svg{width:15px;height:15px;stroke-width:2.25;}
 
-.empty-state{display:flex;flex-direction:column;align-items:center;gap:12px;padding:40px 20px;color:var(--text-2);text-align:center;background:white;border-radius:24px;border:2px dashed var(--border-glass-strong);}
-.empty-state svg{width:48px;height:48px;stroke:var(--mint);opacity:0.8;}
-.empty-state b{color:var(--text-1);font-size:16px;font-weight:700;}
-.empty-state span{font-size:13.5px;line-height:1.5;font-weight:500;}
+.empty-state{display:flex;flex-direction:column;align-items:center;gap:11px;padding:38px 20px;color:var(--ink-soft);text-align:center;background:var(--paper);border-radius:22px;border:1.5px dashed var(--line-strong);}
+.empty-state svg{width:44px;height:44px;stroke:var(--pine);opacity:.85;}
+.empty-state b{color:var(--ink);font-size:15px;font-weight:700;font-family:'Noto Serif Thai',serif;}
+.empty-state span{font-size:13px;line-height:1.5;font-weight:500;}
 
 .fab{
-  position:fixed;bottom:calc(26px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);
-  display:flex;align-items:center;gap:10px;background:var(--mint);
-  color:white;padding:16px 28px;border-radius:100px;font-weight:800;font-size:16px;
-  border:3px solid #0284C7;box-shadow:0 8px 0 #0284C7, 0 12px 24px rgba(2,132,199,0.3);
-  transition:all .15s var(--ease-spring);z-index:40;max-width:480px;width:calc(100% - 40px);justify-content:center;
+  position:fixed;bottom:calc(24px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);
+  display:flex;align-items:center;gap:9px;background:var(--pine);
+  color:#fff;padding:15px 26px;border-radius:100px;font-weight:700;font-size:15px;
+  box-shadow:0 10px 26px rgba(18,59,48,.35), var(--edge);
+  transition:transform .18s var(--ease-spring),box-shadow .18s var(--ease-spring);z-index:40;max-width:480px;width:calc(100% - 40px);justify-content:center;
 }
-.fab:active{transform:translateX(-50%) translateY(6px);box-shadow:0 2px 0 #0284C7;}
-.fab svg{width:22px;height:22px;stroke-width:2.5;}
+.fab:hover{transform:translateX(-50%) translateY(-2px);box-shadow:0 14px 30px rgba(18,59,48,.4);}
+.fab:active{transform:translateX(-50%) translateY(1px);box-shadow:0 4px 14px rgba(18,59,48,.3);}
+.fab svg{width:19px;height:19px;stroke-width:2.25;}
 
 /* ============================= SHEETS ============================= */
-.overlay{position:fixed;inset:0;background:rgba(15,23,42,.4);backdrop-filter:blur(4px);z-index:200;opacity:0;pointer-events:none;transition:opacity .3s var(--ease-out);}
+.overlay{position:fixed;inset:0;background:rgba(18,24,20,.45);backdrop-filter:blur(3px);z-index:200;opacity:0;pointer-events:none;transition:opacity .3s var(--ease-out);}
 .overlay.show{opacity:1;pointer-events:auto;}
 .sheet{
   position:fixed;left:0;right:0;bottom:0;z-index:201;max-width:520px;margin:0 auto;
-  background:white;border:2px solid var(--border-glass-strong);border-bottom:none;
-  border-radius:32px 32px 0 0;padding:12px 24px calc(24px + env(safe-area-inset-bottom));
+  background:var(--paper);
+  border-radius:28px 28px 0 0;padding:10px 22px calc(24px + env(safe-area-inset-bottom));
   transform:translateY(105%);transition:transform .42s var(--ease-spring);
-  box-shadow:0 -10px 40px rgba(0,0,0,.1);max-height:85vh;max-height:85dvh;overflow-y:auto;
+  box-shadow:0 -12px 44px rgba(18,24,20,.16);max-height:85vh;max-height:85dvh;overflow-y:auto;
   -webkit-overflow-scrolling:touch;
 }
 .sheet.show{transform:translateY(0);}
-.sheet-handle{width:48px;height:6px;border-radius:6px;background:#E2E8F0;margin:8px auto 20px;}
-.sheet-title{font-size:20px;font-weight:800;font-family:'Prompt',sans-serif;margin-bottom:20px;color:var(--text-1);text-align:center;}
-.field-lbl{display:block;font-size:14px;color:var(--text-1);margin-bottom:10px;font-weight:700;}
-.type-toggle{display:flex;gap:12px;margin-bottom:20px;}
-.type-opt{flex:1;text-align:center;padding:14px;border-radius:18px;background:#F1F5F9;border:2px solid #E2E8F0;font-size:15px;font-weight:700;color:var(--text-2);transition:all .2s;box-shadow:0 4px 0 #E2E8F0;}
-.type-opt:active{transform:translateY(4px);box-shadow:0 0 0 transparent;}
-.type-opt.active-save{background:#DCFCE7;border-color:var(--volt);color:#166534;box-shadow:0 4px 0 var(--volt);}
-.type-opt.active-spend{background:#FFE4E6;border-color:var(--coral);color:#9F1239;box-shadow:0 4px 0 var(--coral);}
-.amt-input-wrap{display:flex;align-items:baseline;gap:8px;background:#F8FAFC;border:2px solid var(--border-glass);border-radius:20px;padding:16px 20px;margin-bottom:16px;}
-.amt-input-wrap span{font-size:18px;color:var(--text-2);font-weight:700;}
-.amt-input{flex:1;background:none;border:none;outline:none;font-size:28px;font-weight:800;color:var(--text-1);font-family:'Space Grotesk',sans-serif;min-width:0;}
-.text-input{width:100%;background:#F8FAFC;border:2px solid var(--border-glass);border-radius:18px;padding:16px 20px;font-size:16px;font-weight:600;outline:none;margin-bottom:18px;transition:border-color .2s;color:var(--text-1);}
-.text-input::placeholder{color:#94A3B8;}
-.text-input:focus{border-color:var(--mint);background:white;}
-.quick-chips{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;}
-.chip{padding:10px 16px;border-radius:100px;background:white;border:2px solid #E2E8F0;font-size:14px;color:var(--text-1);font-weight:700;box-shadow:0 3px 0 #E2E8F0;transition:all .15s var(--ease-spring);}
-.chip:active{transform:translateY(3px);box-shadow:0 0 0 transparent;}
+.sheet-handle{width:42px;height:5px;border-radius:6px;background:var(--line-strong);margin:8px auto 18px;}
+.sheet-title{font-size:19px;font-weight:700;font-family:'Noto Serif Thai',serif;margin-bottom:20px;color:var(--ink);text-align:center;}
+.field-lbl{display:block;font-size:13px;color:var(--ink-soft);margin-bottom:9px;font-weight:600;}
+.type-toggle{display:flex;gap:10px;margin-bottom:20px;}
+.type-opt{flex:1;text-align:center;padding:13px;border-radius:16px;background:var(--bg-2);border:1px solid var(--line);font-size:14.5px;font-weight:600;color:var(--ink-soft);transition:transform .15s var(--ease-spring),background .2s,color .2s,border-color .2s;}
+.type-opt:active{transform:translateY(2px);}
+.type-opt.active-save{background:var(--pine-soft);border-color:#C6DBCE;color:var(--pine-deep);}
+.type-opt.active-spend{background:var(--clay-soft);border-color:#E4C2B3;color:var(--clay-deep);}
+.amt-input-wrap{display:flex;align-items:baseline;gap:8px;background:var(--paper-2);border:1px solid var(--line);border-radius:18px;padding:15px 19px;margin-bottom:16px;}
+.amt-input-wrap span{font-size:17px;color:var(--ink-soft);font-weight:600;}
+.amt-input{flex:1;background:none;border:none;outline:none;font-size:27px;font-weight:700;color:var(--ink);font-family:'Space Grotesk',sans-serif;min-width:0;}
+.text-input{width:100%;background:var(--paper-2);border:1px solid var(--line);border-radius:16px;padding:15px 19px;font-size:15.5px;font-weight:500;outline:none;margin-bottom:18px;transition:border-color .2s,background .2s;color:var(--ink);}
+.text-input::placeholder{color:var(--ink-faint);}
+.text-input:focus{border-color:var(--pine);background:var(--paper);}
+.quick-chips{display:flex;gap:9px;margin-bottom:20px;flex-wrap:wrap;}
+.chip{padding:9px 15px;border-radius:100px;background:var(--paper);border:1px solid var(--line);font-size:13.5px;color:var(--ink);font-weight:600;transition:transform .15s var(--ease-spring),background .15s;}
+.chip:hover{background:var(--paper-2);}
+.chip:active{transform:translateY(2px) scale(.97);}
 .btn-primary{
-  width:100%;padding:18px;border-radius:20px;font-weight:800;font-size:16px;
-  background:var(--volt);color:#064E3B;border:3px solid #16A34A;box-shadow:0 6px 0 #16A34A;
-  transition:all .15s var(--ease-spring);
+  width:100%;padding:17px;border-radius:18px;font-weight:700;font-size:15.5px;
+  background:var(--pine);color:#fff;box-shadow:0 8px 20px rgba(18,59,48,.3);
+  transition:transform .18s var(--ease-spring),box-shadow .18s var(--ease-spring);
 }
-.btn-primary:active{transform:translateY(6px);box-shadow:0 0 0 transparent;}
-.btn-primary.spend-mode{background:var(--coral);color:#4C0519;border-color:#E11D48;box-shadow:0 6px 0 #E11D48;}
-.btn-secondary{width:100%;padding:16px;border-radius:20px;font-weight:700;font-size:15px;background:#F1F5F9;border:2px solid #CBD5E1;margin-top:12px;color:var(--text-1);transition:all .15s var(--ease-spring);}
-.btn-secondary:active{transform:translateY(3px);box-shadow:0 0 0 transparent;}
+.btn-primary:hover{transform:translateY(-1px);}
+.btn-primary:active{transform:translateY(1px);box-shadow:0 3px 10px rgba(18,59,48,.25);}
+.btn-primary.spend-mode{background:var(--clay-deep);box-shadow:0 8px 20px rgba(129,59,41,.3);}
+.btn-secondary{width:100%;padding:15px;border-radius:18px;font-weight:600;font-size:14.5px;background:var(--bg-2);margin-top:12px;color:var(--ink);transition:transform .15s var(--ease-spring),background .15s;}
+.btn-secondary:hover{background:var(--line);}
+.btn-secondary:active{transform:translateY(1px);}
 
 /* BADGES & CELEBRATION */
-.badge-grid{display:grid;grid-template-columns:repeat(1,1fr);gap:12px;margin-bottom:20px;}
-.badge-card{display:flex;align-items:center;gap:16px;background:#F8FAFC;border:2px solid var(--border-glass);border-radius:20px;padding:14px;transition:all .2s;}
-.badge-card.unlocked{background:white;border-color:var(--gold);box-shadow:0 4px 0 var(--gold);}
-.badge-ic{width:52px;height:52px;border-radius:16px;background:#E2E8F0;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0;filter:grayscale(1);opacity:0.6;}
-.badge-card.unlocked .badge-ic{background:#FEF9C3;border:2px solid var(--gold);filter:grayscale(0);opacity:1;}
+.badge-grid{display:grid;grid-template-columns:repeat(1,1fr);gap:11px;margin-bottom:20px;}
+.badge-card{display:flex;align-items:center;gap:15px;background:var(--paper-2);border:1px solid var(--line);border-radius:18px;padding:13px;transition:background .2s,border-color .2s;}
+.badge-card.unlocked{background:var(--paper);border-color:#E7CE9C;box-shadow:var(--shadow-1);}
+.badge-ic{width:48px;height:48px;border-radius:14px;background:var(--bg-2);display:flex;align-items:center;justify-content:center;font-size:23px;flex-shrink:0;filter:grayscale(1);opacity:.55;}
+.badge-card.unlocked .badge-ic{background:var(--amber-soft);filter:grayscale(0);opacity:1;}
 .badge-info{flex:1;min-width:0;}
-.badge-name{font-size:16px;font-weight:800;color:var(--text-2);margin-bottom:2px;}
-.badge-card.unlocked .badge-name{color:var(--text-1);}
-.badge-desc{font-size:13px;color:var(--text-3);font-weight:600;line-height:1.4;}
-.badge-card.unlocked .badge-desc{color:var(--text-2);}
-.badge-status{font-size:12px;font-weight:800;padding:4px 10px;border-radius:100px;background:#E2E8F0;color:var(--text-3);}
-.badge-card.unlocked .badge-status{background:#DCFCE7;color:#166534;}
+.badge-name{font-size:15px;font-weight:700;color:var(--ink-soft);margin-bottom:2px;}
+.badge-card.unlocked .badge-name{color:var(--ink);}
+.badge-desc{font-size:12px;color:var(--ink-faint);font-weight:500;line-height:1.4;}
+.badge-card.unlocked .badge-desc{color:var(--ink-soft);}
+.badge-status{font-size:11px;font-weight:700;padding:4px 10px;border-radius:100px;background:var(--bg-2);color:var(--ink-faint);flex-shrink:0;}
+.badge-card.unlocked .badge-status{background:var(--pine-soft);color:var(--pine-deep);}
 
 .confetti-wrap{position:fixed;inset:0;z-index:300;pointer-events:none;overflow:hidden;}
 .confetti{position:absolute;top:-50px;animation:confettiFall linear forwards;display:flex;align-items:center;justify-content:center;}
-@keyframes confettiFall{ 0%{transform:translateY(0) rotate(0deg) scale(0.5);opacity:1;} 50%{transform:translateY(50vh) rotate(180deg) scale(1.2);} 100%{transform:translateY(110vh) rotate(360deg) scale(1);opacity:0;} }
+@keyframes confettiFall{0%{transform:translateY(0) rotate(0deg) scale(.5);opacity:1;}50%{transform:translateY(50vh) rotate(180deg) scale(1.15);}100%{transform:translateY(110vh) rotate(360deg) scale(1);opacity:0;}}
 .celeb-card{
   position:fixed;left:50%;top:50%;transform:translate(-50%,-50%) scale(.7);z-index:301;
-  width:calc(100% - 48px);max-width:360px;background:white;
-  border:4px solid var(--mint);border-radius:36px;padding:36px 28px 28px;text-align:center;opacity:0;
-  box-shadow:0 20px 0 var(--mint-dim), 0 30px 60px rgba(0,0,0,.2);
+  width:calc(100% - 48px);max-width:360px;background:var(--paper);
+  border-radius:32px;padding:34px 26px 26px;text-align:center;opacity:0;
+  box-shadow:0 30px 70px rgba(18,24,20,.35);
   transition:opacity .4s var(--ease-out),transform .4s var(--ease-spring);
 }
 .celeb-card.show{opacity:1;transform:translate(-50%,-50%) scale(1);}
-.celeb-trophy{width:90px;height:90px;margin:0 auto 20px;border-radius:50%;background:#FEF9C3;border:4px solid var(--gold);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 0 var(--gold);animation:trophyPop .7s var(--ease-spring) .1s both;font-size:44px;}
-@keyframes trophyPop{0%{transform:scale(0) rotate(-30deg)}100%{transform:scale(1) rotate(0)}}
-.celeb-title{font-size:22px;font-weight:800;font-family:'Prompt',sans-serif;margin-bottom:8px;color:var(--text-1);}
-.celeb-sub{font-size:15px;color:var(--text-2);line-height:1.5;margin-bottom:26px;font-weight:600;}
-.celeb-sub b{color:var(--mint-dim);font-weight:800;font-size:18px;}
+.celeb-trophy{width:84px;height:84px;margin:0 auto 18px;border-radius:50%;background:var(--amber-soft);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 20px rgba(185,133,47,.3);animation:trophyPop .7s var(--ease-spring) .1s both;font-size:40px;}
+@keyframes trophyPop{0%{transform:scale(0) rotate(-25deg)}100%{transform:scale(1) rotate(0)}}
+.celeb-title{font-size:21px;font-weight:700;font-family:'Noto Serif Thai',serif;margin-bottom:8px;color:var(--ink);}
+.celeb-sub{font-size:14px;color:var(--ink-soft);line-height:1.55;margin-bottom:24px;font-weight:500;}
+.celeb-sub b{color:var(--pine-deep);font-weight:700;font-size:17px;}
 
-.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-150%);z-index:400;background:white;border:3px solid var(--text-1);padding:14px 20px;border-radius:100px;font-size:14.5px;font-weight:700;color:var(--text-1);display:flex;align-items:center;gap:10px;transition:transform .4s var(--ease-spring);box-shadow:0 6px 0 var(--text-1);max-width:90%;}
+.toast{position:fixed;top:18px;left:50%;transform:translateX(-50%) translateY(-160%);z-index:400;background:var(--ink);padding:13px 19px;border-radius:100px;font-size:13.5px;font-weight:600;color:var(--bg);display:flex;align-items:center;gap:10px;transition:transform .4s var(--ease-spring);box-shadow:0 12px 30px rgba(18,24,20,.3);max-width:90%;}
 .toast.show{transform:translateX(-50%) translateY(0);}
-.toast .dot2{width:10px;height:10px;border-radius:50%;background:var(--volt);flex-shrink:0;border:2px solid #064E3B;}
-.toast.err .dot2{background:var(--coral);border-color:#4C0519;}
+.toast .dot2{width:8px;height:8px;border-radius:50%;background:var(--sage);flex-shrink:0;}
+.toast.err .dot2{background:#E17A5E;}
 
-.hist-item{display:flex;align-items:center;justify-content:space-between;padding:16px 12px;border:2px solid #E2E8F0;border-radius:20px;margin-bottom:10px;box-shadow:0 4px 0 #E2E8F0;}
+.hist-item{display:flex;align-items:center;justify-content:space-between;padding:15px 12px;border:1px solid var(--line);border-radius:18px;margin-bottom:9px;}
 .hist-item:last-child{margin-bottom:0;}
-.hist-name{font-size:15px;font-weight:700;color:var(--text-1);}
-.hist-date{font-size:12.5px;color:var(--text-3);margin-top:4px;font-weight:600;}
-.hist-amt{font-size:16px;font-weight:800;color:var(--gold);background:#FEF9C3;padding:6px 12px;border-radius:12px;border:2px solid var(--gold);}
+.hist-name{font-size:14.5px;font-weight:600;color:var(--ink);}
+.hist-date{font-size:11.5px;color:var(--ink-faint);margin-top:3px;font-weight:500;}
+.hist-amt{font-size:15px;font-weight:700;color:var(--amber-deep);background:var(--amber-soft);padding:6px 12px;border-radius:11px;}
 
-.offline-banner{display:none;align-items:center;gap:10px;background:#FFE4E6;border:2px solid var(--coral);color:#9F1239;font-size:14px;font-weight:700;padding:12px 16px;border-radius:16px;margin-bottom:16px;box-shadow:0 4px 0 var(--coral);}
+.offline-banner{display:none;align-items:center;gap:10px;background:var(--clay-soft);color:var(--clay-deep);font-size:13.5px;font-weight:600;padding:12px 16px;border-radius:16px;margin-bottom:16px;}
 .offline-banner.show{display:flex;}
-.offline-banner svg{width:18px;height:18px;stroke:#9F1239;flex-shrink:0;}
+.offline-banner svg{width:17px;height:17px;stroke:var(--clay-deep);flex-shrink:0;}
 
 .skeleton-wrap{display:none;flex-direction:column;align-items:center;gap:20px;padding:8px 0 16px;}
 .skeleton-wrap.show{display:flex;}
-.sk{background:linear-gradient(90deg,#E2E8F0 25%,#F1F5F9 37%,#E2E8F0 63%);background-size:400% 100%;animation:skShimmer 1.4s ease infinite;border-radius:16px;}
+.sk{background:linear-gradient(90deg,var(--bg-2) 25%,var(--paper-2) 37%,var(--bg-2) 63%);background-size:400% 100%;animation:skShimmer 1.4s ease infinite;border-radius:16px;}
 @keyframes skShimmer{0%{background-position:100% 50%}100%{background-position:0 50%}}
-.sk-ring{width:230px;height:230px;border-radius:50%;}
-.sk-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;width:100%;}
-.sk-stat{height:96px;border-radius:24px;}
+.sk-ring{width:228px;height:228px;border-radius:50%;}
+.sk-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%;}
+.sk-stat{height:92px;border-radius:20px;}
 .content-wrap{display:none;}
 .content-wrap.show{display:block;animation:fadeUp .5s var(--ease-out);}
-@media(max-width:360px){.ring-box{width:200px;height:200px;}.ring-pct{font-size:36px;}.sk-ring{width:200px;height:200px;}}
+@media(max-width:360px){.ring-box{width:198px;height:198px;}.ring-pct{font-size:34px;}.sk-ring{width:198px;height:198px;}}
 </style>
 </head>
 <body>
@@ -357,13 +424,13 @@ input{font-family:inherit;color:inherit;}
 <!-- ============ OPENING LOADING ============ -->
 <div id="splash">
   <div class="splash-mark">
-    <svg viewBox="0 0 24 24" fill="none" stroke="#38BDF8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#1F5E4C" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
       <path d="M12 2.5c2.8 1.6 5 5.4 5 9 0 2.3-.9 4.3-2 5.6l-.6 3.4-2.4-2-2.4 2-.6-3.4c-1.1-1.3-2-3.3-2-5.6 0-3.6 2.2-7.4 5-9z"/>
       <circle cx="12" cy="10" r="2"/>
     </svg>
   </div>
   <div class="splash-word display">SaveGoal</div>
-  <div class="splash-sub">🚀 กำลังเตรียมฐานทัพ...</div>
+  <div class="splash-sub">กำลังเตรียมฐานทัพของฮีโร่...</div>
   <div class="splash-bar"><div class="splash-bar-fill" id="splashFill"></div></div>
 </div>
 
@@ -371,12 +438,12 @@ input{font-family:inherit;color:inherit;}
 <div id="app">
   <div class="topbar">
     <div class="island">
-      <div class="island-logo"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.5c2.8 1.6 5 5.4 5 9 0 2.3-.9 4.3-2 5.6l-.6 3.4-2.4-2-2.4 2-.6-3.4c-1.1-1.3-2-3.3-2-5.6 0-3.6 2.2-7.4 5-9z"/></svg></div>
+      <div class="island-logo"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.5c2.8 1.6 5 5.4 5 9 0 2.3-.9 4.3-2 5.6l-.6 3.4-2.4-2-2.4 2-.6-3.4c-1.1-1.3-2-3.3-2-5.6 0-3.6 2.2-7.4 5-9z"/></svg></div>
       <span class="island-text">SaveGoal</span>
       <span class="dot" id="connDot"></span>
     </div>
     <button class="icon-btn" id="historyBtn" aria-label="ประวัติเป้าหมาย">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v5l4 2"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v5l4 2"/></svg>
     </button>
   </div>
 
@@ -387,7 +454,7 @@ input{font-family:inherit;color:inherit;}
 
   <div class="content-wrap" id="contentWrap">
     <div class="offline-banner" id="offlineBanner">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 1l22 22M16.72 11.06A10.94 10.94 0 0 1 19 12.55M5 12.55a10.94 10.94 0 0 1 5.17-2.39M10.71 5.05A16 16 0 0 1 22.58 9M1.42 9a15.91 15.91 0 0 1 4.7-2.88M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 1l22 22M16.72 11.06A10.94 10.94 0 0 1 19 12.55M5 12.55a10.94 10.94 0 0 1 5.17-2.39M10.71 5.05A16 16 0 0 1 22.58 9M1.42 9a15.91 15.91 0 0 1 4.7-2.88M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/></svg>
       <span>ออฟไลน์ — ข้อมูลจะซิงค์เมื่อต่อเน็ตนะ!</span>
     </div>
 
@@ -397,10 +464,16 @@ input{font-family:inherit;color:inherit;}
     <!-- GOAL HERO -->
     <div class="goal-hero" id="goalHero"></div>
 
-    <!-- COMPONENTS SYSTEM (NEW) -->
+    <!-- WEEKLY QUEST -->
+    <div id="questContainer"></div>
+
+    <!-- STREAK CALENDAR -->
+    <div id="streakContainer"></div>
+
+    <!-- COMPONENTS SYSTEM -->
     <div id="componentsContainer"></div>
 
-    <!-- PROJECTION SYSTEM (NEW) -->
+    <!-- PROJECTION SYSTEM -->
     <div id="projectionContainer"></div>
 
     <!-- STATS -->
@@ -476,21 +549,21 @@ input{font-family:inherit;color:inherit;}
   <button class="btn-primary" id="txSubmit">บันทึกยอดเยี่ยม!</button>
 </div>
 
-<!-- ============ GOAL SHEET (UPDATED FOR COMPONENTS) ============ -->
+<!-- ============ GOAL SHEET ============ -->
 <div class="overlay" id="overlayGoal"></div>
 <div class="sheet" id="sheetGoal" role="dialog" aria-modal="true" aria-labelledby="goalSheetTitle">
   <div class="sheet-handle"></div>
   <h2 class="sheet-title" id="goalSheetTitle">ตั้งเป้าหมายฮีโร่</h2>
   <label class="field-lbl" for="goalName">ชื่อเป้าหมายหลัก</label>
   <input type="text" class="text-input" id="goalName" placeholder="เช่น สร้างคอมพิวเตอร์ในฝัน">
-  
-  <div class="field-lbl" style="display:flex; justify-content:space-between;">
+
+  <div class="field-lbl" style="display:flex;justify-content:space-between;">
     <span>ชิ้นส่วนย่อย (Micro-wins)</span>
-    <span style="font-size:12px; color:var(--text-3); font-weight:500;">(ไม่บังคับ)</span>
+    <span style="font-size:11.5px;color:var(--ink-faint);font-weight:500;">(ไม่บังคับ)</span>
   </div>
-  <div id="compEditList" style="display:flex; flex-direction:column; gap:8px; margin-bottom:12px;"></div>
-  <button class="btn-secondary" id="btnAddDraftComp" style="margin-top:0; margin-bottom:16px;">+ เพิ่มชิ้นส่วนย่อย</button>
-  
+  <div id="compEditList" style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px;"></div>
+  <button class="btn-secondary" id="btnAddDraftComp" style="margin-top:0;margin-bottom:16px;">+ เพิ่มชิ้นส่วนย่อย</button>
+
   <label class="field-lbl" for="goalTarget">จำนวนเงินรวมที่ต้องใช้</label>
   <div class="amt-input-wrap"><span aria-hidden="true">฿</span><input type="number" inputmode="decimal" class="amt-input" id="goalTarget" placeholder="0" aria-label="จำนวนเงินรวมที่ต้องใช้ (บาท)"></div>
   <button class="btn-primary" id="goalSubmit">เริ่มภารกิจ!</button>
@@ -510,7 +583,7 @@ input{font-family:inherit;color:inherit;}
 <div class="sheet" id="sheetHist" role="dialog" aria-modal="true" aria-labelledby="histSheetTitle">
   <div class="sheet-handle"></div>
   <h2 class="sheet-title" id="histSheetTitle">ภารกิจที่สำเร็จแล้ว ⭐</h2>
-  <button class="btn-secondary" id="btnResetAll" style="color: #9F1239; border-color: var(--coral); background: #FFE4E6; margin-bottom: 16px;">
+  <button class="btn-secondary" id="btnResetAll" style="color:var(--clay-deep);background:var(--clay-soft);margin-bottom:16px;">
     🗑️ รีเซตแอปและลบประวัติทั้งหมด (ต้องใส่รหัส)
   </button>
   <div id="histList" style="max-height:50vh;overflow-y:auto;padding-bottom:10px;"></div>
@@ -522,6 +595,8 @@ input{font-family:inherit;color:inherit;}
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 <script>
+'use strict';
+
 /* ============================= FIREBASE INIT ============================= */
 const firebaseConfig = {
   apiKey: "AIzaSyDwLUi_bnWNRIq_RELSyCQ1hlTUfuFUumM",
@@ -531,24 +606,26 @@ const firebaseConfig = {
   messagingSenderId: "679761307635",
   appId: "1:679761307635:web:195aa4976236d0456bd486"
 };
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-const goalRef = db.collection('sg_goal').doc('current');
-const txCol = db.collection('sg_transactions');
-const archCol = db.collection('sg_archived');
 
-/* ============================= DISCORD NOTIFICATIONS [เพิ่มใหม่ทั้งบล็อก] ============================= */
-// Webhook URL ของ Discord — ใช้แจ้งเตือนกิจกรรมต่างๆ ในแอป
+let db, goalRef, txCol, archCol, firebaseReady = false;
+try{
+  firebase.initializeApp(firebaseConfig);
+  db = firebase.firestore();
+  goalRef = db.collection('sg_goal').doc('current');
+  txCol = db.collection('sg_transactions');
+  archCol = db.collection('sg_archived');
+  firebaseReady = true;
+}catch(err){
+  console.error('Firebase init failed:', err);
+}
+
+/* ============================= DISCORD NOTIFICATIONS ============================= */
 // หมายเหตุ: ฝัง Webhook ไว้ฝั่ง client เหมาะสำหรับรันใช้งานส่วนตัวแบบ local เท่านั้น (ไม่ publish เป็นสาธารณะ)
 const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1529782652406599730/2Km1HWwJp9jS1xHdj9cpdVIK_P21C75H4HkPONSg7gqBh7jAMPtPgfM7IoBZFwULalD6";
 
-// ฟังก์ชันกลางสำหรับยิง Discord Embed — ทุกจุดแจ้งเตือนในแอปเรียกผ่านฟังก์ชันนี้ฟังก์ชันเดียว
-// options: { title, description, color, fields, keepalive }
-function notifyDiscord({ title, description = '', color = 0x38BDF8, fields = null, keepalive = false }){
+function notifyDiscord({ title, description = '', color = 0x1F5E4C, fields = null, keepalive = false }){
   const embed = {
-    title,
-    description,
-    color,
+    title, description, color,
     footer: { text: 'SaveGoal Notification' },
     timestamp: new Date().toISOString()
   };
@@ -558,25 +635,15 @@ function notifyDiscord({ title, description = '', color = 0x38BDF8, fields = nul
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ embeds: [embed] }),
-    keepalive // สำคัญ: ต้องเป็น true เฉพาะตอนออกจากเว็บ (pagehide) กันเบราว์เซอร์ตัดการทำงานก่อนส่งสำเร็จ
+    keepalive
   }).catch(err => console.error('Discord notify error:', err));
 }
 
-/* ============================= PRESENCE ALERT (เข้า/ออกเว็บ) [เพิ่มใหม่] ============================= */
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('App is sending logs to Discord Owner'); // แจ้งใน console เพื่อความโปร่งใสว่าแอปนี้ส่ง log ไปหาเจ้าของ
-  notifyDiscord({
-    title: '🟢 มีผู้ใช้งานเข้าสู่เว็บไซต์',
-    color: 0x4ADE80 // เขียว
-  });
+  notifyDiscord({ title: '🟢 มีผู้ใช้งานเข้าสู่เว็บไซต์', color: 0x3F7D5C });
 });
-
 window.addEventListener('pagehide', () => {
-  notifyDiscord({
-    title: '🔴 มีผู้ใช้งานออกจากเว็บไซต์',
-    color: 0xFB7185, // แดง
-    keepalive: true // กันเบราว์เซอร์ตัดการเชื่อมต่อก่อนส่งคำขอเสร็จตอนปิดแท็บ
-  });
+  notifyDiscord({ title: '🔴 มีผู้ใช้งานออกจากเว็บไซต์', color: 0xB2543A, keepalive: true });
 });
 
 /* ============================= STATE ============================= */
@@ -586,14 +653,14 @@ let firstLoadDone = false;
 let celebratedFor = null;
 let pendingTxType = 'save';
 let pendingCarryChoice = 'carry';
-let draftComps = []; // สำหรับแก้ไขชิ้นส่วนในหน้า Goal Sheet
+let draftComps = [];
 
 /* ============================= HELPERS ============================= */
-const fmt = n => '฿' + Math.round(n).toLocaleString('th-TH');
+const fmt = n => '฿' + Math.round(Number(n) || 0).toLocaleString('th-TH');
 const todayStr = () => new Date().toDateString();
 const $ = id => document.getElementById(id);
+const clampNum = (n, fallback = 0) => { const v = parseFloat(n); return Number.isFinite(v) ? v : fallback; };
 
-// คืนค่าวันที่ปัจจุบันในรูปแบบ yyyy-mm-dd (ใช้กับ input[type=date] โดยอิง local time ไม่ใช่ UTC)
 function todayISO(){
   const d = new Date();
   const mm = String(d.getMonth()+1).padStart(2,'0');
@@ -601,8 +668,6 @@ function todayISO(){
   return `${d.getFullYear()}-${mm}-${dd}`;
 }
 
-// แปลงค่าจาก input[type=date] (yyyy-mm-dd) ให้เป็น timestamp โดยคงเวลาปัจจุบัน (ชม./นาที) ไว้
-// เพื่อให้รายการยังเรียงลำดับตามเวลาที่บันทึกจริงได้อย่างสมเหตุสมผลภายในวันเดียวกัน
 function dateInputToTimestamp(dateStr){
   if(!dateStr) return Date.now();
   const now = new Date();
@@ -611,12 +676,7 @@ function dateInputToTimestamp(dateStr){
   return new Date(y, m-1, d, now.getHours(), now.getMinutes(), now.getSeconds(), now.getMilliseconds()).getTime();
 }
 
-/* ============================= SOUND MANAGER (Web Audio API) =============================
-   สังเคราะห์เสียงเองแบบ real-time ด้วย Web Audio API — ไม่มีการโหลดไฟล์เสียงจากภายนอกเลย
-   - ไม่มีปัญหาลิขสิทธิ์ เพราะคลื่นเสียงถูกสร้างขึ้นเองในเบราว์เซอร์ ไม่ใช่ไฟล์ของใคร จึง "ฟรีตลอดชีพ" แน่นอน
-   - ไม่มี latency จากการโหลดไฟล์เสียง/รอ CDN ตอบกลับ เล่นได้ทันทีที่สั่ง (เหมาะกับ UI ที่ต้องการความไว)
-   - ทำงานได้แม้ออฟไลน์ ไม่ต้องพึ่งลิงก์ภายนอกที่อาจหมดอายุหรือใช้งานไม่ได้ในอนาคต
-*/
+/* ============================= SOUND MANAGER (Web Audio API) ============================= */
 const SoundManager = (() => {
   let ctx = null;
   let enabled = true;
@@ -625,13 +685,11 @@ const SoundManager = (() => {
     if(!ctx){
       const AC = window.AudioContext || window.webkitAudioContext;
       if(!AC) return null;
-      ctx = new AC();
+      try{ ctx = new AC(); }catch(e){ return null; }
     }
-    if(ctx.state === 'suspended') ctx.resume();
+    if(ctx.state === 'suspended') ctx.resume().catch(()=>{});
     return ctx;
   }
-  // เบราว์เซอร์ส่วนใหญ่ต้องมี user gesture ก่อนถึงจะเล่นเสียงได้ (autoplay policy)
-  // จึงปลุก/สร้าง AudioContext ทันทีที่ผู้ใช้แตะหน้าจอ/คลิก/กดคีย์บอร์ดครั้งแรก
   ['pointerdown', 'touchstart', 'keydown'].forEach(ev =>
     document.addEventListener(ev, getCtx, {once:true, passive:true})
   );
@@ -639,48 +697,52 @@ const SoundManager = (() => {
   function tone(freq, start, dur, type='sine', peakGain=0.16){
     const c = getCtx();
     if(!c || !enabled) return;
-    const t0 = c.currentTime + start;
-    const osc = c.createOscillator();
-    const gain = c.createGain();
-    osc.type = type;
-    osc.frequency.setValueAtTime(freq, t0);
-    gain.gain.setValueAtTime(0.0001, t0);
-    gain.gain.exponentialRampToValueAtTime(peakGain, t0 + 0.012);
-    gain.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
-    osc.connect(gain).connect(c.destination);
-    osc.start(t0);
-    osc.stop(t0 + dur + 0.03);
+    try{
+      const t0 = c.currentTime + start;
+      const osc = c.createOscillator();
+      const gain = c.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, t0);
+      gain.gain.setValueAtTime(0.0001, t0);
+      gain.gain.exponentialRampToValueAtTime(peakGain, t0 + 0.012);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+      osc.connect(gain).connect(c.destination);
+      osc.start(t0);
+      osc.stop(t0 + dur + 0.03);
+    }catch(e){ /* audio glitches are non-fatal */ }
   }
 
   function sweep(freqFrom, freqTo, start, dur, type='sine', peakGain=0.13){
     const c = getCtx();
     if(!c || !enabled) return;
-    const t0 = c.currentTime + start;
-    const osc = c.createOscillator();
-    const gain = c.createGain();
-    osc.type = type;
-    osc.frequency.setValueAtTime(freqFrom, t0);
-    osc.frequency.exponentialRampToValueAtTime(freqTo, t0 + dur);
-    gain.gain.setValueAtTime(0.0001, t0);
-    gain.gain.exponentialRampToValueAtTime(peakGain, t0 + 0.015);
-    gain.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
-    osc.connect(gain).connect(c.destination);
-    osc.start(t0);
-    osc.stop(t0 + dur + 0.03);
+    try{
+      const t0 = c.currentTime + start;
+      const osc = c.createOscillator();
+      const gain = c.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freqFrom, t0);
+      osc.frequency.exponentialRampToValueAtTime(freqTo, t0 + dur);
+      gain.gain.setValueAtTime(0.0001, t0);
+      gain.gain.exponentialRampToValueAtTime(peakGain, t0 + 0.015);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+      osc.connect(gain).connect(c.destination);
+      osc.start(t0);
+      osc.stop(t0 + dur + 0.03);
+    }catch(e){ /* audio glitches are non-fatal */ }
   }
 
   return {
-    tap(){ tone(720, 0, 0.05, 'sine', 0.09); },                                   // แตะปุ่มทั่วไป
-    toggle(){ tone(560, 0, 0.06, 'triangle', 0.11); },                            // สลับ เก็บเงิน/ใช้เงิน
-    confirm(){ tone(700, 0, 0.07, 'sine', 0.13); tone(980, 0.06, 0.12, 'sine', 0.12); }, // บันทึกภารกิจสำเร็จ
-    save(){ tone(660, 0, 0.09, 'sine', 0.16); tone(880, 0.07, 0.14, 'sine', 0.16); tone(1180, 0.14, 0.18, 'sine', 0.14); }, // ออมเงินสำเร็จ
-    spend(){ tone(480, 0, 0.10, 'sine', 0.14); tone(360, 0.08, 0.16, 'sine', 0.12); },   // ใช้จ่ายสำเร็จ
-    error(){ tone(300, 0, 0.09, 'square', 0.09); tone(220, 0.09, 0.14, 'square', 0.09); }, // แจ้งเตือนผิดพลาด
-    delete(){ sweep(500, 220, 0, 0.14, 'sine', 0.11); },                          // ลบรายการ
-    unlock(){ tone(760, 0, 0.08, 'sine', 0.13); tone(1140, 0.07, 0.16, 'triangle', 0.13); }, // ปลดล็อกชิ้นส่วน
-    open(){ sweep(420, 760, 0, 0.13, 'sine', 0.09); },                            // เปิดหน้าต่าง/ชีท
-    close(){ sweep(600, 320, 0, 0.11, 'sine', 0.07); },                           // ปิดหน้าต่าง/ชีท
-    achieve(){ [660, 880, 1100, 1320].forEach((f,i) => tone(f, i*0.11, 0.22, 'triangle', 0.16)); }, // สำเร็จเป้าหมาย
+    tap(){ tone(720, 0, 0.05, 'sine', 0.09); },
+    toggle(){ tone(560, 0, 0.06, 'triangle', 0.11); },
+    confirm(){ tone(700, 0, 0.07, 'sine', 0.13); tone(980, 0.06, 0.12, 'sine', 0.12); },
+    save(){ tone(660, 0, 0.09, 'sine', 0.16); tone(880, 0.07, 0.14, 'sine', 0.16); tone(1180, 0.14, 0.18, 'sine', 0.14); },
+    spend(){ tone(480, 0, 0.10, 'sine', 0.14); tone(360, 0.08, 0.16, 'sine', 0.12); },
+    error(){ tone(300, 0, 0.09, 'square', 0.09); tone(220, 0.09, 0.14, 'square', 0.09); },
+    delete(){ sweep(500, 220, 0, 0.14, 'sine', 0.11); },
+    unlock(){ tone(760, 0, 0.08, 'sine', 0.13); tone(1140, 0.07, 0.16, 'triangle', 0.13); },
+    open(){ sweep(420, 760, 0, 0.13, 'sine', 0.09); },
+    close(){ sweep(600, 320, 0, 0.11, 'sine', 0.07); },
+    achieve(){ [660, 880, 1100, 1320].forEach((f,i) => tone(f, i*0.11, 0.22, 'triangle', 0.16)); },
     setEnabled(v){ enabled = v; }
   };
 })();
@@ -692,11 +754,9 @@ function toast(msg, isErr=false){
   t.classList.add('show');
   clearTimeout(toast._h);
   toast._h = setTimeout(()=>t.classList.remove('show'), 2400);
-  if(isErr) SoundManager.error(); // จุดเดียวที่ดักเสียงแจ้งเตือน error ได้ครบทุกจุดในแอป เพราะ toast(...,true) ถูกเรียกจากทุก error path
+  if(isErr) SoundManager.error();
 }
 
-// ปุ่ม/องค์ประกอบที่คลิกได้ทั่วไปซึ่งยังไม่มีเสียงเฉพาะของตัวเอง (ไม่รวม .chip และ .type-opt ที่ผูกเสียงไว้เฉพาะจุดแล้ว
-// เพื่อไม่ให้เสียง "แตะ" ซ้ำสองครั้งในคลิกเดียว) ใช้ event delegation จุดเดียวคลุมทุกปุ่มในแอปรวมถึงปุ่มที่ generate ทีหลัง
 document.addEventListener('click', (e) => {
   if(e.target.closest('.icon-btn, .qa-btn, .fab, .hero-bar, .ring-cta-empty, .comp-btn, .tx-del, .btn-primary, .btn-secondary')){
     SoundManager.tap();
@@ -726,7 +786,7 @@ function computeStats(){
   });
   const balance = totalSaved - totalSpent;
   const todayNet = todaySaved - todaySpent;
-  
+
   let allTimeSaved = 0;
   Object.values(state.transactions || {}).forEach(t => {
     if(t.type === 'save') allTimeSaved += t.amount;
@@ -736,19 +796,19 @@ function computeStats(){
 }
 
 /* ============================= SYSTEM 1: COMPONENT LOGIC ============================= */
-function renderComponents(stats) {
+function renderComponents(stats){
   const cont = $('componentsContainer');
-  if(!state.goal || !state.goal.components || state.goal.components.length === 0) {
+  if(!state.goal || !state.goal.components || state.goal.components.length === 0){
     cont.innerHTML = '';
     return;
   }
-  
+
   const comps = state.goal.components;
   let unlockedTotal = comps.filter(c => c.unlocked).reduce((s, c) => s + c.price, 0);
   let availableBalance = stats.balance - unlockedTotal;
-  
-  const compHTML = comps.map((c, idx) => {
-    if(c.unlocked) {
+
+  const compHTML = comps.map((c) => {
+    if(c.unlocked){
       return `
         <div class="comp-item unlocked">
           <div class="comp-info">
@@ -757,49 +817,49 @@ function renderComponents(stats) {
           </div>
           <button class="comp-btn done">สำเร็จแล้ว ✓</button>
         </div>`;
-    } else {
-      const canUnlock = availableBalance >= c.price;
-      if(canUnlock) {
-        // หักเงินจำลองสำหรับคำนวณชิ้นถัดไปให้ถูกต้อง
-        availableBalance -= c.price;
-        return `
-          <div class="comp-item ready">
-            <div class="comp-info">
-              <div class="comp-name">📦 ${escapeHtml(c.name)}</div>
-              <div class="comp-price">${fmt(c.price)}</div>
-            </div>
-            <button class="comp-btn unlock" onclick="unlockComponent(${c.id})">🔓 ปลดล็อกเลย!</button>
-          </div>`;
-      } else {
-        return `
-          <div class="comp-item">
-            <div class="comp-info">
-              <div class="comp-name">🔒 ${escapeHtml(c.name)}</div>
-              <div class="comp-price">${fmt(c.price)} (ขาดอีก ${fmt(c.price - Math.max(0, availableBalance))})</div>
-            </div>
-            <button class="comp-btn lock">รอเก็บเงิน</button>
-          </div>`;
-      }
     }
+    const canUnlock = availableBalance >= c.price;
+    if(canUnlock){
+      availableBalance -= c.price;
+      return `
+        <div class="comp-item ready">
+          <div class="comp-info">
+            <div class="comp-name">📦 ${escapeHtml(c.name)}</div>
+            <div class="comp-price">${fmt(c.price)}</div>
+          </div>
+          <button class="comp-btn unlock" data-comp-id="${c.id}">ปลดล็อกเลย!</button>
+        </div>`;
+    }
+    return `
+      <div class="comp-item">
+        <div class="comp-info">
+          <div class="comp-name">🔒 ${escapeHtml(c.name)}</div>
+          <div class="comp-price">${fmt(c.price)} (ขาดอีก ${fmt(c.price - Math.max(0, availableBalance))})</div>
+        </div>
+        <button class="comp-btn lock">รอเก็บเงิน</button>
+      </div>`;
   }).join('');
 
   cont.innerHTML = `
     <div class="comp-wrap">
-      <h3 class="comp-title"><span>🧩 ชิ้นส่วนประกอบ (Micro-wins)</span> <span style="font-size:12px;color:var(--text-3);">${comps.filter(c=>c.unlocked).length}/${comps.length}</span></h3>
+      <h3 class="comp-title"><span>🧩 ชิ้นส่วนประกอบ (Micro-wins)</span> <span style="font-size:11.5px;color:var(--ink-faint);">${comps.filter(c=>c.unlocked).length}/${comps.length}</span></h3>
       <div class="comp-list">${compHTML}</div>
     </div>
   `;
+  cont.querySelectorAll('.comp-btn.unlock').forEach(btn => {
+    btn.addEventListener('click', () => unlockComponent(parseFloat(btn.dataset.compId)));
+  });
 }
 
-window.unlockComponent = function(compId) {
-  if(!state.goal || !state.goal.components) return;
+function unlockComponent(compId){
+  if(!state.goal || !state.goal.components || !firebaseReady) return;
   const newComps = state.goal.components.map(c => c.id === compId ? {...c, unlocked:true} : c);
   goalRef.update({components: newComps}).then(() => {
     SoundManager.unlock();
     toast('🎉 ปลดล็อกชิ้นส่วนสำเร็จแล้วฮีโร่!');
     showMiniCelebration();
-  });
-};
+  }).catch(err => toast('เกิดข้อผิดพลาด: ' + err.message, true));
+}
 
 function showMiniCelebration(){
   const wrap = document.createElement('div');
@@ -827,11 +887,21 @@ function renderDraftComps(){
   }
   list.innerHTML = draftComps.map((c, i) => `
     <div style="display:flex;gap:8px;">
-      <input type="text" class="text-input" style="margin-bottom:0;flex:2;padding:10px 14px;" placeholder="ชื่อ (เช่น RAM)" value="${escapeHtml(c.name)}" oninput="draftComps[${i}].name=this.value">
-      <input type="number" class="text-input" style="margin-bottom:0;flex:1;padding:10px 14px;" placeholder="ราคา" value="${c.price || ''}" oninput="draftComps[${i}].price=parseFloat(this.value)||0; updateDraftTarget();">
-      <button class="tx-del" style="background:#FFE4E6;color:#9F1239;border-radius:12px;width:42px;" onclick="draftComps.splice(${i},1);renderDraftComps();updateDraftTarget();">✕</button>
+      <input type="text" class="text-input draft-name" data-idx="${i}" style="margin-bottom:0;flex:2;padding:10px 14px;" placeholder="ชื่อ (เช่น RAM)" value="${escapeHtml(c.name)}">
+      <input type="number" class="text-input draft-price" data-idx="${i}" style="margin-bottom:0;flex:1;padding:10px 14px;" placeholder="ราคา" value="${c.price || ''}">
+      <button class="tx-del draft-remove" data-idx="${i}" style="background:var(--clay-soft);color:var(--clay-deep);border-radius:12px;width:40px;">✕</button>
     </div>
   `).join('');
+
+  list.querySelectorAll('.draft-name').forEach(inp => {
+    inp.addEventListener('input', () => { draftComps[+inp.dataset.idx].name = inp.value; });
+  });
+  list.querySelectorAll('.draft-price').forEach(inp => {
+    inp.addEventListener('input', () => { draftComps[+inp.dataset.idx].price = clampNum(inp.value, 0); updateDraftTarget(); });
+  });
+  list.querySelectorAll('.draft-remove').forEach(btn => {
+    btn.addEventListener('click', () => { draftComps.splice(+btn.dataset.idx, 1); renderDraftComps(); updateDraftTarget(); });
+  });
 }
 
 function updateDraftTarget(){
@@ -845,28 +915,23 @@ $('btnAddDraftComp').onclick = () => {
   renderDraftComps();
 };
 
-
 /* ============================= SYSTEM 2: DYNAMIC PROJECTION ============================= */
-function renderProjection(stats) {
+function renderProjection(stats){
   const cont = $('projectionContainer');
-  if(!state.goal || state.goal.target <= 0 || stats.balance >= state.goal.target) {
+  if(!state.goal || state.goal.target <= 0 || stats.balance >= state.goal.target){
     cont.innerHTML = ''; return;
   }
-  
+
   const target = state.goal.target;
   const bal = stats.balance;
   const remaining = target - bal;
-  
-  // คำนวณวันเฉลี่ย: ใช้วันที่ของรายการที่เก่าที่สุด (รองรับการบันทึกย้อนหลัง) แทนการอิง
-  // เฉพาะ state.goal.startAt อย่างเดียว เพราะถ้าผู้ใช้บันทึกรายการย้อนหลังไปก่อนวันตั้งเป้าหมาย
-  // การหารด้วยจำนวนวันที่สั้นเกินจริงจะทำให้ค่าเฉลี่ยต่อวัน (เช่น ฿500/วัน) พองเกินจริง
-  // (ถ้าเพิ่งสร้างเป้าหมายในวันนี้และยังไม่มีรายการ ให้ถือว่าเป็น 1 วันเพื่อป้องกันหาร 0)
+
   const earliestTxDate = stats.txs.length ? Math.min(...stats.txs.map(t => t.date)) : Date.now();
   const effectiveStart = Math.min(state.goal.startAt, earliestTxDate);
   const daysSinceStart = Math.max(1, (Date.now() - effectiveStart) / (1000 * 60 * 60 * 24));
   const avgDaily = bal / daysSinceStart;
 
-  if(avgDaily <= 0) {
+  if(avgDaily <= 0){
     cont.innerHTML = `
       <div class="proj-wrap">
         <h3 class="proj-title">🔮 พยากรณ์วันสำเร็จ</h3>
@@ -891,16 +956,15 @@ function renderProjection(stats) {
     </div>
   `;
 
-  // ผูก Event ใส่ตัวเลขเพื่อจำลองอนาคต
   $('projExtra').oninput = (e) => {
-    const extra = parseFloat(e.target.value) || 0;
+    const extra = clampNum(e.target.value, 0);
     const resEl = $('projResult');
-    if(extra > 0) {
+    if(extra > 0){
       const newVelocity = avgDaily + extra;
       const newDaysLeft = Math.ceil(remaining / newVelocity);
       const diff = daysLeft - newDaysLeft;
       const newDate = new Date(Date.now() + newDaysLeft * 86400000).toLocaleDateString('th-TH', {day:'numeric', month:'short'});
-      
+
       resEl.style.display = 'block';
       resEl.className = 'proj-result wow';
       resEl.innerHTML = `🚀 เย้! คุณจะได้ของเร็วขึ้นตั้ง <b>${diff} วัน</b><br>(ขยับวันสำเร็จมาเป็นวันที่ ${newDate})`;
@@ -908,6 +972,180 @@ function renderProjection(stats) {
       resEl.style.display = 'none';
     }
   };
+}
+
+/* ============================= SYSTEM 3: STREAK CALENDAR ============================= */
+const STREAK_DAYS = 70; // ~10 สัปดาห์ย้อนหลัง
+
+function dateKey(d){
+  const y = d.getFullYear(), m = String(d.getMonth()+1).padStart(2,'0'), dd = String(d.getDate()).padStart(2,'0');
+  return `${y}-${m}-${dd}`;
+}
+
+function buildStreakCells(days){
+  const end = new Date(); end.setHours(0,0,0,0);
+  const start = new Date(end);
+  start.setDate(start.getDate() - (days - 1));
+  start.setDate(start.getDate() - start.getDay()); // ปรับให้เริ่มที่วันอาทิตย์เพื่อให้ตารางตรงแถว
+  const cells = [];
+  const cur = new Date(start);
+  while(cur <= end){
+    cells.push(new Date(cur));
+    cur.setDate(cur.getDate() + 1);
+  }
+  return { cells, end };
+}
+
+function levelForAmount(amount){
+  if(!amount || amount <= 0) return 0;
+  if(amount < 50) return 1;
+  if(amount < 100) return 2;
+  if(amount < 300) return 3;
+  return 4;
+}
+
+function renderStreakCalendar(){
+  const cont = $('streakContainer');
+  const allSaveTxs = Object.values(state.transactions || {}).filter(t => t.type === 'save');
+  if(!allSaveTxs.length){ cont.innerHTML = ''; return; }
+
+  const savedByDate = {};
+  allSaveTxs.forEach(t => {
+    const k = dateKey(new Date(t.date));
+    savedByDate[k] = (savedByDate[k] || 0) + t.amount;
+  });
+
+  const { cells, end } = buildStreakCells(STREAK_DAYS);
+  const todayKey = dateKey(end);
+
+  let currentStreak = 0;
+  for(let i = cells.length - 1; i >= 0; i--){
+    if(cells[i] > end) continue;
+    const k = dateKey(cells[i]);
+    if(savedByDate[k] > 0) currentStreak++;
+    else break;
+  }
+  let activeDaysInRange = 0;
+  cells.forEach(d => { if(d <= end && savedByDate[dateKey(d)] > 0) activeDaysInRange++; });
+
+  const cellHTML = cells.map(d => {
+    if(d > end) return `<div class="streak-cell"></div>`;
+    const k = dateKey(d);
+    const lvl = levelForAmount(savedByDate[k] || 0);
+    const isToday = k === todayKey;
+    const label = `${d.toLocaleDateString('th-TH',{day:'numeric',month:'short'})}${savedByDate[k] ? ' · ' + fmt(savedByDate[k]) : ''}`;
+    return `<div class="streak-cell ${lvl ? 'l'+lvl : ''} ${isToday ? 'today' : ''}" title="${label}"></div>`;
+  }).join('');
+
+  cont.innerHTML = `
+    <div class="streak-wrap">
+      <div class="streak-head">
+        <h3 class="streak-title">🔥 ปฏิทินความสม่ำเสมอ</h3>
+        <span class="streak-sub">${STREAK_DAYS} วันล่าสุด</span>
+      </div>
+      <div class="streak-grid-scroll"><div class="streak-grid">${cellHTML}</div></div>
+      <div class="streak-legend">
+        <span>น้อย</span>
+        <div class="streak-cell"></div><div class="streak-cell l1"></div><div class="streak-cell l2"></div><div class="streak-cell l3"></div><div class="streak-cell l4"></div>
+        <span>มาก</span>
+      </div>
+      <div class="streak-stats-row">
+        <div class="streak-stat-chip"><b class="num">${currentStreak}</b><span>วันติดต่อกัน</span></div>
+        <div class="streak-stat-chip"><b class="num">${activeDaysInRange}</b><span>วันที่ออมใน ${STREAK_DAYS} วัน</span></div>
+      </div>
+    </div>
+  `;
+}
+
+/* ============================= SYSTEM 4: WEEKLY QUEST ============================= */
+function getWeekStart(){
+  const now = new Date();
+  const day = now.getDay(); // 0 = อาทิตย์
+  const diffToMonday = day === 0 ? 6 : day - 1;
+  const monday = new Date(now);
+  monday.setHours(0,0,0,0);
+  monday.setDate(monday.getDate() - diffToMonday);
+  return monday.getTime();
+}
+
+function renderWeeklyQuest(stats){
+  const cont = $('questContainer');
+  if(!state.goal){ cont.innerHTML = ''; return; }
+
+  const weeklyTarget = state.goal.weeklyTarget || 0;
+  const weekStart = getWeekStart();
+  const weekSaved = stats.txs
+    .filter(t => t.type === 'save' && t.date >= weekStart)
+    .reduce((s,t) => s + t.amount, 0);
+
+  if(!weeklyTarget){
+    cont.innerHTML = `
+      <div class="quest-wrap">
+        <div class="quest-head"><h3 class="quest-title">🎯 เควสต์รายสัปดาห์</h3></div>
+        <div class="quest-text">ตั้งเป้าออมเงินประจำสัปดาห์นี้ เพื่อให้มีความสำเร็จเล็กๆ ระหว่างทางไปเป้าหมายใหญ่!</div>
+        <button class="quest-empty-btn" id="btnSetWeeklyQuest">+ ตั้งเป้าหมายรายสัปดาห์</button>
+      </div>`;
+    $('btnSetWeeklyQuest').onclick = () => setWeeklyTarget();
+    return;
+  }
+
+  const pct = Math.min(100, Math.max(0, (weekSaved / weeklyTarget) * 100));
+  const done = weekSaved >= weeklyTarget;
+
+  cont.innerHTML = `
+    <div class="quest-wrap">
+      <div class="quest-head">
+        <h3 class="quest-title">🎯 เควสต์รายสัปดาห์</h3>
+        <button class="quest-edit" id="btnEditWeeklyQuest">แก้ไข</button>
+      </div>
+      <div class="quest-bar-row">
+        <div class="quest-bar"><div class="quest-fill ${done ? 'done' : ''}" style="width:${pct}%"></div></div>
+        <span class="quest-pct num">${pct.toFixed(0)}%</span>
+      </div>
+      <div class="quest-text">${done
+        ? `🎉 เก็บครบเป้าสัปดาห์นี้แล้ว! สะสมได้ <b class="num">${fmt(weekSaved)}</b> จาก <b class="num">${fmt(weeklyTarget)}</b>`
+        : `สัปดาห์นี้เก็บได้ <b class="num">${fmt(weekSaved)}</b> จากเป้า <b class="num">${fmt(weeklyTarget)}</b> · ขาดอีก <b class="num">${fmt(weeklyTarget - weekSaved)}</b>`}</div>
+    </div>
+  `;
+  $('btnEditWeeklyQuest').onclick = () => setWeeklyTarget(weeklyTarget);
+}
+
+function setWeeklyTarget(current){
+  if(!firebaseReady || !state.goal){ toast('การเชื่อมต่อระบบขัดข้อง', true); return; }
+  const input = prompt("ตั้งเป้าหมายออมเงินต่อสัปดาห์ (บาท):", current || '');
+  if(input === null) return;
+  const val = clampNum(input, NaN);
+  if(!val || val <= 0){ toast('กรุณาใส่จำนวนเงินที่ถูกต้อง', true); return; }
+  goalRef.update({ weeklyTarget: Math.round(val*100)/100 }).then(() => {
+    SoundManager.confirm();
+    toast('ตั้งเป้าหมายรายสัปดาห์แล้ว ✓');
+  }).catch(err => toast('เกิดข้อผิดพลาด', true));
+}
+
+/* ============================= AUTO-SAVE REMINDER ============================= */
+const REMINDER_THRESHOLD_DAYS = 3;
+
+function checkSaveReminder(stats){
+  if(!state.goal) return;
+  const saveTxs = stats.txs.filter(t => t.type === 'save');
+  if(!saveTxs.length) return;
+
+  const lastSaveDate = Math.max(...saveTxs.map(t => t.date));
+  const daysSince = Math.floor((Date.now() - lastSaveDate) / (1000*60*60*24));
+  if(daysSince < REMINDER_THRESHOLD_DAYS) return;
+
+  const todayKey = todayISO();
+  let lastShown = null;
+  try{ lastShown = localStorage.getItem('sg_reminder_shown_date'); }catch(e){ /* private mode etc */ }
+  if(lastShown === todayKey) return;
+
+  toast(`⏰ ห่างหายจากการออมไป ${daysSince} วันแล้วนะฮีโร่ กลับมาออมกันเถอะ!`);
+  try{ localStorage.setItem('sg_reminder_shown_date', todayKey); }catch(e){}
+  notifyDiscord({
+    title: `⏰ ฮีโร่ห่างหายจากการออมเงิน ${daysSince} วัน`,
+    color: 0xB9852F,
+    fields: [{ name: 'เป้าหมายปัจจุบัน', value: state.goal.name, inline: true }]
+  });
 }
 
 /* ============================= HERO LEVEL & BADGES ============================= */
@@ -929,7 +1167,7 @@ function computeHeroLevel(allTimeSaved){
     { rank: "Lv.14 เจ้าแห่งจักรวาลการเงิน", icon: "🌌", min: 50000, max: 100000 },
     { rank: "Lv.15 เทพเจ้าออมเงินอินฟินิตี้", icon: "♾️", min: 100000, max: Infinity }
   ];
-  
+
   const allTxs = Object.values(state.transactions || {});
   let totalSaved = 0, totalSpent = 0;
   allTxs.forEach(t => {
@@ -939,11 +1177,11 @@ function computeHeroLevel(allTimeSaved){
   const netSaved = Math.max(0, totalSaved - totalSpent);
 
   let peakLevelIdx = 0, currentLevelIdx = 0;
-  for(let i = 0; i < levels.length; i++){ 
-    if(totalSaved >= levels[i].min) peakLevelIdx = i; 
-    if(netSaved >= levels[i].min) currentLevelIdx = i; 
+  for(let i = 0; i < levels.length; i++){
+    if(totalSaved >= levels[i].min) peakLevelIdx = i;
+    if(netSaved >= levels[i].min) currentLevelIdx = i;
   }
-  
+
   const safeZoneIdx = Math.max(0, peakLevelIdx - 1);
   if(currentLevelIdx < safeZoneIdx) currentLevelIdx = safeZoneIdx;
 
@@ -963,7 +1201,7 @@ function computeHeroLevel(allTimeSaved){
 function computeBadges(){
   const allTxs = Object.values(state.transactions || {}).sort((a,b)=> a.date - b.date);
   const archs = Object.values(state.archivedGoals || {});
-  
+
   const firstStep = allTxs.some(t => t.type === 'save');
   const earlyBird = allTxs.some(t => t.type === 'save' && new Date(t.date).getHours() >= 4 && new Date(t.date).getHours() < 8);
   const big100 = allTxs.some(t => t.type === 'save' && t.amount >= 100);
@@ -1053,9 +1291,9 @@ function renderGoalHero(stats){
   const hero = $('goalHero');
   if(!state.goal){
     hero.innerHTML = `
-      <div class="ring-box" style="border:none;box-shadow:none;"><div class="ring-target-empty">
+      <div class="ring-box" style="border:none;box-shadow:none;background:none;"><div class="ring-target-empty">
         <button class="ring-cta-empty" id="emptyGoalBtn">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
           <span>ตั้งเป้าหมายแรกของคุณกันเถอะฮีโร่!</span>
         </button>
       </div></div>`;
@@ -1071,19 +1309,19 @@ function renderGoalHero(stats){
         <defs>
           <clipPath id="liquidClip"><circle cx="100" cy="100" r="86"/></clipPath>
           <linearGradient id="waveGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#38BDF8"/>
-            <stop offset="100%" stop-color="#0284C7"/>
+            <stop offset="0%" stop-color="#2E7862"/>
+            <stop offset="100%" stop-color="#123B30"/>
           </linearGradient>
         </defs>
-        <circle cx="100" cy="100" r="86" fill="#F8FAFC"/>
+        <circle cx="100" cy="100" r="86" fill="#FBF7EE"/>
         <g clip-path="url(#liquidClip)">
           <g id="waveGroup" style="transform:translateY(${200 - 14 - (pct*1.6)}px);transition:transform 1s var(--ease-out, ease);">
-            <path id="wavePath1" d="" fill="url(#waveGrad)" opacity="0.6"></path>
-            <path id="wavePath2" d="" fill="url(#waveGrad)" opacity="0.9"></path>
+            <path id="wavePath1" d="" fill="url(#waveGrad)" opacity="0.55"></path>
+            <path id="wavePath2" d="" fill="url(#waveGrad)" opacity="0.85"></path>
           </g>
         </g>
-        <circle cx="100" cy="100" r="90" fill="none" stroke="#E2E8F0" stroke-width="6"/>
-        <circle cx="100" cy="100" r="90" fill="none" stroke="var(--gold)" stroke-width="8"
+        <circle cx="100" cy="100" r="90" fill="none" stroke="#E4DBC5" stroke-width="5"/>
+        <circle cx="100" cy="100" r="90" fill="none" stroke="#B9852F" stroke-width="7"
           stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${c - dash}"
           transform="rotate(-90 100 100)" style="transition:stroke-dashoffset 1s var(--ease-out, ease);"/>
       </svg>
@@ -1145,7 +1383,7 @@ function renderTxList(stats){
   $('txCount').textContent = txs.length ? `${txs.length} รายการ` : '';
   if(!txs.length){
     list.innerHTML = `<div class="empty-state">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="4"/><path d="M16 3v8M8 3v8M3 11h18"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="4"/><path d="M16 3v8M8 3v8M3 11h18"/></svg>
       <b>ยังไม่มีรายการ</b>
       <span>เริ่มออมเงินภารกิจแรกกันเลย!</span>
     </div>`;
@@ -1186,11 +1424,14 @@ function renderAll(){
   const stats = computeStats();
   renderHeroProfileBar(stats);
   renderGoalHero(stats);
-  renderComponents(stats); // <--- ระบบ Component
-  renderProjection(stats); // <--- ระบบพยากรณ์
+  renderWeeklyQuest(stats);
+  renderStreakCalendar();
+  renderComponents(stats);
+  renderProjection(stats);
   renderStats(stats);
   renderTxList(stats);
   checkAchievement(stats);
+  checkSaveReminder(stats);
 }
 
 /* ============================= HERO ACHIEVEMENT ============================= */
@@ -1199,12 +1440,11 @@ function checkAchievement(stats){
   if(stats.balance >= state.goal.target && state.goal.target > 0){
     if(celebratedFor === state.goal.id) return;
     celebratedFor = state.goal.id;
-    goalRef.update({achieved:true});
+    if(firebaseReady) goalRef.update({achieved:true}).catch(err => console.error(err));
     showCelebration(stats);
-    // [เพิ่มใหม่] แจ้งเตือน Discord ระดับพิเศษเมื่อบรรลุเป้าหมายการออม 100%
     notifyDiscord({
       title: '🏆 ยินดีด้วย! บรรลุเป้าหมายการออมเงินแล้ว!',
-      color: 0xFBBF24, // ทอง/เหลืองสด
+      color: 0xB9852F,
       fields: [
         { name: 'ชื่อเป้าหมาย', value: state.goal.name, inline: true },
         { name: 'ยอดเงินรวมที่ทำสำเร็จ', value: fmt(stats.balance), inline: true }
@@ -1218,7 +1458,7 @@ function showCelebration(stats){
   const wrap = document.createElement('div');
   wrap.className = 'confetti-wrap';
   const emojis = ['⭐', '🚀', '💰', '🌟', '🦸‍♂️', '⚡'];
-  
+
   for(let i=0;i<45;i++){
     const c = document.createElement('div');
     c.className = 'confetti';
@@ -1256,6 +1496,7 @@ function showCelebration(stats){
 
 /* ============================= FIREBASE ACTIONS ============================= */
 function addTransaction(type, amount, note, date){
+  if(!firebaseReady){ toast('การเชื่อมต่อระบบขัดข้อง ลองใหม่อีกครั้ง', true); return; }
   if(!state.goal){ toast('กรุณาตั้งเป้าหมายก่อน', true); return; }
   if(!amount || amount <= 0){ toast('กรุณาใส่จำนวนเงิน', true); return; }
   txCol.add({
@@ -1264,10 +1505,9 @@ function addTransaction(type, amount, note, date){
   }).then(()=>{
     type === 'save' ? SoundManager.save() : SoundManager.spend();
     toast(type === 'save' ? 'ยอดเยี่ยม! ออมเงินแล้ว ✓' : 'บันทึกการใช้จ่ายแล้ว ✓');
-    // [เพิ่มใหม่] แจ้งเตือน Discord เมื่อบันทึกรายการการเงินสำเร็จ
     notifyDiscord({
       title: type === 'save' ? '🎉 มีการออมเงินใหม่!' : '💸 มีการใช้จ่ายใหม่',
-      color: type === 'save' ? 0x4ADE80 : 0xFB7185, // เขียว / แดง
+      color: type === 'save' ? 0x3F7D5C : 0xB2543A,
       fields: [
         { name: 'จำนวนเงิน', value: fmt(amount), inline: true },
         { name: 'บันทึกรายการ', value: (note && note.trim()) ? note.trim() : 'ไม่ได้ระบุ', inline: true }
@@ -1278,19 +1518,21 @@ function addTransaction(type, amount, note, date){
 
 function deleteTx(key){
   const pin = prompt("กรุณาใส่รหัสผ่าน (PIN) เพื่อลบรายการนี้:");
-  if (pin === ADMIN_PIN) {
+  if(pin === null) return;
+  if(pin === ADMIN_PIN){
+    if(!firebaseReady){ toast('การเชื่อมต่อระบบขัดข้อง', true); return; }
     txCol.doc(key).delete().then(()=>{
       SoundManager.delete();
       toast('ลบรายการแล้ว');
-      // [เพิ่มใหม่] แจ้งเตือน Discord เมื่อมีการลบรายการการเงิน
-      notifyDiscord({ title: '🗑️ มีการลบรายการการเงิน', color: 0xF97316 }); // ส้ม
+      notifyDiscord({ title: '🗑️ มีการลบรายการการเงิน', color: 0xC97A3D });
     }).catch(err => toast('ลบไม่สำเร็จ', true));
-  } else if (pin !== null) {
+  } else {
     toast('รหัสผ่านไม่ถูกต้อง!', true);
   }
 }
 
 function saveGoal(name, target, carryChoice, components){
+  if(!firebaseReady){ toast('การเชื่อมต่อระบบขัดข้อง ลองใหม่อีกครั้ง', true); return; }
   const doSet = (carryAmount) => {
     const newId = db.collection('sg_goal').doc().id;
     const newGoal = { id:newId, name, target, components: components || [], startAt: Date.now(), achieved:false };
@@ -1311,9 +1553,9 @@ function saveGoal(name, target, carryChoice, components){
       finalBalance: stats.balance, completedAt: Date.now()
     }).then(()=>{
       doSet(carryChoice === 'carry' ? stats.balance : 0);
-    });
+    }).catch(err => toast('เกิดข้อผิดพลาด', true));
   } else if(state.goal){
-    goalRef.update({name, target, components: components || []}).then(()=>{ SoundManager.confirm(); toast('อัปเดตภารกิจแล้ว ✓'); });
+    goalRef.update({name, target, components: components || []}).then(()=>{ SoundManager.confirm(); toast('อัปเดตภารกิจแล้ว ✓'); }).catch(err => toast('เกิดข้อผิดพลาด', true));
   } else {
     doSet(0);
   }
@@ -1341,7 +1583,7 @@ function openTxSheet(type){
   $('txAmount').value = '';
   $('txNote').value = '';
   $('txDate').value = todayISO();
-  $('txDate').max = todayISO(); // กันเลือกวันที่ในอนาคต แต่ไม่จำกัดวันย้อนหลัง (ไม่มี min)
+  $('txDate').max = todayISO();
   openSheet('overlayTx','sheetTx');
   setTimeout(()=> $('txAmount').focus(), 350);
 }
@@ -1352,8 +1594,7 @@ function openGoalSheet(isNewAfterAchieve, carryAmount){
   $('goalTarget').value = isNewAfterAchieve ? '' : (state.goal ? state.goal.target : '');
   $('goalSubmit').dataset.afterAchieve = isNewAfterAchieve ? '1' : '0';
   $('goalSubmit').dataset.carry = carryAmount || 0;
-  
-  // โหลดชิ้นส่วน Draft
+
   draftComps = isNewAfterAchieve ? [] : (state.goal && state.goal.components ? JSON.parse(JSON.stringify(state.goal.components)) : []);
   renderDraftComps();
 
@@ -1368,7 +1609,7 @@ $('typeSpend').onclick = () => { SoundManager.toggle(); pendingTxType='spend'; $
 document.querySelectorAll('.chip').forEach(chip => {
   chip.onclick = () => {
     SoundManager.tap();
-    const cur = parseFloat($('txAmount').value) || 0;
+    const cur = clampNum($('txAmount').value, 0);
     $('txAmount').value = cur + parseFloat(chip.dataset.v);
   };
 });
@@ -1385,7 +1626,6 @@ $('overlayHist').onclick = () => closeSheet('overlayHist','sheetHist');
 $('overlayBadges').onclick = () => closeSheet('overlayBadges','sheetBadges');
 $('closeBadgesBtn').onclick = () => closeSheet('overlayBadges','sheetBadges');
 
-// รองรับปิด sheet ด้วยปุ่ม Escape เพื่อการเข้าถึงด้วยคีย์บอร์ด
 document.addEventListener('keydown', (e) => {
   if(e.key !== 'Escape') return;
   const sheetPairs = [['overlayTx','sheetTx'], ['overlayGoal','sheetGoal'], ['overlayHist','sheetHist'], ['overlayBadges','sheetBadges']];
@@ -1395,8 +1635,9 @@ document.addEventListener('keydown', (e) => {
 });
 
 $('btnResetAll').onclick = () => {
+  if(!firebaseReady){ toast('การเชื่อมต่อระบบขัดข้อง', true); return; }
   const pin = prompt("⚠️ อันตราย: คุณกำลังจะลบเป้าหมาย, เงินออม และประวัติ 'ทั้งหมด'!\n\nกรุณาใส่รหัสผ่าน (PIN) เพื่อยืนยันการรีเซต:");
-  if (pin === ADMIN_PIN) {
+  if(pin === ADMIN_PIN){
     toast('กำลังล้างข้อมูล... ⏳');
     txCol.get().then(snap => {
       const batch = db.batch();
@@ -1412,17 +1653,16 @@ $('btnResetAll').onclick = () => {
       SoundManager.confirm();
       toast('รีเซตข้อมูลสำเร็จ! ✨');
       closeSheet('overlayHist', 'sheetHist');
-      // [เพิ่มใหม่] แจ้งเตือน Discord ระดับสำคัญเมื่อมีการรีเซ็ตระบบ/ลบเป้าหมายทั้งหมด
-      notifyDiscord({ title: '🚨 มีการรีเซ็ตระบบ / ลบเป้าหมาย', color: 0x991B1B }); // แดงเข้ม
+      notifyDiscord({ title: '🚨 มีการรีเซ็ตระบบ / ลบเป้าหมาย', color: 0x813B29 });
       setTimeout(() => location.reload(), 1500);
     }).catch(err => toast('เกิดข้อผิดพลาดในการรีเซต', true));
-  } else if (pin !== null) {
+  } else if(pin !== null){
     toast('รหัสผ่านไม่ถูกต้อง ลบข้อมูลถูกยกเลิก!', true);
   }
 };
 
 $('txSubmit').onclick = () => {
-  const amt = parseFloat($('txAmount').value);
+  const amt = clampNum($('txAmount').value, NaN);
   const ts = dateInputToTimestamp($('txDate').value);
   addTransaction(pendingTxType, amt, $('txNote').value.trim(), ts);
   closeSheet('overlayTx','sheetTx');
@@ -1430,14 +1670,13 @@ $('txSubmit').onclick = () => {
 
 $('goalSubmit').onclick = () => {
   const name = $('goalName').value.trim();
-  const target = parseFloat($('goalTarget').value);
-  
-  // กรองเอาเฉพาะ Component ที่ระบุข้อมูลครบ
+  const target = clampNum($('goalTarget').value, NaN);
+
   const finalComps = draftComps.filter(c => c.name.trim() !== '' && c.price > 0);
 
   if(!name){ toast('กรุณาตั้งชื่อภารกิจฮีโร่ก่อน!', true); return; }
   if(!target || target <= 0){ toast('กรุณาใส่จำนวนเงินเป้าหมายที่ต้องการ', true); return; }
-  
+
   saveGoal(name, target, pendingCarryChoice, finalComps);
   closeSheet('overlayGoal','sheetGoal');
 };
@@ -1447,7 +1686,7 @@ function renderHistory(){
   const el = $('histList');
   if(!arr.length){
     el.innerHTML = `<div class="empty-state" style="padding:24px 4px;border:none;">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l4 2"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l4 2"/></svg>
       <span>ยังไม่มีภารกิจที่สำเร็จ</span>
     </div>`;
     return;
@@ -1474,27 +1713,31 @@ window.addEventListener('offline', ()=> updateConnDot(false));
 
 let loadFlags = {goal:false, tx:false, arch:false};
 
-goalRef.onSnapshot(doc => {
-  state.goal = doc.exists ? doc.data() : null;
-  loadFlags.goal = true; tryFinishLoad();
-  onDataChange();
-}, err => { console.error(err); loadFlags.goal = true; tryFinishLoad(); });
+if(firebaseReady){
+  goalRef.onSnapshot(doc => {
+    state.goal = doc.exists ? doc.data() : null;
+    loadFlags.goal = true; tryFinishLoad();
+    onDataChange();
+  }, err => { console.error(err); loadFlags.goal = true; tryFinishLoad(); });
 
-txCol.onSnapshot(snap => {
-  const obj = {};
-  snap.forEach(d => obj[d.id] = d.data());
-  state.transactions = obj;
-  loadFlags.tx = true; tryFinishLoad();
-  onDataChange();
-}, err => { console.error(err); loadFlags.tx = true; tryFinishLoad(); });
+  txCol.onSnapshot(snap => {
+    const obj = {};
+    snap.forEach(d => obj[d.id] = d.data());
+    state.transactions = obj;
+    loadFlags.tx = true; tryFinishLoad();
+    onDataChange();
+  }, err => { console.error(err); loadFlags.tx = true; tryFinishLoad(); });
 
-archCol.onSnapshot(snap => {
-  const obj = {};
-  snap.forEach(d => obj[d.id] = d.data());
-  state.archivedGoals = obj;
-  loadFlags.arch = true; tryFinishLoad();
-  onDataChange();
-}, err => { console.error(err); loadFlags.arch = true; tryFinishLoad(); });
+  archCol.onSnapshot(snap => {
+    const obj = {};
+    snap.forEach(d => obj[d.id] = d.data());
+    state.archivedGoals = obj;
+    loadFlags.arch = true; tryFinishLoad();
+    onDataChange();
+  }, err => { console.error(err); loadFlags.arch = true; tryFinishLoad(); });
+} else {
+  loadFlags = {goal:true, tx:true, arch:true};
+}
 
 function onDataChange(){ if(firstLoadDone) renderAll(); }
 
