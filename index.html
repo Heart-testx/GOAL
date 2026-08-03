@@ -188,36 +188,6 @@ input{font-family:inherit;color:inherit;}
 @keyframes pulseBtn{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
 .comp-btn.unlock{animation:pulseBtn 1.8s infinite;}
 
-/* ============================= SYSTEM 2: PROJECTION ============================= */
-.proj-wrap{background:linear-gradient(180deg,var(--pine-soft),var(--paper) 60%);border-radius:20px;padding:16px;margin:12px 0 24px;border:1px dashed #B6CFC0;}
-.proj-title{font-size:14.5px;font-family:'Noto Serif Thai',serif;font-weight:700;color:var(--pine-deep);margin-bottom:9px;display:flex;align-items:center;gap:8px;}
-.proj-text{font-size:13.5px;font-weight:500;color:var(--ink-soft);line-height:1.65;}
-.proj-input-group{display:flex;align-items:center;gap:8px;margin-top:12px;background:var(--paper);padding:10px 14px;border-radius:14px;border:1px solid var(--line);}
-.proj-input{width:60px;padding:6px 8px;border-radius:9px;border:1.5px solid var(--pine);font-weight:700;text-align:center;font-size:15px;outline:none;font-family:'Space Grotesk',sans-serif;background:var(--paper);}
-.proj-result{margin-top:12px;font-size:13px;font-weight:600;color:var(--pine-deep);padding:10px 14px;background:var(--paper);border-radius:12px;line-height:1.55;border:1px solid var(--line);}
-.proj-result.wow{color:var(--pine-deep);background:var(--pine-soft);border-color:#C6DBCE;animation:fadeUp .3s ease-out;}
-
-/* ============================= SYSTEM 3: STREAK CALENDAR ============================= */
-.streak-wrap{background:var(--paper);border-radius:20px;padding:16px;margin:12px 0;border:1px solid var(--line);box-shadow:var(--shadow-1);}
-.streak-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
-.streak-title{font-size:14.5px;font-family:'Noto Serif Thai',serif;font-weight:700;color:var(--ink);}
-.streak-sub{font-size:11.5px;color:var(--ink-faint);font-weight:600;}
-.streak-grid-scroll{overflow-x:auto;padding-bottom:2px;-webkit-overflow-scrolling:touch;}
-.streak-grid{display:grid;grid-auto-flow:column;grid-template-rows:repeat(7,1fr);gap:4px;width:max-content;}
-.streak-cell{width:13px;height:13px;border-radius:4px;background:var(--bg-2);transition:transform .12s var(--ease-spring);}
-.streak-cell:hover{transform:scale(1.25);}
-.streak-cell.l1{background:#CBE1D3;}
-.streak-cell.l2{background:#8FC1A5;}
-.streak-cell.l3{background:#4F9873;}
-.streak-cell.l4{background:var(--pine-deep);}
-.streak-cell.today{box-shadow:0 0 0 1.5px var(--amber);}
-.streak-legend{display:flex;align-items:center;gap:5px;margin-top:10px;justify-content:flex-end;font-size:10.5px;color:var(--ink-faint);font-weight:600;}
-.streak-legend .streak-cell{width:11px;height:11px;}
-.streak-stats-row{display:flex;gap:8px;margin-top:12px;}
-.streak-stat-chip{flex:1;text-align:center;background:var(--paper-2);border:1px solid var(--line);border-radius:13px;padding:8px 4px;}
-.streak-stat-chip b{display:block;font-size:16px;font-weight:700;color:var(--pine-deep);font-family:'Space Grotesk',sans-serif;}
-.streak-stat-chip span{font-size:10.5px;color:var(--ink-faint);font-weight:600;}
-
 /* ============================= SYSTEM 4: WEEKLY QUEST ============================= */
 .quest-wrap{background:linear-gradient(180deg,var(--amber-soft),var(--paper) 65%);border-radius:20px;padding:16px;margin:12px 0;border:1px dashed #E7CE9C;}
 .quest-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
@@ -467,14 +437,8 @@ input{font-family:inherit;color:inherit;}
     <!-- WEEKLY QUEST -->
     <div id="questContainer"></div>
 
-    <!-- STREAK CALENDAR -->
-    <div id="streakContainer"></div>
-
     <!-- COMPONENTS SYSTEM -->
     <div id="componentsContainer"></div>
-
-    <!-- PROJECTION SYSTEM -->
-    <div id="projectionContainer"></div>
 
     <!-- STATS -->
     <div class="stats-grid">
@@ -915,148 +879,6 @@ $('btnAddDraftComp').onclick = () => {
   renderDraftComps();
 };
 
-/* ============================= SYSTEM 2: DYNAMIC PROJECTION ============================= */
-function renderProjection(stats){
-  const cont = $('projectionContainer');
-  if(!state.goal || state.goal.target <= 0 || stats.balance >= state.goal.target){
-    cont.innerHTML = ''; return;
-  }
-
-  const target = state.goal.target;
-  const bal = stats.balance;
-  const remaining = target - bal;
-
-  const earliestTxDate = stats.txs.length ? Math.min(...stats.txs.map(t => t.date)) : Date.now();
-  const effectiveStart = Math.min(state.goal.startAt, earliestTxDate);
-  const daysSinceStart = Math.max(1, (Date.now() - effectiveStart) / (1000 * 60 * 60 * 24));
-  const avgDaily = bal / daysSinceStart;
-
-  if(avgDaily <= 0){
-    cont.innerHTML = `
-      <div class="proj-wrap">
-        <h3 class="proj-title">🔮 พยากรณ์วันสำเร็จ</h3>
-        <div class="proj-text">เริ่มออมเงินภารกิจนี้ เพื่อดูระบบพยากรณ์วันสำเร็จแบบ Real-time กันเถอะ!</div>
-      </div>`;
-    return;
-  }
-
-  const daysLeft = Math.ceil(remaining / avgDaily);
-  const estDate = new Date(Date.now() + daysLeft * 86400000).toLocaleDateString('th-TH', {day:'numeric', month:'long', year:'numeric'});
-
-  cont.innerHTML = `
-    <div class="proj-wrap">
-      <h3 class="proj-title">🔮 พยากรณ์วันสำเร็จล่วงหน้า</h3>
-      <div class="proj-text">จากสถิติปัจจุบัน คุณเก็บได้เฉลี่ย <b>${fmt(avgDaily)}/วัน</b><br>เป้าหมายนี้จะสำเร็จประมาณวันที่ <b>${estDate}</b></div>
-      <div class="proj-input-group">
-        <span>🔥 ถ้าเก็บเพิ่มอีกวันละ</span>
-        <input type="number" id="projExtra" class="proj-input" placeholder="50">
-        <span>บาท</span>
-      </div>
-      <div id="projResult" class="proj-result" style="display:none;"></div>
-    </div>
-  `;
-
-  $('projExtra').oninput = (e) => {
-    const extra = clampNum(e.target.value, 0);
-    const resEl = $('projResult');
-    if(extra > 0){
-      const newVelocity = avgDaily + extra;
-      const newDaysLeft = Math.ceil(remaining / newVelocity);
-      const diff = daysLeft - newDaysLeft;
-      const newDate = new Date(Date.now() + newDaysLeft * 86400000).toLocaleDateString('th-TH', {day:'numeric', month:'short'});
-
-      resEl.style.display = 'block';
-      resEl.className = 'proj-result wow';
-      resEl.innerHTML = `🚀 เย้! คุณจะได้ของเร็วขึ้นตั้ง <b>${diff} วัน</b><br>(ขยับวันสำเร็จมาเป็นวันที่ ${newDate})`;
-    } else {
-      resEl.style.display = 'none';
-    }
-  };
-}
-
-/* ============================= SYSTEM 3: STREAK CALENDAR ============================= */
-const STREAK_DAYS = 70; // ~10 สัปดาห์ย้อนหลัง
-
-function dateKey(d){
-  const y = d.getFullYear(), m = String(d.getMonth()+1).padStart(2,'0'), dd = String(d.getDate()).padStart(2,'0');
-  return `${y}-${m}-${dd}`;
-}
-
-function buildStreakCells(days){
-  const end = new Date(); end.setHours(0,0,0,0);
-  const start = new Date(end);
-  start.setDate(start.getDate() - (days - 1));
-  start.setDate(start.getDate() - start.getDay()); // ปรับให้เริ่มที่วันอาทิตย์เพื่อให้ตารางตรงแถว
-  const cells = [];
-  const cur = new Date(start);
-  while(cur <= end){
-    cells.push(new Date(cur));
-    cur.setDate(cur.getDate() + 1);
-  }
-  return { cells, end };
-}
-
-function levelForAmount(amount){
-  if(!amount || amount <= 0) return 0;
-  if(amount < 50) return 1;
-  if(amount < 100) return 2;
-  if(amount < 300) return 3;
-  return 4;
-}
-
-function renderStreakCalendar(){
-  const cont = $('streakContainer');
-  const allSaveTxs = Object.values(state.transactions || {}).filter(t => t.type === 'save');
-  if(!allSaveTxs.length){ cont.innerHTML = ''; return; }
-
-  const savedByDate = {};
-  allSaveTxs.forEach(t => {
-    const k = dateKey(new Date(t.date));
-    savedByDate[k] = (savedByDate[k] || 0) + t.amount;
-  });
-
-  const { cells, end } = buildStreakCells(STREAK_DAYS);
-  const todayKey = dateKey(end);
-
-  let currentStreak = 0;
-  for(let i = cells.length - 1; i >= 0; i--){
-    if(cells[i] > end) continue;
-    const k = dateKey(cells[i]);
-    if(savedByDate[k] > 0) currentStreak++;
-    else break;
-  }
-  let activeDaysInRange = 0;
-  cells.forEach(d => { if(d <= end && savedByDate[dateKey(d)] > 0) activeDaysInRange++; });
-
-  const cellHTML = cells.map(d => {
-    if(d > end) return `<div class="streak-cell"></div>`;
-    const k = dateKey(d);
-    const lvl = levelForAmount(savedByDate[k] || 0);
-    const isToday = k === todayKey;
-    const label = `${d.toLocaleDateString('th-TH',{day:'numeric',month:'short'})}${savedByDate[k] ? ' · ' + fmt(savedByDate[k]) : ''}`;
-    return `<div class="streak-cell ${lvl ? 'l'+lvl : ''} ${isToday ? 'today' : ''}" title="${label}"></div>`;
-  }).join('');
-
-  cont.innerHTML = `
-    <div class="streak-wrap">
-      <div class="streak-head">
-        <h3 class="streak-title">🔥 ปฏิทินความสม่ำเสมอ</h3>
-        <span class="streak-sub">${STREAK_DAYS} วันล่าสุด</span>
-      </div>
-      <div class="streak-grid-scroll"><div class="streak-grid">${cellHTML}</div></div>
-      <div class="streak-legend">
-        <span>น้อย</span>
-        <div class="streak-cell"></div><div class="streak-cell l1"></div><div class="streak-cell l2"></div><div class="streak-cell l3"></div><div class="streak-cell l4"></div>
-        <span>มาก</span>
-      </div>
-      <div class="streak-stats-row">
-        <div class="streak-stat-chip"><b class="num">${currentStreak}</b><span>วันติดต่อกัน</span></div>
-        <div class="streak-stat-chip"><b class="num">${activeDaysInRange}</b><span>วันที่ออมใน ${STREAK_DAYS} วัน</span></div>
-      </div>
-    </div>
-  `;
-}
-
 /* ============================= SYSTEM 4: WEEKLY QUEST ============================= */
 function getWeekStart(){
   const now = new Date();
@@ -1425,9 +1247,7 @@ function renderAll(){
   renderHeroProfileBar(stats);
   renderGoalHero(stats);
   renderWeeklyQuest(stats);
-  renderStreakCalendar();
   renderComponents(stats);
-  renderProjection(stats);
   renderStats(stats);
   renderTxList(stats);
   checkAchievement(stats);
