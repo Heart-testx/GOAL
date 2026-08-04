@@ -740,18 +740,32 @@ document.addEventListener('pointerover', (e) => {
 }, {passive:true});
 
 /* ============================= SCROLL REVEAL ============================= */
-const revealObserver = new IntersectionObserver((entries) => {
+const revealObserver = (typeof IntersectionObserver !== 'undefined') ? new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if(entry.isIntersecting){
       entry.target.classList.add('in-view');
       revealObserver.unobserve(entry.target);
     }
   });
-}, {threshold:0.12, rootMargin:'0px 0px -40px 0px'});
+}, {threshold:0.12, rootMargin:'0px 0px -40px 0px'}) : null;
 
 function initScrollReveal(){
-  document.querySelectorAll('.reveal-up:not(.in-view)').forEach(el => revealObserver.observe(el));
+  try{
+    const els = document.querySelectorAll('.reveal-up:not(.in-view)');
+    if(revealObserver){
+      els.forEach(el => revealObserver.observe(el));
+    } else {
+      els.forEach(el => el.classList.add('in-view'));
+    }
+  }catch(e){
+    document.querySelectorAll('.reveal-up:not(.in-view)').forEach(el => el.classList.add('in-view'));
+  }
 }
+
+/* safety net: never leave content invisible if rendering throws */
+window.addEventListener('error', () => {
+  document.querySelectorAll('.reveal-up:not(.in-view)').forEach(el => el.classList.add('in-view'));
+});
 
 function toast(msg, isErr=false){
   const t = $('toast');
@@ -765,7 +779,7 @@ function toast(msg, isErr=false){
 
 document.addEventListener('click', (e) => {
   const rippleTarget = e.target.closest('.icon-btn, .qa-btn, .fab, .hero-bar, .ring-cta-empty, .comp-btn, .tx-del, .btn-primary, .btn-secondary, .chip, .quest-edit');
-  if(rippleTarget){
+  if(rippleTarget && !rippleTarget.classList.contains('lock') && !rippleTarget.disabled){
     SoundManager.tap();
     const rect = rippleTarget.getBoundingClientRect();
     const size = Math.max(rect.width, rect.height);
