@@ -37,6 +37,17 @@
             margin: 0;
             padding: 0;
             -webkit-tap-highlight-color: transparent;
+            min-width: 0; /* allow flex/grid children to shrink instead of pushing the page wider */
+        }
+
+        html, body {
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden; /* safety net: never allow sideways scroll on any device */
+        }
+
+        img, svg {
+            max-width: 100%;
         }
 
         body {
@@ -395,6 +406,7 @@
         }
 
         .preset-btn {
+            flex-shrink: 0; /* keep natural width so the strip scrolls instead of squishing */
             background: #f1f5f9;
             border: 1px solid var(--border);
             padding: 7px 14px;
@@ -673,27 +685,27 @@
 
             <div class="summary-grid">
                 <div class="metric-box">
-                    <div class="metric-label"><i class="fa-solid fa-briefcase"></i> ทำงานปกติ (500/วัน)[cite: 3]</div>
+                    <div class="metric-label"><i class="fa-solid fa-briefcase"></i> ทำงานปกติ (500/วัน)</div>
                     <div class="metric-value"><span id="metricWorkDays">0</span> วัน (<span id="metricWorkPay">฿0</span>)</div>
                 </div>
                 <div class="metric-box">
-                    <div class="metric-label"><i class="fa-solid fa-bed"></i> หยุดรับค่าแรง (500/วัน)[cite: 3]</div>
+                    <div class="metric-label"><i class="fa-solid fa-bed"></i> หยุดรับค่าแรง (500/วัน)</div>
                     <div class="metric-value"><span id="metricPaidOffDays">0</span> วัน (<span id="metricPaidOffPay">฿0</span>)</div>
                 </div>
                 <div class="metric-box">
-                    <div class="metric-label"><i class="fa-solid fa-clock"></i> ชั่วโมง OT (93.75/ชม.)[cite: 3]</div>
+                    <div class="metric-label"><i class="fa-solid fa-clock"></i> ชั่วโมง OT (93.75/ชม.)</div>
                     <div class="metric-value"><span id="metricOTHours">0.00</span> ชม. (<span id="metricOTPay">฿0</span>)</div>
                 </div>
                 <div class="metric-box">
-                    <div class="metric-label"><i class="fa-solid fa-bowl-food"></i> ค่าอาหาร (50/วัน)[cite: 3]</div>
+                    <div class="metric-label"><i class="fa-solid fa-bowl-food"></i> ค่าอาหาร (50/วัน)</div>
                     <div class="metric-value"><span id="metricMealPay">฿0</span></div>
                 </div>
                 <div class="metric-box">
-                    <div class="metric-label"><i class="fa-solid fa-store"></i> ค่ากะ OP/ปิดร้าน (50/กะ)[cite: 3]</div>
+                    <div class="metric-label"><i class="fa-solid fa-store"></i> ค่ากะ OP/ปิดร้าน (50/กะ)</div>
                     <div class="metric-value"><span id="metricOPPay">฿0</span></div>
                 </div>
                 <div class="metric-box">
-                    <div class="metric-label metric-deduct"><i class="fa-solid fa-shield-halved"></i> ประกันสังคม (5%)[cite: 3]</div>
+                    <div class="metric-label metric-deduct"><i class="fa-solid fa-shield-halved"></i> ประกันสังคม (5%)</div>
                     <div class="metric-value metric-deduct">-<span id="metricSS">฿0</span></div>
                 </div>
             </div>
@@ -709,7 +721,7 @@
                 </div>
                 <div class="form-group" style="margin-bottom: 0;">
                     <label class="form-label" for="otherDeductInput" style="font-size: 0.8rem; font-weight: 500; color: var(--text-muted);">
-                        หักอื่นๆ ครั้งเดียว (เช่น ค่าประกันชุด) Specific รอบนี้:[cite: 3]
+                        หักอื่นๆ ครั้งเดียว (เช่น ค่าประกันชุด) Specific รอบนี้:
                     </label>
                     <input type="number" id="otherDeductInput" class="form-control" min="0" step="0.01" value="0" onchange="onOtherDeductChange()">
                 </div>
@@ -737,8 +749,8 @@
                     <label class="form-label" for="workStatus">สถานะวันทำงาน:</label>
                     <select id="workStatus" class="form-select" onchange="toggleFormFields()">
                         <option value="WORK">ทำงานปกติ</option>
-                        <option value="OFF_PAID">วันหยุดประจำสัปดาห์ (ได้ค่าแรงปกติ / ไม่ได้ค่าอาหาร)[cite: 3]</option>
-                        <option value="OFF_UNPAID">วันหยุดไม่ได้รับค่าจ้าง (ลากิจ / ขาดงาน / ร้านปิดไม่จ่าย)[cite: 3]</option>
+                        <option value="OFF_PAID">วันหยุดประจำสัปดาห์ (ได้ค่าแรงปกติ / ไม่ได้ค่าอาหาร)</option>
+                        <option value="OFF_UNPAID">วันหยุดไม่ได้รับค่าจ้าง (ลากิจ / ขาดงาน / ร้านปิดไม่จ่าย)</option>
                     </select>
                 </div>
 
@@ -764,7 +776,7 @@
 
                     <div class="preview-box" id="hoursPreview">
                         <i class="fa-solid fa-circle-info"></i>
-                        <span>ทำงานปกติ 8.0 ชม. | OT: 0.00 ชม. (หักเวลาพัก 1 ชม.)</span>[cite: 3]
+                        <span>ทำงานปกติ 8.0 ชม. | OT: 0.00 ชม. (หักเวลาพัก 1 ชม.)</span>
                     </div>
 
                     <div class="form-group">
@@ -772,11 +784,11 @@
                         <div class="checkbox-grid">
                             <label class="checkbox-card active" id="mealCard">
                                 <input type="checkbox" id="hasMeal" checked onchange="toggleCardStyle('mealCard', this.checked)">
-                                <span><i class="fa-solid fa-utensils"></i> ค่าอาหาร (50b)</span>[cite: 3]
+                                <span><i class="fa-solid fa-utensils"></i> ค่าอาหาร (50b)</span>
                             </label>
                             <label class="checkbox-card" id="opCard">
                                 <input type="checkbox" id="hasOP" onchange="toggleCardStyle('opCard', this.checked)">
-                                <span><i class="fa-solid fa-moon"></i> ค่ากะ OP (50b)</span>[cite: 3]
+                                <span><i class="fa-solid fa-moon"></i> ค่ากะ OP (50b)</span>
                             </label>
                         </div>
                     </div>
@@ -816,11 +828,11 @@
             <div class="rate-info-title">
                 <i class="fa-solid fa-circle-info"></i> โครงสร้างการคำนวณตามสลิป
             </div>
-            • ฐานเงินเดือน 15,000 บาท/เดือน (คำนวณวันละ 500 บาท)<br>[cite: 3]
-            • OT 1.5 คิดจาก (500 / 8 ชม.) x 1.5 = 93.75 บาท/ชม.<br>[cite: 3]
-            • ตัดรอบบัญชีทุกวันที่ 20 (21 เดือนก่อน - 20 เดือนนี้)<br>[cite: 3]
-            • หักประกันสังคม 5% จาก (ค่าแรง + ค่าอาหาร + ค่ากะ OP) <u>ไม่รวม OT</u> สูงสุดไม่เกิน 750 บาท/เดือน<br>[cite: 3]
-            • รายการหักอื่นๆ เช่น ค่าประกันชุด เป็นรายการหักครั้งเดียว ให้กรอกเองต่อรอบ[cite: 3]
+            • ฐานเงินเดือน 15,000 บาท/เดือน (คำนวณวันละ 500 บาท)<br>
+            • OT 1.5 คิดจาก (500 / 8 ชม.) x 1.5 = 93.75 บาท/ชม.<br>
+            • ตัดรอบบัญชีทุกวันที่ 20 (21 เดือนก่อน - 20 เดือนนี้)<br>
+            • หักประกันสังคม 5% จาก (ค่าแรง + ค่าอาหาร + ค่ากะ OP) <u>ไม่รวม OT</u> สูงสุดไม่เกิน 750 บาท/เดือน<br>
+            • รายการหักอื่นๆ เช่น ค่าประกันชุด เป็นรายการหักครั้งเดียว ให้กรอกเองต่อรอบ
         </div>
 
     </div>
@@ -833,7 +845,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot, writeBatch } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // Your Firebase Configuration[cite: 3]
+        // Your Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyCSmtF-Ch1gJ7D66XzHw2KfyjBkOG7CVrI",
             authDomain: "paytracker-8403b.firebaseapp.com",
@@ -847,7 +859,7 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Rates configuration based on Pay Slip[cite: 3]
+        // Rates configuration based on Pay Slip
         const DAILY_RATE = 500;
         const OT_RATE = 93.75;
         const MEAL_RATE = 50;
