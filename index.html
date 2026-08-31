@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ระบบบันทึกเวลาทำงาน & คำนวณเงินเดือน</title>
+    <title>ระบบบันทึกเวลาทำงาน & คำนวณเงินเดือน Cook Helper</title>
     <!-- Google Fonts & Font Awesome Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -434,7 +434,7 @@
         .metric-deduct { color: var(--danger); }
         .metric-deduct i { color: var(--danger); }
 
-        /* Form Styling */
+        /* Form Styling (อัปเดตแก้บัก iOS แล้ว) */
         .form-group { margin-bottom: 16px; }
         .form-label {
             display: block;
@@ -447,7 +447,7 @@
         .form-control, .form-select {
             width: 100%;
             max-width: 100%;
-            padding: 12px 10px;
+            padding: 12px 14px;
             border: 1.5px solid var(--border);
             border-radius: var(--radius-md);
             font-size: 16px;
@@ -455,9 +455,15 @@
             background-color: #ffffff;
             transition: var(--transition);
             outline: none;
+            box-sizing: border-box !important;
+            text-align: left !important;
         }
 
-        input[type="date"], input[type="time"] { min-width: 0; }
+        input[type="date"], input[type="time"] { 
+            min-width: 0;
+            display: block;
+            -webkit-appearance: none;
+        }
 
         .form-control:focus, .form-select:focus {
             border-color: var(--primary);
@@ -1324,25 +1330,31 @@
             if (!file) return;
 
             const reader = new FileReader();
-            reader.onload = async function(event) {
+            reader.onload = async (event) => {
                 try {
                     const importedLogs = JSON.parse(event.target.result);
                     if (Array.isArray(importedLogs)) {
-                        const batch = writeBatch(db);
-                        importedLogs.forEach(log => {
-                            if (log.date) {
-                                const ref = doc(db, "work_logs", log.date);
-                                batch.set(ref, log);
-                            }
-                        });
-                        await batch.commit();
-                        alert('นำเข้าข้อมูลไปยัง Firebase เรียบร้อยแล้ว!');
+                        if (confirm(`คุณต้องการนำเข้าข้อมูล ${importedLogs.length} รายการ ใช่หรือไม่? (อาจทับข้อมูลเดิมในวันที่ตรงกัน)`)) {
+                            const batch = writeBatch(db);
+                            let count = 0;
+                            
+                            importedLogs.forEach(log => {
+                                if (log.date) {
+                                    const docRef = doc(db, "work_logs", log.date);
+                                    batch.set(docRef, log);
+                                    count++;
+                                }
+                            });
+
+                            await batch.commit();
+                            alert(`นำเข้าข้อมูลสำเร็จ ${count} รายการ!`);
+                        }
                     } else {
-                        alert('รูปแบบไฟล์ไม่ถูกต้อง');
+                        alert("ไฟล์ไม่ถูกต้อง");
                     }
-                } catch (err) {
-                    console.error(err);
-                    alert('เกิดข้อผิดพลาดในการนำเข้าไฟล์');
+                } catch (error) {
+                    alert("เกิดข้อผิดพลาดในการอ่านไฟล์");
+                    console.error(error);
                 }
                 e.target.value = '';
             };
@@ -1351,21 +1363,19 @@
 
         window.onPeriodChange = onPeriodChange;
         window.onDateInputChange = onDateInputChange;
-        window.onOtherDeductChange = onOtherDeductChange;
-        window.handleFormSubmit = handleFormSubmit;
         window.toggleFormFields = toggleFormFields;
+        window.toggleCardStyle = toggleCardStyle;
         window.applyPreset = applyPreset;
         window.updateHoursPreview = updateHoursPreview;
-        window.toggleCardStyle = toggleCardStyle;
-        window.exportData = exportData;
-        window.importData = importData;
-        window.handleFileImport = handleFileImport;
+        window.onOtherDeductChange = onOtherDeductChange;
+        window.handleFormSubmit = handleFormSubmit;
         window.deleteEntry = deleteEntry;
-        
-        /* Modal Window Global Event */
         window.openHistoryModal = openHistoryModal;
         window.closeHistoryModal = closeHistoryModal;
         window.closeModalOnOutside = closeModalOnOutside;
+        window.exportData = exportData;
+        window.importData = importData;
+        window.handleFileImport = handleFileImport;
     </script>
 </body>
 </html>
