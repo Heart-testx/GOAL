@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ระบบบันทึกเวลาทำงาน & คำนวณเงินเดือน Cook Helper</title>
+    <title>ระบบบันทึกเวลาทำงาน & คำนวณเงินเดือน</title>
     <!-- Google Fonts & Font Awesome Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -37,13 +37,13 @@
             margin: 0;
             padding: 0;
             -webkit-tap-highlight-color: transparent;
-            min-width: 0; /* allow flex/grid children to shrink instead of pushing the page wider */
+            min-width: 0;
         }
 
         html, body {
             width: 100%;
             max-width: 100%;
-            overflow-x: hidden; /* safety net: never allow sideways scroll on any device */
+            overflow-x: hidden;
         }
 
         img, svg {
@@ -156,7 +156,7 @@
             padding: 0 16px;
         }
 
-        /* ============ Small phones (very narrow) ============ */
+        /* Responsive Breakpoints */
         @media (max-width: 359px) {
             .app-header { padding: 22px 16px 32px 16px; }
             .brand-title { font-size: 1.15rem; }
@@ -166,14 +166,12 @@
             .card { padding: 18px; }
         }
 
-        /* ============ Tablets / small laptops ============ */
         @media (min-width: 700px) {
             .container { max-width: 660px; padding: 0 24px; }
             .app-header { padding: 32px 40px 46px 40px; }
             .net-amount { font-size: 2.9rem; }
         }
 
-        /* ============ Desktop: two-column layout ============ */
         @media (min-width: 1024px) {
             .container {
                 max-width: 1120px;
@@ -184,31 +182,13 @@
                 gap: 26px;
                 padding: 0 32px;
             }
-
             .col-left {
                 position: sticky;
                 top: 24px;
             }
-
             .container > .rate-info {
                 grid-column: 1 / -1;
             }
-
-            .col-right .card:last-of-type #historyList {
-                max-height: 60vh;
-                overflow-y: auto;
-                padding-right: 4px;
-            }
-
-            .col-right .card:last-of-type #historyList::-webkit-scrollbar {
-                width: 6px;
-            }
-
-            .col-right .card:last-of-type #historyList::-webkit-scrollbar-thumb {
-                background: var(--border);
-                border-radius: 10px;
-            }
-
             .app-header { padding: 36px 48px 56px 48px; }
             .header-top { max-width: 1120px; margin: 0 auto 20px auto; }
             .period-selector-wrapper { max-width: 1120px; margin: 0 auto; }
@@ -217,6 +197,104 @@
         @media (min-width: 1280px) {
             .container { max-width: 1200px; }
             .header-top, .period-selector-wrapper { max-width: 1200px; }
+        }
+
+        /* Modal / Pop-up Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(6px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+        
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-container {
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 550px;
+            max-height: 85vh;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-md);
+            display: flex;
+            flex-direction: column;
+            transform: translateY(20px) scale(0.95);
+            transition: var(--transition);
+            overflow: hidden;
+        }
+
+        .modal-overlay.active .modal-container {
+            transform: translateY(0) scale(1);
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 24px;
+            background: #ffffff;
+            border-bottom: 1.5px solid var(--border);
+        }
+
+        .modal-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-title i {
+            color: var(--primary);
+            background: #eff6ff;
+            padding: 8px;
+            border-radius: 10px;
+        }
+
+        .btn-close {
+            background: #f1f5f9;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-close:hover {
+            background: #fee2e2;
+            color: var(--danger);
+        }
+
+        .modal-body {
+            padding: 20px 24px;
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+
+        .modal-body::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .modal-body::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
         }
 
         /* Modern Card Elements */
@@ -353,19 +431,11 @@
             color: var(--text-main);
         }
 
-        .metric-deduct {
-            color: var(--danger);
-        }
-
-        .metric-deduct i {
-            color: var(--danger);
-        }
+        .metric-deduct { color: var(--danger); }
+        .metric-deduct i { color: var(--danger); }
 
         /* Form Styling */
-        .form-group {
-            margin-bottom: 16px;
-        }
-
+        .form-group { margin-bottom: 16px; }
         .form-label {
             display: block;
             font-size: 0.88rem;
@@ -380,19 +450,14 @@
             padding: 12px 10px;
             border: 1.5px solid var(--border);
             border-radius: var(--radius-md);
-            font-size: 16px; /* 16px avoids iOS Safari auto-zoom on focus */
+            font-size: 16px;
             color: var(--text-main);
             background-color: #ffffff;
             transition: var(--transition);
             outline: none;
         }
 
-        /* iOS renders the native time/date control with its own internal minimum
-           width, which can be wider than a narrow grid column allows and bleed
-           past the box. Force it to respect the box it's given. */
-        input[type="date"], input[type="time"] {
-            min-width: 0;
-        }
+        input[type="date"], input[type="time"] { min-width: 0; }
 
         .form-control:focus, .form-select:focus {
             border-color: var(--primary);
@@ -401,14 +466,12 @@
 
         .time-grid {
             display: grid;
-            grid-template-columns: 1fr; /* stack on phones: two side-by-side native time pickers are too tight */
+            grid-template-columns: 1fr;
             gap: 12px;
         }
 
         @media (min-width: 480px) {
-            .time-grid {
-                grid-template-columns: 1fr 1fr;
-            }
+            .time-grid { grid-template-columns: 1fr 1fr; }
         }
 
         /* Quick Shift Chips */
@@ -421,7 +484,7 @@
         }
 
         .preset-btn {
-            flex-shrink: 0; /* keep natural width so the strip scrolls instead of squishing */
+            flex-shrink: 0;
             background: #f1f5f9;
             border: 1px solid var(--border);
             padding: 7px 14px;
@@ -441,7 +504,6 @@
             transform: translateY(-1px);
         }
 
-        /* Hours Preview Banner */
         .preview-box {
             background: #eff6ff;
             border: 1px solid #bfdbfe;
@@ -456,7 +518,6 @@
             font-weight: 500;
         }
 
-        /* Custom Modern Checkbox Cards */
         .checkbox-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -478,10 +539,7 @@
             font-size: 0.88rem;
         }
 
-        .checkbox-card:hover {
-            border-color: var(--primary-light);
-        }
-
+        .checkbox-card:hover { border-color: var(--primary-light); }
         .checkbox-card.active {
             border-color: #10b981;
             background-color: #ecfdf5;
@@ -494,7 +552,6 @@
             height: 18px;
         }
 
-        /* Form Submit Button */
         .btn-submit {
             width: 100%;
             padding: 15px;
@@ -518,11 +575,35 @@
             box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45);
         }
 
-        .btn-submit:active {
-            transform: translateY(0);
+        .btn-submit:active { transform: translateY(0); }
+
+        /* Main Open Modal Button */
+        .btn-open-modal {
+            width: 100%;
+            padding: 14px;
+            margin-top: 16px;
+            background: #ffffff;
+            color: var(--primary);
+            border: 1.5px solid var(--primary-light);
+            border-radius: var(--radius-md);
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            box-shadow: var(--shadow-sm);
         }
 
-        /* Modern History Cards */
+        .btn-open-modal:hover {
+            background: #eff6ff;
+            border-color: var(--primary);
+            transform: translateY(-1px);
+        }
+
+        /* History Items */
         .history-item {
             background: #ffffff;
             border: 1px solid var(--border);
@@ -595,31 +676,32 @@
 
         .empty-state {
             text-align: center;
-            padding: 30px 10px;
+            padding: 40px 10px;
             color: var(--text-muted);
-            font-size: 0.9rem;
+            font-size: 0.95rem;
         }
 
         .empty-state i {
-            font-size: 2.2rem;
-            margin-bottom: 10px;
+            font-size: 2.5rem;
+            margin-bottom: 12px;
             opacity: 0.4;
         }
 
-        /* Tool Action Buttons */
         .tools-row {
             display: flex;
             gap: 10px;
-            margin-top: 14px;
+            margin-top: 20px;
+            border-top: 1.5px solid var(--border);
+            padding-top: 16px;
         }
 
         .btn-tool {
             flex: 1;
-            padding: 10px;
+            padding: 12px;
             background: #f8fafc;
             border: 1px solid var(--border);
             border-radius: var(--radius-md);
-            font-size: 0.82rem;
+            font-size: 0.85rem;
             font-weight: 600;
             color: var(--text-muted);
             cursor: pointer;
@@ -660,7 +742,6 @@
 </head>
 <body>
 
-    <!-- Header & Period Filter -->
     <header class="app-header">
         <div class="header-top">
             <div class="brand-title">
@@ -675,7 +756,7 @@
         <div class="period-selector-wrapper">
             <i class="fa-regular fa-calendar-check"></i>
             <select id="periodSelect" class="period-select" onchange="onPeriodChange()">
-                <!-- Options generated dynamically in JS -->
+                <!-- Options generated dynamically -->
             </select>
         </div>
     </header>
@@ -683,7 +764,6 @@
     <div class="container">
 
       <div class="col-left">
-
         <!-- Net Payment Card -->
         <div class="net-pay-card">
             <div class="net-title">ประมาณการยอดรับสุทธิรอบนี้</div>
@@ -742,11 +822,9 @@
                 </div>
             </div>
         </div>
-
       </div>
 
       <div class="col-right">
-
         <!-- Daily Input Form -->
         <div class="card">
             <div class="card-header">
@@ -769,7 +847,6 @@
                     </select>
                 </div>
 
-                <!-- Section for WORK status -->
                 <div id="workFields">
                     <label class="form-label">เลือกกะด่วน:</label>
                     <div class="preset-container">
@@ -813,46 +890,58 @@
                     <i class="fa-solid fa-floppy-disk"></i> บันทึกข้อมูล
                 </button>
             </form>
+
+            <!-- ปุ่มเปิดประวัติการบันทึก (Modal Trigger) -->
+            <button class="btn-open-modal" onclick="openHistoryModal()">
+                <i class="fa-solid fa-list-check"></i> ดูประวัติการบันทึกรอบบิลนี้
+            </button>
         </div>
-
-        <!-- History Log Card -->
-        <div class="card">
-            <div class="card-header">
-                <i class="fa-solid fa-list-check"></i>
-                <h2>ประวัติการบันทึกในรอบบิลนี้</h2>
-            </div>
-
-            <div id="historyList">
-                <!-- Log items rendered dynamically -->
-            </div>
-
-            <div class="tools-row">
-                <button class="btn-tool" onclick="exportData()">
-                    <i class="fa-solid fa-download"></i> สำรองข้อมูล
-                </button>
-                <button class="btn-tool" onclick="importData()">
-                    <i class="fa-solid fa-upload"></i> นำเข้าข้อมูล
-                </button>
-            </div>
-        </div>
-
       </div>
 
-        <!-- Info Card -->
-        <div class="rate-info">
-            <div class="rate-info-title">
-                <i class="fa-solid fa-circle-info"></i> โครงสร้างการคำนวณตามสลิป
-            </div>
-            • ฐานเงินเดือน 15,000 บาท/เดือน (คำนวณวันละ 500 บาท)<br>
-            • OT 1.5 คิดจาก (500 / 8 ชม.) x 1.5 = 93.75 บาท/ชม.<br>
-            • ตัดรอบบัญชีทุกวันที่ 20 (21 เดือนก่อน - 20 เดือนนี้)<br>
-            • หักประกันสังคม 5% จาก (ค่าแรง + ค่าอาหาร + ค่ากะ OP) <u>ไม่รวม OT</u> สูงสุดไม่เกิน 750 บาท/เดือน<br>
-            • รายการหักอื่นๆ เช่น ค่าประกันชุด เป็นรายการหักครั้งเดียว ให้กรอกเองต่อรอบ
-        </div>
-
+      <!-- Info Card -->
+      <div class="rate-info">
+          <div class="rate-info-title">
+              <i class="fa-solid fa-circle-info"></i> โครงสร้างการคำนวณตามสลิป
+          </div>
+          • ฐานเงินเดือน 15,000 บาท/เดือน (คำนวณวันละ 500 บาท)<br>
+          • OT 1.5 คิดจาก (500 / 8 ชม.) x 1.5 = 93.75 บาท/ชม.<br>
+          • ตัดรอบบัญชีทุกวันที่ 20 (21 เดือนก่อน - 20 เดือนนี้)<br>
+          • หักประกันสังคม 5% จาก (ค่าแรง + ค่าอาหาร + ค่ากะ OP) <u>ไม่รวม OT</u> สูงสุดไม่เกิน 750 บาท/เดือน<br>
+          • รายการหักอื่นๆ เช่น ค่าประกันชุด เป็นรายการหักครั้งเดียว ให้กรอกเองต่อรอบ
+      </div>
     </div>
 
-    <!-- Hidden file input for import -->
+    <!-- Modal: History Log -->
+    <div class="modal-overlay" id="historyModal" onclick="closeModalOnOutside(event)">
+        <div class="modal-container">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <i class="fa-solid fa-clock-rotate-left"></i> ประวัติการบันทึกรอบบิลนี้
+                </div>
+                <button class="btn-close" onclick="closeHistoryModal()">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            
+            <div class="modal-body">
+                <!-- รายการประวัติ -->
+                <div id="historyList">
+                    <!-- ข้อมูลถูกสร้างผ่าน JS -->
+                </div>
+
+                <!-- เครื่องมือ Backup & Restore -->
+                <div class="tools-row">
+                    <button class="btn-tool" onclick="exportData()">
+                        <i class="fa-solid fa-download"></i> สำรองข้อมูล
+                    </button>
+                    <button class="btn-tool" onclick="importData()">
+                        <i class="fa-solid fa-upload"></i> นำเข้าข้อมูล
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <input type="file" id="importFile" style="display:none;" accept=".json" onchange="handleFileImport(event)">
 
     <!-- Firebase SDK Modules -->
@@ -860,7 +949,6 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot, writeBatch } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // Your Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyCSmtF-Ch1gJ7D66XzHw2KfyjBkOG7CVrI",
             authDomain: "paytracker-8403b.firebaseapp.com",
@@ -870,11 +958,9 @@
             appId: "1:52699502253:web:99e492e45b0d0c60c01824"
         };
 
-        // Initialize Firebase & Firestore
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Rates configuration based on Pay Slip
         const DAILY_RATE = 500;
         const OT_RATE = 93.75;
         const MEAL_RATE = 50;
@@ -882,17 +968,14 @@
         const SS_PERCENT = 0.05;
         const SS_MAX = 750;
 
-        // Global state updated by Firestore Realtime Snapshots
         let allLogs = [];
         let otherDeductsMap = {};
 
-        // Initialize App
         document.addEventListener('DOMContentLoaded', () => {
             initDateAndPeriods();
             setupFirestoreListeners();
         });
 
-        // Setup Firestore Real-time Listeners
         function setupFirestoreListeners() {
             onSnapshot(collection(db, "work_logs"), (snapshot) => {
                 allLogs = snapshot.docs.map(doc => doc.data());
@@ -919,14 +1002,12 @@
             const month = String(today.getMonth() + 1).padStart(2, '0');
             const day = String(today.getDate()).padStart(2, '0');
             document.getElementById('logDate').value = `${year}-${month}-${day}`;
-
             generatePeriodOptions(today);
         }
 
         function generatePeriodOptions(referenceDate) {
             const select = document.getElementById('periodSelect');
             select.innerHTML = '';
-
             const thaiMonths = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
 
             let refYear = referenceDate.getFullYear();
@@ -953,17 +1034,12 @@
 
                 const monthStr = String(endM + 1).padStart(2, '0');
                 const key = `${endY}-${monthStr}`;
-
                 const label = `รอบ 21 ${thaiMonths[startM]} ${startY + 543} - 20 ${thaiMonths[endM]} ${endY + 543}`;
                 
                 const option = document.createElement('option');
                 option.value = key;
                 option.textContent = label;
-
-                if (i === 0) {
-                    option.selected = true;
-                }
-
+                if (i === 0) option.selected = true;
                 select.appendChild(option);
             }
         }
@@ -992,15 +1068,11 @@
                         break;
                     }
                 }
-                if (exists) {
-                    renderApp();
-                }
+                if (exists) renderApp();
             }
         }
 
-        function onPeriodChange() {
-            renderApp();
-        }
+        function onPeriodChange() { renderApp(); }
 
         function toggleFormFields() {
             const status = document.getElementById('workStatus').value;
@@ -1027,39 +1099,29 @@
 
         function calculateHours(timeInStr, timeOutStr) {
             if (!timeInStr || !timeOutStr) return { workHours: 0, otHours: 0 };
-
             const [inH, inM] = timeInStr.split(':').map(Number);
             const [outH, outM] = timeOutStr.split(':').map(Number);
 
             let inMinutes = inH * 60 + inM;
             let outMinutes = outH * 60 + outM;
 
-            if (outMinutes < inMinutes) {
-                outMinutes += 24 * 60;
-            }
+            if (outMinutes < inMinutes) outMinutes += 24 * 60;
 
             let totalMinutes = outMinutes - inMinutes;
-
-            if (totalMinutes > 300) {
-                totalMinutes = Math.max(300, totalMinutes - 60);
-            }
+            if (totalMinutes > 300) totalMinutes = Math.max(300, totalMinutes - 60);
 
             let totalHours = totalMinutes / 60;
             let standardHours = 8;
-
             let workHours = Math.min(totalHours, standardHours);
             let otHours = Math.max(0, totalHours - standardHours);
 
-            otHours = Math.round(otHours * 100) / 100;
-
-            return { workHours, otHours };
+            return { workHours, otHours: Math.round(otHours * 100) / 100 };
         }
 
         function updateHoursPreview() {
             const timeIn = document.getElementById('timeIn').value;
             const timeOut = document.getElementById('timeOut').value;
             const { workHours, otHours } = calculateHours(timeIn, timeOut);
-
             document.getElementById('hoursPreview').innerHTML = 
                 `<i class="fa-solid fa-circle-info"></i> <span>เวลาทำงานปกติ ${workHours.toFixed(1)} ชม. | OT: <strong>${otHours.toFixed(2)} ชม.</strong> (หักพัก 1 ชม.)</span>`;
         }
@@ -1076,7 +1138,6 @@
 
         async function handleFormSubmit(e) {
             e.preventDefault();
-
             const date = document.getElementById('logDate').value;
             const status = document.getElementById('workStatus').value;
             const timeIn = document.getElementById('timeIn').value;
@@ -1088,13 +1149,11 @@
 
             let otHours = 0;
             if (status === 'WORK') {
-                const calculated = calculateHours(timeIn, timeOut);
-                otHours = calculated.otHours;
+                otHours = calculateHours(timeIn, timeOut).otHours;
             }
 
             const entry = {
-                date,
-                status,
+                date, status,
                 timeIn: status === 'WORK' ? timeIn : '',
                 timeOut: status === 'WORK' ? timeOut : '',
                 otHours: status === 'WORK' ? otHours : 0,
@@ -1104,6 +1163,7 @@
 
             try {
                 await setDoc(doc(db, "work_logs", date), entry);
+                alert("บันทึกข้อมูลสำเร็จ!");
             } catch (err) {
                 console.error("Error saving log: ", err);
             }
@@ -1126,11 +1186,7 @@
             const selectedPeriodKey = selectElement.value;
             const periodLogs = allLogs.filter(l => getPeriodKeyForDate(l.date) === selectedPeriodKey);
 
-            let workDays = 0;
-            let paidOffDays = 0;
-            let totalOTHours = 0;
-            let mealCount = 0;
-            let opCount = 0;
+            let workDays = 0, paidOffDays = 0, totalOTHours = 0, mealCount = 0, opCount = 0;
 
             periodLogs.forEach(item => {
                 if (item.status === 'WORK') {
@@ -1146,11 +1202,9 @@
             const workPay = workDays * DAILY_RATE;
             const paidOffPay = paidOffDays * DAILY_RATE;
             const baseSalaryTotal = workPay + paidOffPay;
-
             const otPay = totalOTHours * OT_RATE;
             const mealPay = mealCount * MEAL_RATE;
             const opPay = opCount * OP_RATE;
-
             const grossTotal = baseSalaryTotal + otPay + mealPay + opPay;
 
             const ssBase = baseSalaryTotal + mealPay + opPay;
@@ -1159,29 +1213,20 @@
 
             const otherDeduct = Number(otherDeductsMap[selectedPeriodKey]) || 0;
             const totalDeduct = ssDeduction + otherDeduct;
-
             const netPay = grossTotal - totalDeduct;
 
             document.getElementById('netPay').innerText = netPay.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-            
-            const selectedOptionText = selectElement.options[selectElement.selectedIndex]?.text || '';
-            document.getElementById('netPaySub').innerText = selectedOptionText;
-
+            document.getElementById('netPaySub').innerText = selectElement.options[selectElement.selectedIndex]?.text || '';
             document.getElementById('otherDeductInput').value = otherDeduct;
             document.getElementById('metricTotalDeduct').innerText = `฿${totalDeduct.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
-
             document.getElementById('metricWorkDays').innerText = workDays;
             document.getElementById('metricWorkPay').innerText = `฿${workPay.toLocaleString()}`;
-
             document.getElementById('metricPaidOffDays').innerText = paidOffDays;
             document.getElementById('metricPaidOffPay').innerText = `฿${paidOffPay.toLocaleString()}`;
-
             document.getElementById('metricOTHours').innerText = totalOTHours.toFixed(2);
             document.getElementById('metricOTPay').innerText = `฿${otPay.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
-
             document.getElementById('metricMealPay').innerText = `฿${mealPay.toLocaleString()}`;
             document.getElementById('metricOPPay').innerText = `฿${opPay.toLocaleString()}`;
-
             document.getElementById('metricSS').innerText = `฿${ssDeduction.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
 
             renderHistoryList(periodLogs);
@@ -1206,9 +1251,8 @@
             sorted.forEach(item => {
                 const dateParts = item.date.split('-');
                 const formattedDate = `${dateParts[2]}/${dateParts[1]}/${parseInt(dateParts[0]) + 543}`;
-
-                let statusBadge = '';
-                let detailsText = '';
+                
+                let statusBadge = '', detailsText = '';
 
                 if (item.status === 'WORK') {
                     statusBadge = `<span class="badge badge-work">ทำงานปกติ</span>`;
@@ -1222,17 +1266,10 @@
                 }
 
                 let badgesHTML = statusBadge;
-
                 if (item.status === 'WORK') {
-                    if (item.otHours > 0) {
-                        badgesHTML += `<span class="badge badge-ot">OT +${item.otHours.toFixed(2)} ชม.</span>`;
-                    }
-                    if (item.hasMeal) {
-                        badgesHTML += `<span class="badge badge-food">ค่าอาหาร 50b</span>`;
-                    }
-                    if (item.hasOP) {
-                        badgesHTML += `<span class="badge badge-op">กะ OP 50b</span>`;
-                    }
+                    if (item.otHours > 0) badgesHTML += `<span class="badge badge-ot">OT +${item.otHours.toFixed(2)} ชม.</span>`;
+                    if (item.hasMeal) badgesHTML += `<span class="badge badge-food">ค่าอาหาร 50b</span>`;
+                    if (item.hasOP) badgesHTML += `<span class="badge badge-op">กะ OP 50b</span>`;
                 }
 
                 const div = document.createElement('div');
@@ -1249,6 +1286,23 @@
                 `;
                 historyList.appendChild(div);
             });
+        }
+
+        /* Modal Functions */
+        function openHistoryModal() {
+            document.getElementById('historyModal').classList.add('active');
+            document.body.style.overflow = 'hidden'; // ป้องกันการเลื่อนหน้าจอด้านหลัง
+        }
+
+        function closeHistoryModal() {
+            document.getElementById('historyModal').classList.remove('active');
+            document.body.style.overflow = ''; 
+        }
+
+        function closeModalOnOutside(e) {
+            if (e.target.id === 'historyModal') {
+                closeHistoryModal();
+            }
         }
 
         function exportData() {
@@ -1295,7 +1349,6 @@
             reader.readAsText(file);
         }
 
-        // Global function bindings for inline events
         window.onPeriodChange = onPeriodChange;
         window.onDateInputChange = onDateInputChange;
         window.onOtherDeductChange = onOtherDeductChange;
@@ -1308,6 +1361,11 @@
         window.importData = importData;
         window.handleFileImport = handleFileImport;
         window.deleteEntry = deleteEntry;
+        
+        /* Modal Window Global Event */
+        window.openHistoryModal = openHistoryModal;
+        window.closeHistoryModal = closeHistoryModal;
+        window.closeModalOnOutside = closeModalOnOutside;
     </script>
 </body>
 </html>
