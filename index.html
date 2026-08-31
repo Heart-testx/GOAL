@@ -22,6 +22,7 @@
             --text-muted: #64748b;
             --border: #e2e8f0;
             --danger: #ef4444;
+            --warning: #f59e0b;
             --radius-xl: 24px;
             --radius-lg: 16px;
             --radius-md: 12px;
@@ -56,6 +57,43 @@
             padding-bottom: 50px;
             min-height: 100vh;
         }
+
+        /* Toast Notifications */
+        #toastContainer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
+        }
+
+        .toast {
+            background: #0f172a;
+            color: white;
+            padding: 12px 20px;
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: var(--transition);
+            pointer-events: auto;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .toast-success i { color: #10b981; }
+        .toast-error i { color: #ef4444; }
+        .toast-info i { color: #38bdf8; }
 
         /* Modern Glass Header */
         .app-header {
@@ -312,10 +350,16 @@
         .card-header {
             display: flex;
             align-items: center;
-            gap: 12px;
+            justify-content: space-between;
             margin-bottom: 18px;
             padding-bottom: 12px;
             border-bottom: 1.5px solid var(--border);
+        }
+
+        .card-header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
         .card-header i {
@@ -434,7 +478,7 @@
         .metric-deduct { color: var(--danger); }
         .metric-deduct i { color: var(--danger); }
 
-        /* Form Styling (อัปเดตแก้บัก iOS แล้ว) */
+        /* Form Styling */
         .form-group { margin-bottom: 16px; }
         .form-label {
             display: block;
@@ -459,6 +503,16 @@
             text-align: left !important;
         }
 
+        .form-select {
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2064748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            background-size: 16px;
+            padding-right: 40px;
+        }
+
         input[type="date"], input[type="time"] { 
             min-width: 0;
             display: block;
@@ -468,6 +522,18 @@
         .form-control:focus, .form-select:focus {
             border-color: var(--primary);
             box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+        }
+
+        .editing-tag {
+            background: #fef3c7;
+            color: #b45309;
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: 600;
+            display: none;
+            align-items: center;
+            gap: 4px;
         }
 
         .time-grid {
@@ -583,7 +649,6 @@
 
         .btn-submit:active { transform: translateY(0); }
 
-        /* Main Open Modal Button */
         .btn-open-modal {
             width: 100%;
             padding: 14px;
@@ -660,9 +725,12 @@
         .badge-food { background: #e0f2fe; color: #0369a1; }
         .badge-op { background: #f3e8ff; color: #6b21a8; }
 
-        .btn-del {
-            background: #fee2e2;
-            color: var(--danger);
+        .action-btns {
+            display: flex;
+            gap: 6px;
+        }
+
+        .btn-action {
             border: none;
             width: 36px;
             height: 36px;
@@ -674,10 +742,24 @@
             transition: var(--transition);
         }
 
+        .btn-edit {
+            background: #eff6ff;
+            color: var(--primary);
+        }
+
+        .btn-edit:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-del {
+            background: #fee2e2;
+            color: var(--danger);
+        }
+
         .btn-del:hover {
             background: var(--danger);
             color: white;
-            transform: scale(1.05);
         }
 
         .empty-state {
@@ -748,6 +830,9 @@
 </head>
 <body>
 
+    <!-- Notification Toast Container -->
+    <div id="toastContainer"></div>
+
     <header class="app-header">
         <div class="header-top">
             <div class="brand-title">
@@ -761,7 +846,7 @@
 
         <div class="period-selector-wrapper">
             <i class="fa-regular fa-calendar-check"></i>
-            <select id="periodSelect" class="period-select" onchange="onPeriodChange()">
+            <select id="periodSelect" class="period-select" onchange="window.onPeriodChange()">
                 <!-- Options generated dynamically -->
             </select>
         </div>
@@ -780,8 +865,10 @@
         <!-- Summary Dashboard -->
         <div class="card">
             <div class="card-header">
-                <i class="fa-solid fa-chart-pie"></i>
-                <h2>สรุปยอดสะสมตามรอบบิล</h2>
+                <div class="card-header-left">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <h2>สรุปยอดสะสมตามรอบบิล</h2>
+                </div>
             </div>
 
             <div class="summary-grid">
@@ -824,7 +911,7 @@
                     <label class="form-label" for="otherDeductInput" style="font-size: 0.8rem; font-weight: 500; color: var(--text-muted);">
                         หักอื่นๆ ครั้งเดียว (เช่น ค่าประกันชุด) Specific รอบนี้:
                     </label>
-                    <input type="number" id="otherDeductInput" class="form-control" min="0" step="0.01" value="0" onchange="onOtherDeductChange()">
+                    <input type="number" id="otherDeductInput" class="form-control" min="0" step="0.01" value="0" onchange="window.onOtherDeductChange()">
                 </div>
             </div>
         </div>
@@ -834,19 +921,24 @@
         <!-- Daily Input Form -->
         <div class="card">
             <div class="card-header">
-                <i class="fa-solid fa-calendar-plus"></i>
-                <h2>บันทึกเวลาทำงานรายวัน</h2>
+                <div class="card-header-left">
+                    <i class="fa-solid fa-calendar-plus"></i>
+                    <h2>บันทึกเวลาทำงานรายวัน</h2>
+                </div>
+                <span class="editing-tag" id="editingTag">
+                    <i class="fa-solid fa-pen-to-square"></i> แก้ไขข้อมูลเดิม
+                </span>
             </div>
 
-            <form id="dailyForm" onsubmit="handleFormSubmit(event)">
+            <form id="dailyForm" onsubmit="window.handleFormSubmit(event)">
                 <div class="form-group">
                     <label class="form-label" for="logDate">เลือกวันที่:</label>
-                    <input type="date" id="logDate" class="form-control" required onchange="onDateInputChange()">
+                    <input type="date" id="logDate" class="form-control" required onchange="window.onDateInputChange()">
                 </div>
 
                 <div class="form-group">
                     <label class="form-label" for="workStatus">สถานะวันทำงาน:</label>
-                    <select id="workStatus" class="form-select" onchange="toggleFormFields()">
+                    <select id="workStatus" class="form-select" onchange="window.toggleFormFields()">
                         <option value="WORK">ทำงานปกติ</option>
                         <option value="OFF_PAID">วันหยุดประจำสัปดาห์ (ได้ค่าแรงปกติ / ไม่ได้ค่าอาหาร)</option>
                         <option value="OFF_UNPAID">วันหยุดไม่ได้รับค่าจ้าง (ลากิจ / ขาดงาน / ร้านปิดไม่จ่าย)</option>
@@ -856,19 +948,19 @@
                 <div id="workFields">
                     <label class="form-label">เลือกกะด่วน:</label>
                     <div class="preset-container">
-                        <button type="button" class="preset-btn" onclick="applyPreset('08:00', '17:00')">กะเช้า (08:00 - 17:00)</button>
-                        <button type="button" class="preset-btn" onclick="applyPreset('12:00', '21:00')">กะกลางวัน (12:00 - 21:00)</button>
-                        <button type="button" class="preset-btn" onclick="applyPreset('16:00', '01:00')">กะปิดร้าน (16:00 - 01:00)</button>
+                        <button type="button" class="preset-btn" onclick="window.applyPreset('08:00', '17:00')">กะเช้า (08:00 - 17:00)</button>
+                        <button type="button" class="preset-btn" onclick="window.applyPreset('12:00', '21:00')">กะกลางวัน (12:00 - 21:00)</button>
+                        <button type="button" class="preset-btn" onclick="window.applyPreset('16:00', '01:00')">กะปิดร้าน (16:00 - 01:00)</button>
                     </div>
 
                     <div class="time-grid">
                         <div class="form-group">
                             <label class="form-label" for="timeIn">เวลาเข้างาน:</label>
-                            <input type="time" id="timeIn" class="form-control" value="08:00" onchange="updateHoursPreview()">
+                            <input type="time" id="timeIn" class="form-control" value="08:00" onchange="window.updateHoursPreview()">
                         </div>
                         <div class="form-group">
                             <label class="form-label" for="timeOut">เวลาออกงาน:</label>
-                            <input type="time" id="timeOut" class="form-control" value="17:00" onchange="updateHoursPreview()">
+                            <input type="time" id="timeOut" class="form-control" value="17:00" onchange="window.updateHoursPreview()">
                         </div>
                     </div>
 
@@ -881,24 +973,23 @@
                         <label class="form-label">สวัสดิการประจำวัน:</label>
                         <div class="checkbox-grid">
                             <label class="checkbox-card active" id="mealCard">
-                                <input type="checkbox" id="hasMeal" checked onchange="toggleCardStyle('mealCard', this.checked)">
+                                <input type="checkbox" id="hasMeal" checked onchange="window.toggleCardStyle('mealCard', this.checked)">
                                 <span><i class="fa-solid fa-utensils"></i> ค่าอาหาร (50b)</span>
                             </label>
                             <label class="checkbox-card" id="opCard">
-                                <input type="checkbox" id="hasOP" onchange="toggleCardStyle('opCard', this.checked)">
+                                <input type="checkbox" id="hasOP" onchange="window.toggleCardStyle('opCard', this.checked)">
                                 <span><i class="fa-solid fa-moon"></i> ค่ากะ OP (50b)</span>
                             </label>
                         </div>
                     </div>
                 </div>
 
-                <button type="submit" class="btn-submit">
+                <button type="submit" class="btn-submit" id="btnSubmit">
                     <i class="fa-solid fa-floppy-disk"></i> บันทึกข้อมูล
                 </button>
             </form>
 
-            <!-- ปุ่มเปิดประวัติการบันทึก (Modal Trigger) -->
-            <button class="btn-open-modal" onclick="openHistoryModal()">
+            <button class="btn-open-modal" onclick="window.openHistoryModal()">
                 <i class="fa-solid fa-list-check"></i> ดูประวัติการบันทึกรอบบิลนี้
             </button>
         </div>
@@ -918,29 +1009,25 @@
     </div>
 
     <!-- Modal: History Log -->
-    <div class="modal-overlay" id="historyModal" onclick="closeModalOnOutside(event)">
+    <div class="modal-overlay" id="historyModal" onclick="window.closeModalOnOutside(event)">
         <div class="modal-container">
             <div class="modal-header">
                 <div class="modal-title">
                     <i class="fa-solid fa-clock-rotate-left"></i> ประวัติการบันทึกรอบบิลนี้
                 </div>
-                <button class="btn-close" onclick="closeHistoryModal()">
+                <button class="btn-close" onclick="window.closeHistoryModal()">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
             
             <div class="modal-body">
-                <!-- รายการประวัติ -->
-                <div id="historyList">
-                    <!-- ข้อมูลถูกสร้างผ่าน JS -->
-                </div>
+                <div id="historyList"></div>
 
-                <!-- เครื่องมือ Backup & Restore -->
                 <div class="tools-row">
-                    <button class="btn-tool" onclick="exportData()">
+                    <button class="btn-tool" onclick="window.exportData()">
                         <i class="fa-solid fa-download"></i> สำรองข้อมูล
                     </button>
-                    <button class="btn-tool" onclick="importData()">
+                    <button class="btn-tool" onclick="window.importData()">
                         <i class="fa-solid fa-upload"></i> นำเข้าข้อมูล
                     </button>
                 </div>
@@ -948,7 +1035,7 @@
         </div>
     </div>
 
-    <input type="file" id="importFile" style="display:none;" accept=".json" onchange="handleFileImport(event)">
+    <input type="file" id="importFile" style="display:none;" accept=".json" onchange="window.handleFileImport(event)">
 
     <!-- Firebase SDK Modules -->
     <script type="module">
@@ -977,6 +1064,26 @@
         let allLogs = [];
         let otherDeductsMap = {};
 
+        // Notification Helper
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            
+            let iconClass = 'fa-circle-check';
+            if (type === 'error') iconClass = 'fa-triangle-exclamation';
+            if (type === 'info') iconClass = 'fa-circle-info';
+
+            toast.innerHTML = `<i class="fa-solid ${iconClass}"></i> <span>${message}</span>`;
+            container.appendChild(toast);
+
+            setTimeout(() => toast.classList.add('show'), 10);
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             initDateAndPeriods();
             setupFirestoreListeners();
@@ -985,10 +1092,13 @@
         function setupFirestoreListeners() {
             onSnapshot(collection(db, "work_logs"), (snapshot) => {
                 allLogs = snapshot.docs.map(doc => doc.data());
-                allLogs.sort((a, b) => new Date(a.date) - new Date(b.date));
+                // Safe string comparison for dates YYYY-MM-DD
+                allLogs.sort((a, b) => a.date.localeCompare(b.date));
                 renderApp();
+                checkExistingLogForDate(document.getElementById('logDate').value);
             }, (error) => {
                 console.error("Firestore Logs Sync Error: ", error);
+                showToast("เชื่อมต่อข้อมูลไม่สำเร็จ", "error");
             });
 
             onSnapshot(collection(db, "other_deductions"), (snapshot) => {
@@ -1007,7 +1117,8 @@
             const year = today.getFullYear();
             const month = String(today.getMonth() + 1).padStart(2, '0');
             const day = String(today.getDate()).padStart(2, '0');
-            document.getElementById('logDate').value = `${year}-${month}-${day}`;
+            const dateStr = `${year}-${month}-${day}`;
+            document.getElementById('logDate').value = dateStr;
             generatePeriodOptions(today);
         }
 
@@ -1051,6 +1162,7 @@
         }
 
         function getPeriodKeyForDate(dateStr) {
+            if (!dateStr) return '';
             const [y, m, d] = dateStr.split('-').map(Number);
             let endMonth = d > 20 ? m + 1 : m;
             let endYear = y;
@@ -1059,6 +1171,39 @@
                 endYear++;
             }
             return `${endYear}-${String(endMonth).padStart(2, '0')}`;
+        }
+
+        function checkExistingLogForDate(chosenDate) {
+            if (!chosenDate) return;
+            const existing = allLogs.find(l => l.date === chosenDate);
+            const editingTag = document.getElementById('editingTag');
+            
+            if (existing) {
+                editingTag.style.display = 'inline-flex';
+                document.getElementById('workStatus').value = existing.status || 'WORK';
+                toggleFormFields();
+
+                if (existing.status === 'WORK') {
+                    document.getElementById('timeIn').value = existing.timeIn || '08:00';
+                    document.getElementById('timeOut').value = existing.timeOut || '17:00';
+                    document.getElementById('hasMeal').checked = !!existing.hasMeal;
+                    document.getElementById('hasOP').checked = !!existing.hasOP;
+                    toggleCardStyle('mealCard', existing.hasMeal);
+                    toggleCardStyle('opCard', existing.hasOP);
+                    updateHoursPreview();
+                }
+            } else {
+                editingTag.style.display = 'none';
+                document.getElementById('workStatus').value = 'WORK';
+                toggleFormFields();
+                document.getElementById('timeIn').value = '08:00';
+                document.getElementById('timeOut').value = '17:00';
+                document.getElementById('hasMeal').checked = true;
+                document.getElementById('hasOP').checked = false;
+                toggleCardStyle('mealCard', true);
+                toggleCardStyle('opCard', false);
+                updateHoursPreview();
+            }
         }
 
         function onDateInputChange() {
@@ -1074,6 +1219,7 @@
                         break;
                     }
                 }
+                checkExistingLogForDate(chosenDate);
                 if (exists) renderApp();
             }
         }
@@ -1137,8 +1283,10 @@
             const value = Number(document.getElementById('otherDeductInput').value) || 0;
             try {
                 await setDoc(doc(db, "other_deductions", periodKey), { amount: value });
+                showToast("บันทึกรายการหักเพิ่มเติมแล้ว", "info");
             } catch (err) {
                 console.error("Error saving deduction: ", err);
+                showToast("เกิดข้อผิดพลาดในการบันทึกรายการหัก", "error");
             }
         }
 
@@ -1151,7 +1299,10 @@
             const hasMeal = document.getElementById('hasMeal').checked;
             const hasOP = document.getElementById('hasOP').checked;
 
-            if (!date) return;
+            if (!date) {
+                showToast("กรุณาเลือกวันที่", "error");
+                return;
+            }
 
             let otHours = 0;
             if (status === 'WORK') {
@@ -1169,18 +1320,28 @@
 
             try {
                 await setDoc(doc(db, "work_logs", date), entry);
-                alert("บันทึกข้อมูลสำเร็จ!");
+                showToast(`บันทึกข้อมูลวันที่ ${date} เรียบร้อยแล้ว`);
             } catch (err) {
                 console.error("Error saving log: ", err);
+                showToast("ไม่สามารถบันทึกข้อมูลได้", "error");
             }
+        }
+
+        async function editEntry(date) {
+            document.getElementById('logDate').value = date;
+            onDateInputChange();
+            closeHistoryModal();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         async function deleteEntry(date) {
             if (confirm(`คุณต้องการลบบันทึกของวันที่ ${date} ใช่หรือไม่?`)) {
                 try {
                     await deleteDoc(doc(db, "work_logs", date));
+                    showToast(`ลบรายการวันที่ ${date} แล้ว`, "info");
                 } catch (err) {
                     console.error("Error deleting log: ", err);
+                    showToast("เกิดข้อผิดพลาดในการลบข้อมูล", "error");
                 }
             }
         }
@@ -1286,9 +1447,14 @@
                         <div class="history-sub">${detailsText}</div>
                         <div class="history-badges">${badgesHTML}</div>
                     </div>
-                    <button class="btn-del" onclick="deleteEntry('${item.date}')" title="ลบรายการ">
-                        <i class="fa-solid fa-trash-can"></i>
-                    </button>
+                    <div class="action-btns">
+                        <button class="btn-action btn-edit" onclick="window.editEntry('${item.date}')" title="แก้ไขรายการ">
+                            <i class="fa-solid fa-pen"></i>
+                        </button>
+                        <button class="btn-action btn-del" onclick="window.deleteEntry('${item.date}')" title="ลบรายการ">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </div>
                 `;
                 historyList.appendChild(div);
             });
@@ -1297,7 +1463,7 @@
         /* Modal Functions */
         function openHistoryModal() {
             document.getElementById('historyModal').classList.add('active');
-            document.body.style.overflow = 'hidden'; // ป้องกันการเลื่อนหน้าจอด้านหลัง
+            document.body.style.overflow = 'hidden';
         }
 
         function closeHistoryModal() {
@@ -1312,6 +1478,10 @@
         }
 
         function exportData() {
+            if (allLogs.length === 0) {
+                showToast("ไม่มีข้อมูลให้ส่งออก", "error");
+                return;
+            }
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(allLogs, null, 2));
             const downloadAnchor = document.createElement('a');
             downloadAnchor.setAttribute("href", dataStr);
@@ -1319,6 +1489,7 @@
             document.body.appendChild(downloadAnchor);
             downloadAnchor.click();
             downloadAnchor.remove();
+            showToast("สำรองข้อมูลสำเร็จ", "success");
         }
 
         function importData() {
@@ -1334,26 +1505,33 @@
                 try {
                     const importedLogs = JSON.parse(event.target.result);
                     if (Array.isArray(importedLogs)) {
-                        if (confirm(`คุณต้องการนำเข้าข้อมูล ${importedLogs.length} รายการ ใช่หรือไม่? (อาจทับข้อมูลเดิมในวันที่ตรงกัน)`)) {
-                            const batch = writeBatch(db);
+                        if (confirm(`คุณต้องการนำเข้าข้อมูล ${importedLogs.length} รายการ ใช่หรือไม่?`)) {
+                            // Chunk Firestore batch (max 400 items per batch to stay under limits)
+                            const chunkSize = 400;
                             let count = 0;
-                            
-                            importedLogs.forEach(log => {
-                                if (log.date) {
-                                    const docRef = doc(db, "work_logs", log.date);
-                                    batch.set(docRef, log);
-                                    count++;
-                                }
-                            });
 
-                            await batch.commit();
-                            alert(`นำเข้าข้อมูลสำเร็จ ${count} รายการ!`);
+                            for (let i = 0; i < importedLogs.length; i += chunkSize) {
+                                const batch = writeBatch(db);
+                                const chunk = importedLogs.slice(i, i + chunkSize);
+
+                                chunk.forEach(log => {
+                                    if (log.date) {
+                                        const docRef = doc(db, "work_logs", log.date);
+                                        batch.set(docRef, log);
+                                        count++;
+                                    }
+                                });
+
+                                await batch.commit();
+                            }
+
+                            showToast(`นำเข้าข้อมูลสำเร็จ ${count} รายการ!`, "success");
                         }
                     } else {
-                        alert("ไฟล์ไม่ถูกต้อง");
+                        showToast("รูปแบบไฟล์ JSON ไม่ถูกต้อง", "error");
                     }
                 } catch (error) {
-                    alert("เกิดข้อผิดพลาดในการอ่านไฟล์");
+                    showToast("เกิดข้อผิดพลาดในการนำเข้าไฟล์", "error");
                     console.error(error);
                 }
                 e.target.value = '';
@@ -1361,6 +1539,7 @@
             reader.readAsText(file);
         }
 
+        // Export functions to Window Scope
         window.onPeriodChange = onPeriodChange;
         window.onDateInputChange = onDateInputChange;
         window.toggleFormFields = toggleFormFields;
@@ -1369,6 +1548,7 @@
         window.updateHoursPreview = updateHoursPreview;
         window.onOtherDeductChange = onOtherDeductChange;
         window.handleFormSubmit = handleFormSubmit;
+        window.editEntry = editEntry;
         window.deleteEntry = deleteEntry;
         window.openHistoryModal = openHistoryModal;
         window.closeHistoryModal = closeHistoryModal;
