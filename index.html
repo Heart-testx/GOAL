@@ -3,27 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ระบบบันทึกเวลาทำงาน & คำนวณเงินเดือน Cook Helper (Firebase Realtime)</title>
+    <title>ระบบบันทึกเวลาทำงาน & คำนวณเงินเดือน Cook Helper</title>
     <!-- Google Fonts & Font Awesome Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
-            --primary: #1e3c72;
-            --primary-dark: #122549;
-            --primary-light: #2a5298;
-            --accent: #10b981;
-            --accent-glow: rgba(16, 185, 129, 0.2);
-            --danger: #ef4444;
-            --warning: #f59e0b;
-            --bg: #f8fafc;
-            --card-bg: #ffffff;
-            --text-main: #1e293b;
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --primary-light: #60a5fa;
+            --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            --header-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #3b82f6 100%);
+            --net-gradient: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --card-glass: rgba(255, 255, 255, 0.85);
+            --text-main: #0f172a;
             --text-muted: #64748b;
             --border: #e2e8f0;
-            --radius: 16px;
-            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+            --danger: #ef4444;
+            --radius-xl: 24px;
+            --radius-lg: 16px;
+            --radius-md: 12px;
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 10px 25px -5px rgba(15, 23, 42, 0.08);
+            --shadow-glow: 0 12px 30px -5px rgba(16, 185, 129, 0.3);
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         * {
@@ -35,20 +40,20 @@
         }
 
         body {
-            background-color: var(--bg);
+            background: var(--bg-gradient);
             color: var(--text-main);
-            padding-bottom: 40px;
+            padding-bottom: 50px;
             min-height: 100vh;
         }
 
-        /* Top Header */
+        /* Modern Glass Header */
         .app-header {
-            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+            background: var(--header-gradient);
             color: white;
-            padding: 24px 20px 32px 20px;
-            border-bottom-left-radius: 28px;
-            border-bottom-right-radius: 28px;
-            box-shadow: 0 10px 20px rgba(30, 60, 114, 0.15);
+            padding: 28px 24px 40px 24px;
+            border-bottom-left-radius: 32px;
+            border-bottom-right-radius: 32px;
+            box-shadow: 0 20px 30px -10px rgba(15, 23, 42, 0.25);
             position: relative;
         }
 
@@ -56,95 +61,116 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
         }
 
         .brand-title {
-            font-size: 1.25rem;
-            font-weight: 600;
+            font-size: 1.35rem;
+            font-weight: 700;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+            letter-spacing: -0.3px;
         }
 
         .brand-title i {
             color: #38bdf8;
+            filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.5));
         }
 
         .status-badge {
             font-size: 0.75rem;
-            background: rgba(16, 185, 129, 0.2);
-            border: 1px solid rgba(16, 185, 129, 0.4);
-            color: #6ee7b7;
-            padding: 3px 8px;
-            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #38bdf8;
+            padding: 5px 12px;
+            border-radius: 20px;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
+            font-weight: 500;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #10b981;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #10b981;
         }
 
         .period-selector-wrapper {
             background: rgba(255, 255, 255, 0.12);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
-            padding: 8px 14px;
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: var(--radius-lg);
+            padding: 10px 16px;
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin-top: 10px;
+            gap: 12px;
+            transition: var(--transition);
+        }
+
+        .period-selector-wrapper:hover {
+            background: rgba(255, 255, 255, 0.18);
         }
 
         .period-selector-wrapper i {
             color: #38bdf8;
-            font-size: 1.1rem;
+            font-size: 1.15rem;
         }
 
         .period-select {
             background: transparent;
             border: none;
             color: white;
-            font-family: 'Kanit', sans-serif;
-            font-size: 0.95rem;
             font-weight: 500;
+            font-size: 0.95rem;
             width: 100%;
             outline: none;
             cursor: pointer;
         }
 
         .period-select option {
-            background: var(--primary-dark);
+            background: #0f172a;
             color: white;
         }
 
-        /* Container & Cards */
+        /* Container Layout */
         .container {
-            max-width: 500px;
-            margin: -20px auto 0 auto;
+            max-width: 520px;
+            margin: -25px auto 0 auto;
             padding: 0 16px;
         }
 
+        /* Modern Card Elements */
         .card {
             background: var(--card-bg);
-            border-radius: var(--radius);
-            padding: 20px;
-            margin-bottom: 18px;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+            border-radius: var(--radius-xl);
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            transition: var(--transition);
         }
 
         .card-header {
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin-bottom: 16px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--border);
+            gap: 12px;
+            margin-bottom: 18px;
+            padding-bottom: 12px;
+            border-bottom: 1.5px solid var(--border);
         }
 
         .card-header i {
-            font-size: 1.2rem;
+            font-size: 1.25rem;
             color: var(--primary);
+            background: #eff6ff;
+            padding: 8px;
+            border-radius: 10px;
         }
 
         .card-header h2 {
@@ -153,35 +179,141 @@
             color: var(--text-main);
         }
 
-        /* Form Controls */
+        /* Net Payment Hero Card */
+        .net-pay-card {
+            background: var(--net-gradient);
+            color: white;
+            border-radius: var(--radius-xl);
+            padding: 26px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-glow);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .net-pay-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 35px -5px rgba(16, 185, 129, 0.4);
+        }
+
+        .net-pay-card::after {
+            content: '';
+            position: absolute;
+            top: -60%;
+            right: -40%;
+            width: 240px;
+            height: 240px;
+            background: rgba(255, 255, 255, 0.12);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .net-title {
+            font-size: 0.85rem;
+            opacity: 0.95;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+
+        .net-amount {
+            font-size: 2.6rem;
+            font-weight: 700;
+            line-height: 1.15;
+            letter-spacing: -0.5px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .net-sub {
+            font-size: 0.82rem;
+            opacity: 0.9;
+            margin-top: 8px;
+            background: rgba(0, 0, 0, 0.1);
+            display: inline-block;
+            padding: 4px 14px;
+            border-radius: 20px;
+        }
+
+        /* Metrics Grid */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .metric-box {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            padding: 14px;
+            border-radius: var(--radius-lg);
+            transition: var(--transition);
+        }
+
+        .metric-box:hover {
+            border-color: var(--primary-light);
+            background: #ffffff;
+            transform: translateY(-1px);
+        }
+
+        .metric-label {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .metric-label i {
+            color: var(--primary);
+        }
+
+        .metric-value {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .metric-deduct {
+            color: var(--danger);
+        }
+
+        .metric-deduct i {
+            color: var(--danger);
+        }
+
+        /* Form Styling */
         .form-group {
             margin-bottom: 16px;
         }
 
         .form-label {
             display: block;
-            font-size: 0.9rem;
-            font-weight: 500;
+            font-size: 0.88rem;
+            font-weight: 600;
             margin-bottom: 6px;
             color: var(--text-main);
         }
 
         .form-control, .form-select {
             width: 100%;
-            padding: 12px 14px;
+            padding: 12px 16px;
             border: 1.5px solid var(--border);
-            border-radius: 10px;
+            border-radius: var(--radius-md);
             font-size: 0.95rem;
             color: var(--text-main);
-            background-color: #fdfdfd;
-            transition: all 0.2s ease;
+            background-color: #ffffff;
+            transition: var(--transition);
             outline: none;
         }
 
         .form-control:focus, .form-select:focus {
-            border-color: var(--primary-light);
-            box-shadow: 0 0 0 3px rgba(42, 82, 152, 0.1);
-            background-color: #fff;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
         }
 
         .time-grid {
@@ -190,11 +322,11 @@
             gap: 12px;
         }
 
-        /* Shift Presets */
+        /* Quick Shift Chips */
         .preset-container {
             display: flex;
             gap: 8px;
-            margin-bottom: 12px;
+            margin-bottom: 14px;
             overflow-x: auto;
             padding-bottom: 4px;
         }
@@ -202,184 +334,126 @@
         .preset-btn {
             background: #f1f5f9;
             border: 1px solid var(--border);
-            padding: 6px 12px;
+            padding: 7px 14px;
             border-radius: 20px;
             font-size: 0.8rem;
+            font-weight: 500;
             color: var(--text-muted);
             white-space: nowrap;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: var(--transition);
         }
 
         .preset-btn:hover {
-            background: var(--primary-light);
+            background: var(--primary);
             color: white;
-            border-color: var(--primary-light);
+            border-color: var(--primary);
+            transform: translateY(-1px);
         }
 
-        /* Preview Banner */
+        /* Hours Preview Banner */
         .preview-box {
-            background: #f0f9ff;
-            border-left: 4px solid #0284c7;
-            padding: 10px 14px;
-            border-radius: 8px;
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            padding: 12px 16px;
+            border-radius: var(--radius-md);
             font-size: 0.85rem;
-            color: #0369a1;
+            color: #1e40af;
             margin-bottom: 16px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+            font-weight: 500;
         }
 
-        /* Checkboxes */
+        /* Custom Modern Checkbox Cards */
         .checkbox-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
+            gap: 12px;
         }
 
         .checkbox-card {
             border: 1.5px solid var(--border);
-            border-radius: 10px;
-            padding: 10px 12px;
+            border-radius: var(--radius-md);
+            padding: 12px 14px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: var(--transition);
             user-select: none;
+            background: #ffffff;
+            font-weight: 500;
+            font-size: 0.88rem;
+        }
+
+        .checkbox-card:hover {
+            border-color: var(--primary-light);
         }
 
         .checkbox-card.active {
-            border-color: var(--accent);
-            background-color: #f0fdf4;
-            color: #166534;
+            border-color: #10b981;
+            background-color: #ecfdf5;
+            color: #065f46;
         }
 
         .checkbox-card input {
-            accent-color: var(--accent);
+            accent-color: #10b981;
             width: 18px;
             height: 18px;
         }
 
-        /* Primary Button */
+        /* Form Submit Button */
         .btn-submit {
             width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            padding: 15px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
             border: none;
-            border-radius: 12px;
+            border-radius: var(--radius-md);
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(30, 60, 114, 0.25);
-            transition: all 0.2s;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+            transition: var(--transition);
             display: flex;
             justify-content: center;
             align-items: center;
             gap: 8px;
         }
 
+        .btn-submit:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45);
+        }
+
         .btn-submit:active {
-            transform: scale(0.98);
+            transform: translateY(0);
         }
 
-        /* Dashboard Net Display */
-        .net-pay-card {
-            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
-            color: white;
-            border-radius: var(--radius);
-            padding: 22px;
-            margin-bottom: 18px;
-            box-shadow: 0 10px 20px var(--accent-glow);
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .net-pay-card::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 200px;
-            height: 200px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            pointer-events: none;
-        }
-
-        .net-title {
-            font-size: 0.9rem;
-            opacity: 0.9;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 4px;
-        }
-
-        .net-amount {
-            font-size: 2.3rem;
-            font-weight: 700;
-            line-height: 1.2;
-        }
-
-        .net-sub {
-            font-size: 0.8rem;
-            opacity: 0.85;
-            margin-top: 6px;
-        }
-
-        /* Breakdown Metrics */
-        .summary-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 14px;
-        }
-
-        .metric-box {
-            background: #f8fafc;
-            border: 1px solid var(--border);
-            padding: 12px;
-            border-radius: 12px;
-        }
-
-        .metric-label {
-            font-size: 0.78rem;
-            color: var(--text-muted);
-            margin-bottom: 4px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .metric-value {
-            font-size: 1.05rem;
-            font-weight: 600;
-            color: var(--text-main);
-        }
-
-        .metric-deduct {
-            color: var(--danger);
-        }
-
-        /* History Table / List */
+        /* Modern History Cards */
         .history-item {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 14px 16px;
+            margin-bottom: 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid var(--border);
+            transition: var(--transition);
         }
 
-        .history-item:last-child {
-            border-bottom: none;
+        .history-item:hover {
+            border-color: var(--primary-light);
+            box-shadow: var(--shadow-sm);
         }
 
         .history-date {
-            font-weight: 600;
+            font-weight: 700;
             font-size: 0.95rem;
+            color: var(--text-main);
         }
 
         .history-sub {
@@ -390,20 +464,20 @@
 
         .history-badges {
             display: flex;
-            gap: 4px;
-            margin-top: 4px;
+            gap: 6px;
+            margin-top: 6px;
             flex-wrap: wrap;
         }
 
         .badge {
-            padding: 2px 8px;
-            border-radius: 6px;
-            font-size: 0.72rem;
-            font-weight: 500;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.73rem;
+            font-weight: 600;
         }
 
         .badge-work { background: #dcfce7; color: #15803d; }
-        .badge-off { background: #e2e8f0; color: #475569; }
+        .badge-off { background: #f1f5f9; color: #475569; }
         .badge-unpaid { background: #fee2e2; color: #b91c1c; }
         .badge-ot { background: #fef3c7; color: #b45309; }
         .badge-food { background: #e0f2fe; color: #0369a1; }
@@ -413,76 +487,81 @@
             background: #fee2e2;
             color: var(--danger);
             border: none;
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: var(--transition);
         }
 
         .btn-del:hover {
             background: var(--danger);
             color: white;
+            transform: scale(1.05);
         }
 
         .empty-state {
             text-align: center;
-            padding: 24px 10px;
+            padding: 30px 10px;
             color: var(--text-muted);
             font-size: 0.9rem;
         }
 
         .empty-state i {
-            font-size: 2rem;
-            margin-bottom: 8px;
-            opacity: 0.5;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            opacity: 0.4;
         }
 
-        /* Backup / Tools */
+        /* Tool Action Buttons */
         .tools-row {
             display: flex;
             gap: 10px;
-            margin-top: 10px;
+            margin-top: 14px;
         }
 
         .btn-tool {
             flex: 1;
-            padding: 8px;
-            background: #f1f5f9;
+            padding: 10px;
+            background: #f8fafc;
             border: 1px solid var(--border);
-            border-radius: 8px;
-            font-size: 0.8rem;
+            border-radius: var(--radius-md);
+            font-size: 0.82rem;
+            font-weight: 600;
             color: var(--text-muted);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
+            gap: 8px;
+            transition: var(--transition);
         }
 
         .btn-tool:hover {
-            background: #e2e8f0;
-            color: var(--text-main);
+            background: #ffffff;
+            color: var(--primary);
+            border-color: var(--primary-light);
+            box-shadow: var(--shadow-sm);
         }
 
-        /* Rate Info Banner */
+        /* Notice Banner */
         .rate-info {
             background: #fffbe3;
             border: 1px solid #fef08a;
-            border-radius: 12px;
-            padding: 12px;
-            font-size: 0.8rem;
+            border-radius: var(--radius-lg);
+            padding: 14px 16px;
+            font-size: 0.82rem;
             color: #713f12;
             margin-bottom: 16px;
-            line-height: 1.5;
+            line-height: 1.6;
         }
 
         .rate-info-title {
-            font-weight: 600;
-            margin-bottom: 4px;
+            font-weight: 700;
+            margin-bottom: 6px;
             display: flex;
             align-items: center;
             gap: 6px;
@@ -498,8 +577,8 @@
                 <i class="fa-solid fa-utensils"></i>
                 <span>Cook Helper PayTracker</span>
             </div>
-            <div class="status-badge" id="cloudStatus">
-                <i class="fa-solid fa-cloud"></i> Firebase Sync
+            <div class="status-badge">
+                <span class="status-dot"></span> Firebase Live
             </div>
         </div>
 
@@ -529,40 +608,46 @@
 
             <div class="summary-grid">
                 <div class="metric-box">
-                    <div class="metric-label"><i class="fa-solid fa-briefcase"></i> ทำงานปกติ (500/วัน)</div>
+                    <div class="metric-label"><i class="fa-solid fa-briefcase"></i> ทำงานปกติ (500/วัน)[cite: 3]</div>
                     <div class="metric-value"><span id="metricWorkDays">0</span> วัน (<span id="metricWorkPay">฿0</span>)</div>
                 </div>
                 <div class="metric-box">
-                    <div class="metric-label"><i class="fa-solid fa-bed"></i> หยุดรับค่าแรง (500/วัน)</div>
+                    <div class="metric-label"><i class="fa-solid fa-bed"></i> หยุดรับค่าแรง (500/วัน)[cite: 3]</div>
                     <div class="metric-value"><span id="metricPaidOffDays">0</span> วัน (<span id="metricPaidOffPay">฿0</span>)</div>
                 </div>
                 <div class="metric-box">
-                    <div class="metric-label"><i class="fa-solid fa-clock"></i> ชั่วโมง OT (93.75/ชม.)</div>
+                    <div class="metric-label"><i class="fa-solid fa-clock"></i> ชั่วโมง OT (93.75/ชม.)[cite: 3]</div>
                     <div class="metric-value"><span id="metricOTHours">0.00</span> ชม. (<span id="metricOTPay">฿0</span>)</div>
                 </div>
                 <div class="metric-box">
-                    <div class="metric-label"><i class="fa-solid fa-bowl-food"></i> ค่าอาหาร (50/วัน)</div>
+                    <div class="metric-label"><i class="fa-solid fa-bowl-food"></i> ค่าอาหาร (50/วัน)[cite: 3]</div>
                     <div class="metric-value"><span id="metricMealPay">฿0</span></div>
                 </div>
                 <div class="metric-box">
-                    <div class="metric-label"><i class="fa-solid fa-store"></i> ค่ากะ OP/ปิดร้าน (50/กะ)</div>
+                    <div class="metric-label"><i class="fa-solid fa-store"></i> ค่ากะ OP/ปิดร้าน (50/กะ)[cite: 3]</div>
                     <div class="metric-value"><span id="metricOPPay">฿0</span></div>
                 </div>
                 <div class="metric-box">
-                    <div class="metric-label metric-deduct"><i class="fa-solid fa-shield-halved"></i> ประกันสังคม (5%, ไม่รวม OT)</div>
+                    <div class="metric-label metric-deduct"><i class="fa-solid fa-shield-halved"></i> ประกันสังคม (5%)[cite: 3]</div>
                     <div class="metric-value metric-deduct">-<span id="metricSS">฿0</span></div>
-                </div>
-                <div class="metric-box">
-                    <div class="metric-label metric-deduct"><i class="fa-solid fa-file-invoice-dollar"></i> รวมยอดหักทั้งหมด</div>
-                    <div class="metric-value metric-deduct">-<span id="metricTotalDeduct">฿0</span></div>
                 </div>
             </div>
 
-            <div class="form-group" style="margin-top: 14px; margin-bottom: 0;">
-                <label class="form-label" for="otherDeductInput">
-                    รายการหักอื่นๆ ครั้งเดียว (เช่น ค่าประกันชุด) เฉพาะรอบนี้:
-                </label>
-                <input type="number" id="otherDeductInput" class="form-control" min="0" step="0.01" value="0" onchange="onOtherDeductChange()">
+            <div style="background: #f8fafc; border-radius: var(--radius-lg); padding: 12px 14px; border: 1px solid var(--border);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <span style="font-size: 0.85rem; font-weight: 600; color: var(--danger);">
+                        <i class="fa-solid fa-file-invoice-dollar"></i> รวมยอดหักทั้งหมด
+                    </span>
+                    <span style="font-weight: 700; color: var(--danger); font-size: 1.05rem;">
+                        -<span id="metricTotalDeduct">฿0</span>
+                    </span>
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label" for="otherDeductInput" style="font-size: 0.8rem; font-weight: 500; color: var(--text-muted);">
+                        หักอื่นๆ ครั้งเดียว (เช่น ค่าประกันชุด) Specific รอบนี้:[cite: 3]
+                    </label>
+                    <input type="number" id="otherDeductInput" class="form-control" min="0" step="0.01" value="0" onchange="onOtherDeductChange()">
+                </div>
             </div>
         </div>
 
@@ -583,18 +668,17 @@
                     <label class="form-label" for="workStatus">สถานะวันทำงาน:</label>
                     <select id="workStatus" class="form-select" onchange="toggleFormFields()">
                         <option value="WORK">ทำงานปกติ</option>
-                        <option value="OFF_PAID">วันหยุดประจำสัปดาห์ (ได้ค่าแรงปกติ / ไม่ได้ค่าอาหาร)</option>
-                        <option value="OFF_UNPAID">วันหยุดไม่ได้รับค่าจ้าง (ลากิจ / ขาดงาน / ร้านปิดไม่จ่าย)</option>
+                        <option value="OFF_PAID">วันหยุดประจำสัปดาห์ (ได้ค่าแรงปกติ / ไม่ได้ค่าอาหาร)[cite: 3]</option>
+                        <option value="OFF_UNPAID">วันหยุดไม่ได้รับค่าจ้าง (ลากิจ / ขาดงาน / ร้านปิดไม่จ่าย)[cite: 3]</option>
                     </select>
                 </div>
 
                 <!-- Section for WORK status -->
                 <div id="workFields">
-                    <!-- Quick Presets -->
                     <label class="form-label">เลือกกะด่วน:</label>
                     <div class="preset-container">
                         <button type="button" class="preset-btn" onclick="applyPreset('08:00', '17:00')">กะเช้า (08:00 - 17:00)</button>
-                        <button type="button" class="preset-btn" onclick="applyPreset('10:00', '19:00')">กะกลางวัน (10:00 - 19:00)</button>
+                        <button type="button" class="preset-btn" onclick="applyPreset('12:00', '21:00')">กะกลางวัน (12:00 - 21:00)</button>
                         <button type="button" class="preset-btn" onclick="applyPreset('16:00', '01:00')">กะปิดร้าน (16:00 - 01:00)</button>
                     </div>
 
@@ -611,7 +695,7 @@
 
                     <div class="preview-box" id="hoursPreview">
                         <i class="fa-solid fa-circle-info"></i>
-                        <span>ทำงานปกติ 8.0 ชม. | OT: 0.00 ชม. (หักเวลาพัก 1 ชม.)</span>
+                        <span>ทำงานปกติ 8.0 ชม. | OT: 0.00 ชม. (หักเวลาพัก 1 ชม.)</span>[cite: 3]
                     </div>
 
                     <div class="form-group">
@@ -619,11 +703,11 @@
                         <div class="checkbox-grid">
                             <label class="checkbox-card active" id="mealCard">
                                 <input type="checkbox" id="hasMeal" checked onchange="toggleCardStyle('mealCard', this.checked)">
-                                <span><i class="fa-solid fa-utensils"></i> ค่าอาหาร (50b)</span>
+                                <span><i class="fa-solid fa-utensils"></i> ค่าอาหาร (50b)</span>[cite: 3]
                             </label>
                             <label class="checkbox-card" id="opCard">
                                 <input type="checkbox" id="hasOP" onchange="toggleCardStyle('opCard', this.checked)">
-                                <span><i class="fa-solid fa-moon"></i> ค่ากะ OP (50b)</span>
+                                <span><i class="fa-solid fa-moon"></i> ค่ากะ OP (50b)</span>[cite: 3]
                             </label>
                         </div>
                     </div>
@@ -648,7 +732,7 @@
 
             <div class="tools-row">
                 <button class="btn-tool" onclick="exportData()">
-                    <i class="fa-solid fa-download"></i> สำรองข้อมูล (JSON)
+                    <i class="fa-solid fa-download"></i> สำรองข้อมูล
                 </button>
                 <button class="btn-tool" onclick="importData()">
                     <i class="fa-solid fa-upload"></i> นำเข้าข้อมูล
@@ -661,11 +745,11 @@
             <div class="rate-info-title">
                 <i class="fa-solid fa-circle-info"></i> โครงสร้างการคำนวณตามสลิป
             </div>
-            • ฐานเงินเดือน 15,000 บาท/เดือน (คำนวณวันละ 500 บาท)<br>
-            • OT 1.5 คิดจาก (500 / 8 ชม.) x 1.5 = 93.75 บาท/ชม.<br>
-            • ตัดรอบบัญชีทุกวันที่ 20 (21 เดือนก่อน - 20 เดือนนี้)<br>
-            • หักประกันสังคม 5% จาก (ค่าแรง + ค่าอาหาร + ค่ากะ OP) <u>ไม่รวม OT</u> ปัดเศษเป็นบาท สูงสุดไม่เกิน 750 บาท/เดือน<br>
-            • รายการหักอื่นๆ เช่น ค่าประกันชุด เป็นรายการหักครั้งเดียว ให้กรอกเองต่อรอบ
+            • ฐานเงินเดือน 15,000 บาท/เดือน (คำนวณวันละ 500 บาท)<br>[cite: 3]
+            • OT 1.5 คิดจาก (500 / 8 ชม.) x 1.5 = 93.75 บาท/ชม.<br>[cite: 3]
+            • ตัดรอบบัญชีทุกวันที่ 20 (21 เดือนก่อน - 20 เดือนนี้)<br>[cite: 3]
+            • หักประกันสังคม 5% จาก (ค่าแรง + ค่าอาหาร + ค่ากะ OP) <u>ไม่รวม OT</u> สูงสุดไม่เกิน 750 บาท/เดือน<br>[cite: 3]
+            • รายการหักอื่นๆ เช่น ค่าประกันชุด เป็นรายการหักครั้งเดียว ให้กรอกเองต่อรอบ[cite: 3]
         </div>
 
     </div>
@@ -678,7 +762,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot, writeBatch } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // Your Firebase Configuration
+        // Your Firebase Configuration[cite: 3]
         const firebaseConfig = {
             apiKey: "AIzaSyCSmtF-Ch1gJ7D66XzHw2KfyjBkOG7CVrI",
             authDomain: "paytracker-8403b.firebaseapp.com",
@@ -692,7 +776,7 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Rates configuration based on Pay Slip
+        // Rates configuration based on Pay Slip[cite: 3]
         const DAILY_RATE = 500;
         const OT_RATE = 93.75;
         const MEAL_RATE = 50;
@@ -712,7 +796,6 @@
 
         // Setup Firestore Real-time Listeners
         function setupFirestoreListeners() {
-            // Listen to work_logs collection
             onSnapshot(collection(db, "work_logs"), (snapshot) => {
                 allLogs = snapshot.docs.map(doc => doc.data());
                 allLogs.sort((a, b) => new Date(a.date) - new Date(b.date));
@@ -721,7 +804,6 @@
                 console.error("Firestore Logs Sync Error: ", error);
             });
 
-            // Listen to other_deductions collection
             onSnapshot(collection(db, "other_deductions"), (snapshot) => {
                 otherDeductsMap = {};
                 snapshot.docs.forEach(doc => {
@@ -733,7 +815,6 @@
             });
         }
 
-        // Set default date picker to today
         function initDateAndPeriods() {
             const today = new Date();
             const year = today.getFullYear();
@@ -744,7 +825,6 @@
             generatePeriodOptions(today);
         }
 
-        // Generate Period Selector Options based on 20th cutoff
         function generatePeriodOptions(referenceDate) {
             const select = document.getElementById('periodSelect');
             select.innerHTML = '';
@@ -752,7 +832,7 @@
             const thaiMonths = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
 
             let refYear = referenceDate.getFullYear();
-            let refMonth = referenceDate.getMonth(); // 0-indexed
+            let refMonth = referenceDate.getMonth();
             let refDay = referenceDate.getDate();
 
             let currentPeriodEndMonth = (refDay > 20) ? refMonth + 1 : refMonth;
@@ -847,7 +927,6 @@
             updateHoursPreview();
         }
 
-        // Calculate Work and OT Hours from Time In / Out
         function calculateHours(timeInStr, timeOutStr) {
             if (!timeInStr || !timeOutStr) return { workHours: 0, otHours: 0 };
 
@@ -893,8 +972,7 @@
             try {
                 await setDoc(doc(db, "other_deductions", periodKey), { amount: value });
             } catch (err) {
-                console.error("Error saving deduction to Firebase: ", err);
-                alert("เกิดข้อผิดพลาดในการบันทึกรายการหักไปยัง Firebase");
+                console.error("Error saving deduction: ", err);
             }
         }
 
@@ -928,10 +1006,8 @@
 
             try {
                 await setDoc(doc(db, "work_logs", date), entry);
-                alert(`บันทึกข้อมูลวันที่ ${date} ลง Firebase เรียบร้อยแล้ว!`);
             } catch (err) {
-                console.error("Error saving log to Firebase: ", err);
-                alert("เกิดข้อผิดพลาดในการบันทึกไปยัง Firebase");
+                console.error("Error saving log: ", err);
             }
         }
 
@@ -940,8 +1016,7 @@
                 try {
                     await deleteDoc(doc(db, "work_logs", date));
                 } catch (err) {
-                    console.error("Error deleting log from Firebase: ", err);
-                    alert("เกิดข้อผิดพลาดในการลบข้อมูล");
+                    console.error("Error deleting log: ", err);
                 }
             }
         }
@@ -1115,14 +1190,14 @@
                     }
                 } catch (err) {
                     console.error(err);
-                    alert('เกิดข้อผิดพลาดในการอ่านหรือบันทึกไฟล์ไปยัง Firebase');
+                    alert('เกิดข้อผิดพลาดในการนำเข้าไฟล์');
                 }
                 e.target.value = '';
             };
             reader.readAsText(file);
         }
 
-        // Expose functions to window object for inline HTML event handlers
+        // Global function bindings for inline events
         window.onPeriodChange = onPeriodChange;
         window.onDateInputChange = onDateInputChange;
         window.onOtherDeductChange = onOtherDeductChange;
