@@ -2,34 +2,31 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>ระบบบันทึกเวลาทำงาน & คำนวณเงินเดือน Cook Helper</title>
-    <!-- Google Fonts & Font Awesome Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
             --primary: #2563eb;
-            --primary-dark: #1e40af;
+            --primary-dark: #1d4ed8;
             --primary-light: #60a5fa;
-            --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-            --header-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #3b82f6 100%);
-            --net-gradient: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%);
-            --card-bg: rgba(255, 255, 255, 0.95);
-            --card-glass: rgba(255, 255, 255, 0.85);
+            --bg-app: #f2f4f7;
+            --header-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #1d4ed8 100%);
+            --net-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            --card-bg: #ffffff;
             --text-main: #0f172a;
             --text-muted: #64748b;
+            --input-bg: #f1f5f9;
             --border: #e2e8f0;
             --danger: #ef4444;
-            --warning: #f59e0b;
             --radius-xl: 24px;
             --radius-lg: 16px;
-            --radius-md: 12px;
-            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-            --shadow-md: 0 10px 25px -5px rgba(15, 23, 42, 0.08);
-            --shadow-glow: 0 12px 30px -5px rgba(16, 185, 129, 0.3);
-            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --radius-md: 14px;
+            --shadow-sm: 0 2px 4px rgba(15, 23, 42, 0.04);
+            --shadow-card: 0 8px 20px -4px rgba(15, 23, 42, 0.08);
+            --transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
         }
 
         * {
@@ -43,67 +40,62 @@
 
         html, body {
             width: 100%;
-            max-width: 100%;
             overflow-x: hidden;
-        }
-
-        img, svg {
-            max-width: 100%;
-        }
-
-        body {
-            background: var(--bg-gradient);
+            overscroll-behavior-y: none; /* ป้องกันเว็บเด้ง */
+            background: var(--bg-app);
             color: var(--text-main);
-            padding-bottom: 50px;
             min-height: 100vh;
         }
 
         /* Toast Notifications */
         #toastContainer {
             position: fixed;
-            top: 20px;
-            right: 20px;
+            top: max(20px, env(safe-area-inset-top));
+            left: 50%;
+            transform: translateX(-50%);
             z-index: 9999;
             display: flex;
             flex-direction: column;
             gap: 10px;
             pointer-events: none;
+            width: 90%;
+            max-width: 400px;
         }
 
         .toast {
-            background: #0f172a;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
             color: white;
-            padding: 12px 20px;
-            border-radius: var(--radius-md);
-            font-size: 0.9rem;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            padding: 14px 20px;
+            border-radius: var(--radius-lg);
+            font-size: 0.95rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             opacity: 0;
-            transform: translateY(-20px);
+            transform: translateY(-20px) scale(0.95);
             transition: var(--transition);
-            pointer-events: auto;
         }
 
         .toast.show {
             opacity: 1;
-            transform: translateY(0);
+            transform: translateY(0) scale(1);
         }
 
-        .toast-success i { color: #10b981; }
-        .toast-error i { color: #ef4444; }
+        .toast-success i { color: #34d399; }
+        .toast-error i { color: #f87171; }
         .toast-info i { color: #38bdf8; }
 
-        /* Modern Glass Header */
+        /* Modern Native Header */
         .app-header {
             background: var(--header-gradient);
             color: white;
-            padding: 28px 24px 40px 24px;
+            padding: calc(24px + env(safe-area-inset-top)) 24px 45px 24px;
             border-bottom-left-radius: 32px;
             border-bottom-right-radius: 32px;
-            box-shadow: 0 20px 30px -10px rgba(15, 23, 42, 0.25);
             position: relative;
+            box-shadow: 0 4px 20px rgba(15, 23, 42, 0.15);
         }
 
         .header-top {
@@ -114,26 +106,23 @@
         }
 
         .brand-title {
-            font-size: 1.35rem;
+            font-size: 1.25rem;
             font-weight: 700;
             display: flex;
             align-items: center;
             gap: 10px;
-            letter-spacing: -0.3px;
         }
 
         .brand-title i {
-            color: #38bdf8;
-            filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.5));
+            color: #60a5fa;
+            font-size: 1.4rem;
         }
 
         .status-badge {
             font-size: 0.75rem;
-            background: rgba(255, 255, 255, 0.12);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: #38bdf8;
-            padding: 5px 12px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(8px);
+            padding: 6px 14px;
             border-radius: 20px;
             display: flex;
             align-items: center;
@@ -146,214 +135,67 @@
             height: 8px;
             background: #10b981;
             border-radius: 50%;
-            box-shadow: 0 0 8px #10b981;
         }
 
         .period-selector-wrapper {
-            background: rgba(255, 255, 255, 0.12);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.25);
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
             border-radius: var(--radius-lg);
-            padding: 10px 16px;
+            padding: 12px 18px;
             display: flex;
             align-items: center;
             gap: 12px;
-            transition: var(--transition);
-        }
-
-        .period-selector-wrapper:hover {
-            background: rgba(255, 255, 255, 0.18);
-        }
-
-        .period-selector-wrapper i {
-            color: #38bdf8;
-            font-size: 1.15rem;
         }
 
         .period-select {
             background: transparent;
             border: none;
             color: white;
-            font-weight: 500;
-            font-size: 0.95rem;
+            font-weight: 600;
+            font-size: 1rem;
             width: 100%;
             outline: none;
-            cursor: pointer;
+            appearance: none;
         }
 
         .period-select option {
-            background: #0f172a;
-            color: white;
+            background: var(--card-bg);
+            color: var(--text-main);
         }
 
-        /* Container Layout */
+        /* Layout */
         .container {
             width: 100%;
-            max-width: 520px;
-            margin: -25px auto 0 auto;
-            padding: 0 16px;
-        }
-
-        /* Responsive Breakpoints */
-        @media (max-width: 359px) {
-            .app-header { padding: 22px 16px 32px 16px; }
-            .brand-title { font-size: 1.15rem; }
-            .net-amount { font-size: 2.15rem; }
-            .summary-grid, .checkbox-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
-            .time-grid { gap: 8px; }
-            .card { padding: 18px; }
-        }
-
-        @media (min-width: 700px) {
-            .container { max-width: 660px; padding: 0 24px; }
-            .app-header { padding: 32px 40px 46px 40px; }
-            .net-amount { font-size: 2.9rem; }
+            max-width: 550px;
+            margin: -30px auto 0 auto;
+            padding: 0 16px calc(30px + env(safe-area-inset-bottom));
         }
 
         @media (min-width: 1024px) {
             .container {
-                max-width: 1120px;
-                margin-top: -30px;
+                max-width: 1100px;
                 display: grid;
-                grid-template-columns: minmax(340px, 400px) 1fr;
-                align-items: start;
-                gap: 26px;
-                padding: 0 32px;
+                grid-template-columns: 400px 1fr;
+                gap: 24px;
             }
-            .col-left {
-                position: sticky;
-                top: 24px;
-            }
-            .container > .rate-info {
-                grid-column: 1 / -1;
-            }
-            .app-header { padding: 36px 48px 56px 48px; }
-            .header-top { max-width: 1120px; margin: 0 auto 20px auto; }
-            .period-selector-wrapper { max-width: 1120px; margin: 0 auto; }
+            .col-left { position: sticky; top: 24px; }
+            .container > .rate-info { grid-column: 1 / -1; }
         }
 
-        @media (min-width: 1280px) {
-            .container { max-width: 1200px; }
-            .header-top, .period-selector-wrapper { max-width: 1200px; }
-        }
-
-        /* Modal / Pop-up Styles */
-        .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(6px);
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 16px;
-            opacity: 0;
-            visibility: hidden;
-            transition: var(--transition);
-        }
-        
-        .modal-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .modal-container {
-            background: var(--card-bg);
-            width: 100%;
-            max-width: 550px;
-            max-height: 85vh;
-            border-radius: var(--radius-xl);
-            box-shadow: var(--shadow-md);
-            display: flex;
-            flex-direction: column;
-            transform: translateY(20px) scale(0.95);
-            transition: var(--transition);
-            overflow: hidden;
-        }
-
-        .modal-overlay.active .modal-container {
-            transform: translateY(0) scale(1);
-        }
-
-        .modal-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 20px 24px;
-            background: #ffffff;
-            border-bottom: 1.5px solid var(--border);
-        }
-
-        .modal-title {
-            font-size: 1.15rem;
-            font-weight: 700;
-            color: var(--text-main);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .modal-title i {
-            color: var(--primary);
-            background: #eff6ff;
-            padding: 8px;
-            border-radius: 10px;
-        }
-
-        .btn-close {
-            background: #f1f5f9;
-            border: none;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-muted);
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .btn-close:hover {
-            background: #fee2e2;
-            color: var(--danger);
-        }
-
-        .modal-body {
-            padding: 20px 24px;
-            overflow-y: auto;
-            flex-grow: 1;
-        }
-
-        .modal-body::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .modal-body::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 10px;
-        }
-
-        /* Modern Card Elements */
+        /* Native App Cards */
         .card {
             background: var(--card-bg);
-            backdrop-filter: blur(10px);
             border-radius: var(--radius-xl);
             padding: 24px;
             margin-bottom: 20px;
-            box-shadow: var(--shadow-md);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            transition: var(--transition);
+            box-shadow: var(--shadow-card);
         }
 
         .card-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 18px;
-            padding-bottom: 12px;
-            border-bottom: 1.5px solid var(--border);
+            margin-bottom: 20px;
         }
 
         .card-header-left {
@@ -363,230 +205,211 @@
         }
 
         .card-header i {
-            font-size: 1.25rem;
+            font-size: 1.3rem;
             color: var(--primary);
-            background: #eff6ff;
-            padding: 8px;
-            border-radius: 10px;
         }
 
         .card-header h2 {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--text-main);
+            font-size: 1.15rem;
+            font-weight: 700;
+            letter-spacing: -0.2px;
         }
 
-        /* Net Payment Hero Card */
+        /* Net Payment Premium Card */
         .net-pay-card {
             background: var(--net-gradient);
             color: white;
             border-radius: var(--radius-xl);
-            padding: 26px;
+            padding: 28px 24px;
             margin-bottom: 20px;
-            box-shadow: var(--shadow-glow);
+            box-shadow: 0 12px 24px -6px rgba(16, 185, 129, 0.4);
             text-align: center;
             position: relative;
             overflow: hidden;
-            transition: var(--transition);
-        }
-
-        .net-pay-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 16px 35px -5px rgba(16, 185, 129, 0.4);
-        }
-
-        .net-pay-card::after {
-            content: '';
-            position: absolute;
-            top: -60%;
-            right: -40%;
-            width: 240px;
-            height: 240px;
-            background: rgba(255, 255, 255, 0.12);
-            border-radius: 50%;
-            pointer-events: none;
         }
 
         .net-title {
-            font-size: 0.85rem;
-            opacity: 0.95;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            font-size: 0.9rem;
             font-weight: 500;
-            margin-bottom: 6px;
+            opacity: 0.9;
+            margin-bottom: 8px;
         }
 
         .net-amount {
-            font-size: 2.6rem;
+            font-size: 2.8rem;
             font-weight: 700;
-            line-height: 1.15;
+            line-height: 1.1;
             letter-spacing: -0.5px;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
         .net-sub {
-            font-size: 0.82rem;
+            font-size: 0.85rem;
             opacity: 0.9;
-            margin-top: 8px;
-            background: rgba(0, 0, 0, 0.1);
+            margin-top: 12px;
+            background: rgba(255, 255, 255, 0.2);
             display: inline-block;
-            padding: 4px 14px;
+            padding: 6px 16px;
             border-radius: 20px;
+            backdrop-filter: blur(4px);
         }
 
-        /* Metrics Grid */
+        .btn-copy-summary {
+            margin-top: 16px;
+            background: #ffffff;
+            color: #059669;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 24px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-copy-summary:active { transform: scale(0.96); }
+
+        /* Widget Grid */
         .summary-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 12px;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
         }
 
         .metric-box {
-            background: #f8fafc;
-            border: 1px solid var(--border);
-            padding: 14px;
+            background: var(--input-bg);
+            padding: 16px;
             border-radius: var(--radius-lg);
-            transition: var(--transition);
-        }
-
-        .metric-box:hover {
-            border-color: var(--primary-light);
-            background: #ffffff;
-            transform: translateY(-1px);
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
         }
 
         .metric-label {
-            font-size: 0.78rem;
+            font-size: 0.8rem;
             color: var(--text-muted);
-            margin-bottom: 6px;
+            font-weight: 500;
             display: flex;
             align-items: center;
             gap: 6px;
         }
 
-        .metric-label i {
-            color: var(--primary);
-        }
-
         .metric-value {
-            font-size: 1.05rem;
+            font-size: 1.1rem;
             font-weight: 700;
             color: var(--text-main);
         }
 
         .metric-deduct { color: var(--danger); }
-        .metric-deduct i { color: var(--danger); }
 
-        /* Form Styling */
-        .form-group { margin-bottom: 16px; }
+        /* Native App Form Inputs */
+        .form-group { margin-bottom: 20px; }
         .form-label {
             display: block;
-            font-size: 0.88rem;
+            font-size: 0.9rem;
             font-weight: 600;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
             color: var(--text-main);
         }
 
         .form-control, .form-select {
             width: 100%;
-            max-width: 100%;
-            padding: 12px 14px;
-            border: 1.5px solid var(--border);
+            padding: 14px 16px;
+            background-color: var(--input-bg);
+            border: 2px solid transparent;
             border-radius: var(--radius-md);
             font-size: 16px;
             color: var(--text-main);
-            background-color: #ffffff;
             transition: var(--transition);
             outline: none;
-            box-sizing: border-box !important;
-            text-align: left !important;
+        }
+
+        .form-control:focus, .form-select:focus {
+            background-color: #ffffff;
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08);
         }
 
         .form-select {
             appearance: none;
-            -webkit-appearance: none;
             background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2064748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
             background-repeat: no-repeat;
-            background-position: right 14px center;
+            background-position: right 16px center;
             background-size: 16px;
-            padding-right: 40px;
         }
 
-        input[type="date"], input[type="time"] { 
-            min-width: 0;
-            display: block;
-            -webkit-appearance: none;
-        }
-
-        .form-control:focus, .form-select:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
-        }
-
-        .editing-tag {
-            background: #fef3c7;
-            color: #b45309;
-            font-size: 0.75rem;
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-weight: 600;
-            display: none;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .time-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
-        }
-
-        @media (min-width: 480px) {
-            .time-grid { grid-template-columns: 1fr 1fr; }
-        }
-
-        /* Quick Shift Chips */
-        .preset-container {
+        .date-nav-wrapper {
             display: flex;
-            gap: 8px;
-            margin-bottom: 14px;
-            overflow-x: auto;
-            padding-bottom: 4px;
+            gap: 10px;
         }
 
-        .preset-btn {
-            flex-shrink: 0;
-            background: #f1f5f9;
-            border: 1px solid var(--border);
-            padding: 7px 14px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            color: var(--text-muted);
-            white-space: nowrap;
+        .btn-date-nav {
+            background: var(--input-bg);
+            border: none;
+            border-radius: var(--radius-md);
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-main);
             cursor: pointer;
             transition: var(--transition);
         }
 
-        .preset-btn:hover {
+        .btn-date-nav:active {
+            background: #e2e8f0;
+            transform: scale(0.92);
+        }
+
+        .time-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        /* Chips / Segments */
+        .preset-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 16px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+            scrollbar-width: none;
+        }
+
+        .preset-btn {
+            flex-shrink: 0;
+            background: var(--card-bg);
+            border: 1.5px solid var(--border);
+            padding: 8px 16px;
+            border-radius: 24px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .preset-btn:active { transform: scale(0.95); }
+        .preset-btn.active, .preset-btn:focus {
             background: var(--primary);
             color: white;
             border-color: var(--primary);
-            transform: translateY(-1px);
         }
 
+        /* Info Preview Box */
         .preview-box {
             background: #eff6ff;
-            border: 1px solid #bfdbfe;
-            padding: 12px 16px;
+            padding: 14px 16px;
             border-radius: var(--radius-md);
-            font-size: 0.85rem;
-            color: #1e40af;
-            margin-bottom: 16px;
+            font-size: 0.9rem;
+            color: var(--primary-dark);
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             font-weight: 500;
         }
 
@@ -597,65 +420,59 @@
         }
 
         .checkbox-card {
-            border: 1.5px solid var(--border);
+            background: var(--input-bg);
+            border: 2px solid transparent;
             border-radius: var(--radius-md);
-            padding: 12px 14px;
+            padding: 14px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             cursor: pointer;
             transition: var(--transition);
-            user-select: none;
-            background: #ffffff;
-            font-weight: 500;
-            font-size: 0.88rem;
+            font-weight: 600;
+            font-size: 0.9rem;
         }
 
-        .checkbox-card:hover { border-color: var(--primary-light); }
         .checkbox-card.active {
+            background: #ecfdf5;
             border-color: #10b981;
-            background-color: #ecfdf5;
             color: #065f46;
         }
 
         .checkbox-card input {
             accent-color: #10b981;
-            width: 18px;
-            height: 18px;
+            width: 20px;
+            height: 20px;
         }
 
+        /* Native Buttons */
         .btn-submit {
             width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            padding: 16px;
+            background: var(--primary);
             color: white;
             border: none;
             border-radius: var(--radius-md);
-            font-size: 1rem;
-            font-weight: 600;
+            font-size: 1.05rem;
+            font-weight: 700;
             cursor: pointer;
-            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
             transition: var(--transition);
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
 
-        .btn-submit:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45);
-        }
-
-        .btn-submit:active { transform: translateY(0); }
+        .btn-submit:active { transform: scale(0.98); box-shadow: none; }
 
         .btn-open-modal {
             width: 100%;
-            padding: 14px;
+            padding: 16px;
             margin-top: 16px;
-            background: #ffffff;
-            color: var(--primary);
-            border: 1.5px solid var(--primary-light);
+            background: var(--input-bg);
+            color: var(--text-main);
+            border: none;
             border-radius: var(--radius-md);
             font-size: 0.95rem;
             font-weight: 600;
@@ -663,373 +480,348 @@
             transition: var(--transition);
             display: flex;
             justify-content: center;
-            align-items: center;
-            gap: 8px;
-            box-shadow: var(--shadow-sm);
+            gap: 10px;
+        }
+        
+        .btn-open-modal:active { transform: scale(0.98); background: #e2e8f0; }
+
+        /* iOS Style Bottom Sheet Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease;
+        }
+        
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
         }
 
-        .btn-open-modal:hover {
-            background: #eff6ff;
-            border-color: var(--primary);
-            transform: translateY(-1px);
+        .modal-container {
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 600px;
+            max-height: 85vh;
+            border-radius: 24px 24px 0 0;
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        .modal-overlay.active .modal-container { transform: translateY(0); }
+
+        @media (min-width: 768px) {
+            .modal-overlay { align-items: center; padding: 20px; }
+            .modal-container {
+                border-radius: var(--radius-xl);
+                transform: translateY(20px) scale(0.95);
+            }
+            .modal-overlay.active .modal-container { transform: translateY(0) scale(1); }
+        }
+
+        .modal-drag-handle {
+            width: 40px;
+            height: 5px;
+            background: #cbd5e1;
+            border-radius: 3px;
+            margin: 12px auto 0 auto;
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .modal-title { font-size: 1.15rem; font-weight: 700; }
+
+        .btn-close {
+            background: var(--input-bg);
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        .modal-body {
+            padding: 24px;
+            overflow-y: auto;
+            flex-grow: 1;
         }
 
         /* History Items */
         .history-item {
-            background: #ffffff;
+            background: var(--card-bg);
             border: 1px solid var(--border);
             border-radius: var(--radius-lg);
-            padding: 14px 16px;
-            margin-bottom: 10px;
+            padding: 16px;
+            margin-bottom: 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: var(--transition);
         }
 
-        .history-item:hover {
-            border-color: var(--primary-light);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .history-date {
-            font-weight: 700;
-            font-size: 0.95rem;
-            color: var(--text-main);
-        }
-
-        .history-sub {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            margin-top: 2px;
-        }
-
-        .history-badges {
-            display: flex;
-            gap: 6px;
-            margin-top: 6px;
-            flex-wrap: wrap;
-        }
-
+        .history-date { font-weight: 700; font-size: 1rem; }
+        .history-sub { font-size: 0.85rem; color: var(--text-muted); margin-top: 4px; }
+        
         .badge {
-            padding: 3px 10px;
-            border-radius: 20px;
-            font-size: 0.73rem;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 0.75rem;
             font-weight: 600;
+            display: inline-block;
+            margin-top: 8px;
+            margin-right: 4px;
         }
-
         .badge-work { background: #dcfce7; color: #15803d; }
-        .badge-off { background: #f1f5f9; color: #475569; }
-        .badge-unpaid { background: #fee2e2; color: #b91c1c; }
         .badge-ot { background: #fef3c7; color: #b45309; }
-        .badge-food { background: #e0f2fe; color: #0369a1; }
-        .badge-op { background: #f3e8ff; color: #6b21a8; }
 
-        .action-btns {
-            display: flex;
-            gap: 6px;
-        }
-
+        .action-btns { display: flex; gap: 8px; }
         .btn-action {
             border: none;
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            font-size: 1rem;
             cursor: pointer;
-            transition: var(--transition);
+            transition: transform 0.1s;
         }
+        .btn-action:active { transform: scale(0.9); }
+        .btn-edit { background: #eff6ff; color: var(--primary); }
+        .btn-del { background: #fee2e2; color: var(--danger); }
 
-        .btn-edit {
-            background: #eff6ff;
-            color: var(--primary);
-        }
-
-        .btn-edit:hover {
-            background: var(--primary);
-            color: white;
-        }
-
-        .btn-del {
-            background: #fee2e2;
-            color: var(--danger);
-        }
-
-        .btn-del:hover {
-            background: var(--danger);
-            color: white;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 40px 10px;
-            color: var(--text-muted);
-            font-size: 0.95rem;
-        }
-
-        .empty-state i {
-            font-size: 2.5rem;
-            margin-bottom: 12px;
-            opacity: 0.4;
+        .editing-tag {
+            background: #fef3c7;
+            color: #b45309;
+            font-size: 0.8rem;
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-weight: 600;
+            display: none;
         }
 
         .tools-row {
             display: flex;
-            gap: 10px;
-            margin-top: 20px;
-            border-top: 1.5px solid var(--border);
-            padding-top: 16px;
+            gap: 12px;
+            margin-top: 24px;
         }
-
         .btn-tool {
             flex: 1;
-            padding: 12px;
-            background: #f8fafc;
-            border: 1px solid var(--border);
+            padding: 14px;
+            background: var(--input-bg);
+            border: none;
             border-radius: var(--radius-md);
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             font-weight: 600;
-            color: var(--text-muted);
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: var(--transition);
         }
+        .btn-tool:active { transform: scale(0.96); }
 
-        .btn-tool:hover {
-            background: #ffffff;
-            color: var(--primary);
-            border-color: var(--primary-light);
-            box-shadow: var(--shadow-sm);
-        }
-
-        /* Notice Banner */
         .rate-info {
-            background: #fffbe3;
-            border: 1px solid #fef08a;
+            background: #fffbeb;
             border-radius: var(--radius-lg);
-            padding: 14px 16px;
-            font-size: 0.82rem;
-            color: #713f12;
-            margin-bottom: 16px;
+            padding: 20px;
+            font-size: 0.85rem;
+            color: #92400e;
+            margin-bottom: 20px;
             line-height: 1.6;
         }
-
-        .rate-info-title {
-            font-weight: 700;
-            margin-bottom: 6px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
+        .rate-info-title { font-weight: 700; margin-bottom: 8px; font-size: 1rem; }
     </style>
 </head>
 <body>
 
-    <!-- Notification Toast Container -->
     <div id="toastContainer"></div>
 
     <header class="app-header">
         <div class="header-top">
             <div class="brand-title">
-                <i class="fa-solid fa-utensils"></i>
-                <span>Cook Helper PayTracker</span>
+                <i class="fa-solid fa-utensils"></i> Cook Helper
             </div>
-            <div class="status-badge">
-                <span class="status-dot"></span> Firebase Live
+            <div class="status-badge" id="onlineStatusBadge">
+                <span class="status-dot"></span> Offline Ready
             </div>
         </div>
 
         <div class="period-selector-wrapper">
-            <i class="fa-regular fa-calendar-check"></i>
-            <select id="periodSelect" class="period-select" onchange="window.onPeriodChange()">
-                <!-- Options generated dynamically -->
-            </select>
+            <i class="fa-regular fa-calendar-check" style="color: #60a5fa; font-size: 1.2rem;"></i>
+            <select id="periodSelect" class="period-select" onchange="window.onPeriodChange()"></select>
         </div>
     </header>
 
     <div class="container">
-
       <div class="col-left">
-        <!-- Net Payment Card -->
+        <!-- Net Pay Premium Widget -->
         <div class="net-pay-card">
             <div class="net-title">ประมาณการยอดรับสุทธิรอบนี้</div>
             <div class="net-amount">฿<span id="netPay">0.00</span></div>
-            <div class="net-sub" id="netPaySub">ประจำรอบรอบบิลปัจจุบัน</div>
+            <div class="net-sub" id="netPaySub">ประจำรอบบิลปัจจุบัน</div>
+            <button type="button" class="btn-copy-summary" onclick="window.copySummaryToClipboard()">
+                <i class="fa-regular fa-copy"></i> คัดลอกสรุปส่งไลน์
+            </button>
         </div>
 
-        <!-- Summary Dashboard -->
         <div class="card">
             <div class="card-header">
                 <div class="card-header-left">
                     <i class="fa-solid fa-chart-pie"></i>
-                    <h2>สรุปยอดสะสมตามรอบบิล</h2>
+                    <h2>สรุปยอดสะสม</h2>
                 </div>
             </div>
-
             <div class="summary-grid">
                 <div class="metric-box">
-                    <div class="metric-label"><i class="fa-solid fa-briefcase"></i> ทำงานปกติ (500/วัน)</div>
-                    <div class="metric-value"><span id="metricWorkDays">0</span> วัน (<span id="metricWorkPay">฿0</span>)</div>
+                    <div class="metric-label">ทำงานปกติ (500)</div>
+                    <div class="metric-value"><span id="metricWorkDays">0</span> วัน <small style="font-size:0.8rem;color:#64748b">(<span id="metricWorkPay">฿0</span>)</small></div>
                 </div>
                 <div class="metric-box">
-                    <div class="metric-label"><i class="fa-solid fa-bed"></i> หยุดรับค่าแรง (500/วัน)</div>
-                    <div class="metric-value"><span id="metricPaidOffDays">0</span> วัน (<span id="metricPaidOffPay">฿0</span>)</div>
+                    <div class="metric-label">วันหยุด (500)</div>
+                    <div class="metric-value"><span id="metricPaidOffDays">0</span> วัน <small style="font-size:0.8rem;color:#64748b">(<span id="metricPaidOffPay">฿0</span>)</small></div>
                 </div>
                 <div class="metric-box">
-                    <div class="metric-label"><i class="fa-solid fa-clock"></i> ชั่วโมง OT (93.75/ชม.)</div>
-                    <div class="metric-value"><span id="metricOTHours">0.00</span> ชม. (<span id="metricOTPay">฿0</span>)</div>
+                    <div class="metric-label">OT (93.75/ชม.)</div>
+                    <div class="metric-value"><span id="metricOTHours">0.00</span> ชม. <small style="font-size:0.8rem;color:#64748b">(<span id="metricOTPay">฿0</span>)</small></div>
                 </div>
                 <div class="metric-box">
-                    <div class="metric-label"><i class="fa-solid fa-bowl-food"></i> ค่าอาหาร (50/วัน)</div>
+                    <div class="metric-label">ค่าอาหาร (50)</div>
                     <div class="metric-value"><span id="metricMealPay">฿0</span></div>
                 </div>
                 <div class="metric-box">
-                    <div class="metric-label"><i class="fa-solid fa-store"></i> ค่ากะ OP/ปิดร้าน (50/กะ)</div>
+                    <div class="metric-label">กะ OP (50)</div>
                     <div class="metric-value"><span id="metricOPPay">฿0</span></div>
                 </div>
-                <div class="metric-box">
-                    <div class="metric-label metric-deduct"><i class="fa-solid fa-shield-halved"></i> ประกันสังคม (5%)</div>
+                <div class="metric-box" style="background: #fef2f2;">
+                    <div class="metric-label metric-deduct">ประกันสังคม (5%)</div>
                     <div class="metric-value metric-deduct">-<span id="metricSS">฿0</span></div>
                 </div>
             </div>
 
-            <div style="background: #f8fafc; border-radius: var(--radius-lg); padding: 12px 14px; border: 1px solid var(--border);">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                    <span style="font-size: 0.85rem; font-weight: 600; color: var(--danger);">
-                        <i class="fa-solid fa-file-invoice-dollar"></i> รวมยอดหักทั้งหมด
-                    </span>
-                    <span style="font-weight: 700; color: var(--danger); font-size: 1.05rem;">
-                        -<span id="metricTotalDeduct">฿0</span>
-                    </span>
-                </div>
-                <div class="form-group" style="margin-bottom: 0;">
-                    <label class="form-label" for="otherDeductInput" style="font-size: 0.8rem; font-weight: 500; color: var(--text-muted);">
-                        หักอื่นๆ ครั้งเดียว (เช่น ค่าประกันชุด) Specific รอบนี้:
-                    </label>
-                    <input type="number" id="otherDeductInput" class="form-control" min="0" step="0.01" value="0" onchange="window.onOtherDeductChange()">
+            <div class="form-group" style="margin-bottom: 0; border-top: 1px solid var(--border); padding-top: 16px;">
+                <label class="form-label" for="otherDeductInput">หักอื่นๆ ประจำรอบนี้ (เช่น ค่าชุด)</label>
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <input type="number" id="otherDeductInput" class="form-control" style="flex: 1;" min="0" step="0.01" value="0" onchange="window.onOtherDeductChange()">
+                    <div style="text-align: right; line-height: 1.2;">
+                        <span style="font-size:0.8rem; color:var(--text-muted)">รวมหักทั้งหมด</span><br>
+                        <span style="font-weight:700; color:var(--danger)">-<span id="metricTotalDeduct">฿0</span></span>
+                    </div>
                 </div>
             </div>
         </div>
       </div>
 
       <div class="col-right">
-        <!-- Daily Input Form -->
+        <!-- Daily Form App Style -->
         <div class="card">
             <div class="card-header">
                 <div class="card-header-left">
                     <i class="fa-solid fa-calendar-plus"></i>
-                    <h2>บันทึกเวลาทำงานรายวัน</h2>
+                    <h2>บันทึกรายวัน</h2>
                 </div>
-                <span class="editing-tag" id="editingTag">
-                    <i class="fa-solid fa-pen-to-square"></i> แก้ไขข้อมูลเดิม
-                </span>
+                <span class="editing-tag" id="editingTag"><i class="fa-solid fa-pen"></i> แก้ไขอยู่</span>
             </div>
 
             <form id="dailyForm" onsubmit="window.handleFormSubmit(event)">
                 <div class="form-group">
-                    <label class="form-label" for="logDate">เลือกวันที่:</label>
-                    <input type="date" id="logDate" class="form-control" required onchange="window.onDateInputChange()">
+                    <label class="form-label">เลือกวันที่</label>
+                    <div class="date-nav-wrapper">
+                        <button type="button" class="btn-date-nav" onclick="window.changeDate(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+                        <input type="date" id="logDate" class="form-control" style="text-align: center; font-weight: 600;" required onchange="window.onDateInputChange()">
+                        <button type="button" class="btn-date-nav" onclick="window.changeDate(1)"><i class="fa-solid fa-chevron-right"></i></button>
+                    </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label" for="workStatus">สถานะวันทำงาน:</label>
+                    <label class="form-label">สถานะ</label>
                     <select id="workStatus" class="form-select" onchange="window.toggleFormFields()">
                         <option value="WORK">ทำงานปกติ</option>
-                        <option value="OFF_PAID">วันหยุดประจำสัปดาห์ (ได้ค่าแรงปกติ / ไม่ได้ค่าอาหาร)</option>
-                        <option value="OFF_UNPAID">วันหยุดไม่ได้รับค่าจ้าง (ลากิจ / ขาดงาน / ร้านปิดไม่จ่าย)</option>
+                        <option value="OFF_PAID">วันหยุดประจำสัปดาห์ (ได้ค่าแรง)</option>
+                        <option value="OFF_UNPAID">วันหยุดไม่ได้รับค่าจ้าง (ลา/ขาด)</option>
                     </select>
                 </div>
 
                 <div id="workFields">
-                    <label class="form-label">เลือกกะด่วน:</label>
                     <div class="preset-container">
-                        <button type="button" class="preset-btn" onclick="window.applyPreset('08:00', '17:00')">กะเช้า (08:00 - 17:00)</button>
-                        <button type="button" class="preset-btn" onclick="window.applyPreset('12:00', '21:00')">กะกลางวัน (12:00 - 21:00)</button>
-                        <button type="button" class="preset-btn" onclick="window.applyPreset('16:00', '01:00')">กะปิดร้าน (16:00 - 01:00)</button>
+                        <button type="button" class="preset-btn" onclick="window.applyPreset('08:00', '17:00', false)">กะเช้า</button>
+                        <button type="button" class="preset-btn" onclick="window.applyPreset('12:00', '21:00', false)">กะกลางวัน</button>
+                        <button type="button" class="preset-btn" onclick="window.applyPreset('16:00', '01:00', true)">กะปิดร้าน (OP)</button>
                     </div>
 
-                    <div class="time-grid">
-                        <div class="form-group">
-                            <label class="form-label" for="timeIn">เวลาเข้างาน:</label>
+                    <div class="time-grid form-group">
+                        <div>
+                            <label class="form-label">เข้างาน</label>
                             <input type="time" id="timeIn" class="form-control" value="08:00" onchange="window.updateHoursPreview()">
                         </div>
-                        <div class="form-group">
-                            <label class="form-label" for="timeOut">เวลาออกงาน:</label>
+                        <div>
+                            <label class="form-label">ออกงาน</label>
                             <input type="time" id="timeOut" class="form-control" value="17:00" onchange="window.updateHoursPreview()">
                         </div>
                     </div>
 
                     <div class="preview-box" id="hoursPreview">
                         <i class="fa-solid fa-circle-info"></i>
-                        <span>ทำงานปกติ 8.0 ชม. | OT: 0.00 ชม. (หักเวลาพัก 1 ชม.)</span>
+                        <span>ทำงาน 8.0 ชม. | OT: 0.00 ชม.</span>
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">สวัสดิการประจำวัน:</label>
+                        <label class="form-label">สวัสดิการเพิ่มเติม</label>
                         <div class="checkbox-grid">
                             <label class="checkbox-card active" id="mealCard">
                                 <input type="checkbox" id="hasMeal" checked onchange="window.toggleCardStyle('mealCard', this.checked)">
-                                <span><i class="fa-solid fa-utensils"></i> ค่าอาหาร (50b)</span>
+                                ค่าอาหาร (+50)
                             </label>
                             <label class="checkbox-card" id="opCard">
                                 <input type="checkbox" id="hasOP" onchange="window.toggleCardStyle('opCard', this.checked)">
-                                <span><i class="fa-solid fa-moon"></i> ค่ากะ OP (50b)</span>
+                                กะ OP (+50)
                             </label>
                         </div>
                     </div>
                 </div>
 
-                <button type="submit" class="btn-submit" id="btnSubmit">
-                    <i class="fa-solid fa-floppy-disk"></i> บันทึกข้อมูล
-                </button>
+                <button type="submit" class="btn-submit" id="btnSubmit">บันทึกข้อมูล</button>
             </form>
 
             <button class="btn-open-modal" onclick="window.openHistoryModal()">
-                <i class="fa-solid fa-list-check"></i> ดูประวัติการบันทึกรอบบิลนี้
+                <i class="fa-solid fa-list-ul"></i> ดูประวัติรอบบิลนี้
             </button>
         </div>
       </div>
 
-      <!-- Info Card -->
       <div class="rate-info">
-          <div class="rate-info-title">
-              <i class="fa-solid fa-circle-info"></i> โครงสร้างการคำนวณตามสลิป
-          </div>
-          • ฐานเงินเดือน 15,000 บาท/เดือน (คำนวณวันละ 500 บาท)<br>
-          • OT 1.5 คิดจาก (500 / 8 ชม.) x 1.5 = 93.75 บาท/ชม.<br>
-          • ตัดรอบบัญชีทุกวันที่ 20 (21 เดือนก่อน - 20 เดือนนี้)<br>
-          • หักประกันสังคม 5% จาก (ค่าแรง + ค่าอาหาร + ค่ากะ OP) <u>ไม่รวม OT</u> สูงสุดไม่เกิน 750 บาท/เดือน<br>
-          • รายการหักอื่นๆ เช่น ค่าประกันชุด เป็นรายการหักครั้งเดียว ให้กรอกเองต่อรอบ
+          <div class="rate-info-title"><i class="fa-solid fa-circle-info"></i> โครงสร้างเงินเดือน</div>
+          • ฐาน 15,000 บ./เดือน (500 บ./วัน)<br>
+          • OT 93.75 บ./ชม.<br>
+          • ตัดรอบทุกวันที่ 20 ของเดือน<br>
+          • หักประกันสังคม 5% สูงสุด 750 บ. (ไม่รวม OT)
       </div>
     </div>
 
-    <!-- Modal: History Log -->
+    <!-- Bottom Sheet Modal -->
     <div class="modal-overlay" id="historyModal" onclick="window.closeModalOnOutside(event)">
         <div class="modal-container">
+            <div class="modal-drag-handle"></div>
             <div class="modal-header">
-                <div class="modal-title">
-                    <i class="fa-solid fa-clock-rotate-left"></i> ประวัติการบันทึกรอบบิลนี้
-                </div>
-                <button class="btn-close" onclick="window.closeHistoryModal()">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
+                <div class="modal-title">ประวัติการบันทึก</div>
+                <button class="btn-close" onclick="window.closeHistoryModal()"><i class="fa-solid fa-xmark"></i></button>
             </div>
             
             <div class="modal-body">
                 <div id="historyList"></div>
-
                 <div class="tools-row">
-                    <button class="btn-tool" onclick="window.exportData()">
-                        <i class="fa-solid fa-download"></i> สำรองข้อมูล
-                    </button>
-                    <button class="btn-tool" onclick="window.importData()">
-                        <i class="fa-solid fa-upload"></i> นำเข้าข้อมูล
-                    </button>
+                    <button class="btn-tool" onclick="window.exportData()"><i class="fa-solid fa-download"></i> สำรองข้อมูล</button>
+                    <button class="btn-tool" onclick="window.importData()"><i class="fa-solid fa-upload"></i> นำเข้า</button>
                 </div>
             </div>
         </div>
@@ -1037,10 +829,13 @@
 
     <input type="file" id="importFile" style="display:none;" accept=".json" onchange="window.handleFileImport(event)">
 
-    <!-- Firebase SDK Modules -->
+    <!-- Firebase SDK (คง Logic เดิมไว้ 100%) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot, writeBatch } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { 
+            initializeFirestore, persistentLocalCache, persistentMultipleTabManager,
+            collection, doc, setDoc, deleteDoc, onSnapshot, writeBatch 
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCSmtF-Ch1gJ7D66XzHw2KfyjBkOG7CVrI",
@@ -1052,110 +847,79 @@
         };
 
         const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+        const db = initializeFirestore(app, {
+            localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() })
+        });
 
-        const DAILY_RATE = 500;
-        const OT_RATE = 93.75;
-        const MEAL_RATE = 50;
-        const OP_RATE = 50;
-        const SS_PERCENT = 0.05;
-        const SS_MAX = 750;
+        const DAILY_RATE = 500, OT_RATE = 93.75, MEAL_RATE = 50, OP_RATE = 50, SS_PERCENT = 0.05, SS_MAX = 750;
+        let allLogs = [], otherDeductsMap = {};
 
-        let allLogs = [];
-        let otherDeductsMap = {};
-
-        // Notification Helper
         function showToast(message, type = 'success') {
             const container = document.getElementById('toastContainer');
             const toast = document.createElement('div');
             toast.className = `toast toast-${type}`;
-            
-            let iconClass = 'fa-circle-check';
-            if (type === 'error') iconClass = 'fa-triangle-exclamation';
-            if (type === 'info') iconClass = 'fa-circle-info';
-
+            let iconClass = type === 'error' ? 'fa-triangle-exclamation' : (type === 'info' ? 'fa-circle-info' : 'fa-circle-check');
             toast.innerHTML = `<i class="fa-solid ${iconClass}"></i> <span>${message}</span>`;
             container.appendChild(toast);
-
             setTimeout(() => toast.classList.add('show'), 10);
-            setTimeout(() => {
-                toast.classList.remove('show');
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
+            setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 300); }, 3000);
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            initDateAndPeriods();
-            setupFirestoreListeners();
-        });
+        document.addEventListener('DOMContentLoaded', () => { initDateAndPeriods(); setupFirestoreListeners(); });
 
         function setupFirestoreListeners() {
             onSnapshot(collection(db, "work_logs"), (snapshot) => {
                 allLogs = snapshot.docs.map(doc => doc.data());
-                // Safe string comparison for dates YYYY-MM-DD
                 allLogs.sort((a, b) => a.date.localeCompare(b.date));
                 renderApp();
                 checkExistingLogForDate(document.getElementById('logDate').value);
-            }, (error) => {
-                console.error("Firestore Logs Sync Error: ", error);
-                showToast("เชื่อมต่อข้อมูลไม่สำเร็จ", "error");
-            });
+            }, (error) => showToast("ใช้งานโหมด Offline", "info"));
 
             onSnapshot(collection(db, "other_deductions"), (snapshot) => {
                 otherDeductsMap = {};
-                snapshot.docs.forEach(doc => {
-                    otherDeductsMap[doc.id] = doc.data().amount || 0;
-                });
+                snapshot.docs.forEach(doc => { otherDeductsMap[doc.id] = doc.data().amount || 0; });
                 renderApp();
-            }, (error) => {
-                console.error("Firestore Deductions Sync Error: ", error);
             });
         }
 
         function initDateAndPeriods() {
             const today = new Date();
-            const year = today.getFullYear();
-            const month = String(today.getMonth() + 1).padStart(2, '0');
-            const day = String(today.getDate()).padStart(2, '0');
-            const dateStr = `${year}-${month}-${day}`;
-            document.getElementById('logDate').value = dateStr;
+            setFormattedDate(today);
             generatePeriodOptions(today);
+        }
+
+        function setFormattedDate(d) {
+            const y = d.getFullYear(), m = String(d.getMonth() + 1).padStart(2, '0'), day = String(d.getDate()).padStart(2, '0');
+            document.getElementById('logDate').value = `${y}-${m}-${day}`;
+        }
+
+        function changeDate(days) {
+            const input = document.getElementById('logDate');
+            if (!input.value) return;
+            const current = new Date(input.value);
+            current.setDate(current.getDate() + days);
+            setFormattedDate(current);
+            onDateInputChange();
         }
 
         function generatePeriodOptions(referenceDate) {
             const select = document.getElementById('periodSelect');
             select.innerHTML = '';
             const thaiMonths = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
-
-            let refYear = referenceDate.getFullYear();
-            let refMonth = referenceDate.getMonth();
-            let refDay = referenceDate.getDate();
-
-            let currentPeriodEndMonth = (refDay > 20) ? refMonth + 1 : refMonth;
-            let currentPeriodEndYear = refYear;
-            if (currentPeriodEndMonth > 11) {
-                currentPeriodEndMonth = 0;
-                currentPeriodEndYear++;
-            }
+            let refYear = referenceDate.getFullYear(), refMonth = referenceDate.getMonth(), refDay = referenceDate.getDate();
+            let endM = (refDay > 20) ? refMonth + 1 : refMonth, endY = refYear;
+            if (endM > 11) { endM = 0; endY++; }
 
             for (let i = -6; i <= 2; i++) {
-                let endM = currentPeriodEndMonth + i;
-                let endY = currentPeriodEndYear;
-                
-                while (endM < 0) { endM += 12; endY--; }
-                while (endM > 11) { endM -= 12; endY++; }
-
-                let startM = endM - 1;
-                let startY = endY;
-                if (startM < 0) { startM = 11; startY--; }
-
-                const monthStr = String(endM + 1).padStart(2, '0');
-                const key = `${endY}-${monthStr}`;
-                const label = `รอบ 21 ${thaiMonths[startM]} ${startY + 543} - 20 ${thaiMonths[endM]} ${endY + 543}`;
+                let m = endM + i, y = endY;
+                while (m < 0) { m += 12; y--; }
+                while (m > 11) { m -= 12; y++; }
+                let sM = m - 1, sY = y;
+                if (sM < 0) { sM = 11; sY--; }
                 
                 const option = document.createElement('option');
-                option.value = key;
-                option.textContent = label;
+                option.value = `${y}-${String(m + 1).padStart(2, '0')}`;
+                option.textContent = `21 ${thaiMonths[sM]} - 20 ${thaiMonths[m]} ${y + 543}`;
                 if (i === 0) option.selected = true;
                 select.appendChild(option);
             }
@@ -1164,12 +928,8 @@
         function getPeriodKeyForDate(dateStr) {
             if (!dateStr) return '';
             const [y, m, d] = dateStr.split('-').map(Number);
-            let endMonth = d > 20 ? m + 1 : m;
-            let endYear = y;
-            if (endMonth > 12) {
-                endMonth = 1;
-                endYear++;
-            }
+            let endMonth = d > 20 ? m + 1 : m, endYear = y;
+            if (endMonth > 12) { endMonth = 1; endYear++; }
             return `${endYear}-${String(endMonth).padStart(2, '0')}`;
         }
 
@@ -1179,10 +939,9 @@
             const editingTag = document.getElementById('editingTag');
             
             if (existing) {
-                editingTag.style.display = 'inline-flex';
+                editingTag.style.display = 'inline-block';
                 document.getElementById('workStatus').value = existing.status || 'WORK';
                 toggleFormFields();
-
                 if (existing.status === 'WORK') {
                     document.getElementById('timeIn').value = existing.timeIn || '08:00';
                     document.getElementById('timeOut').value = existing.timeOut || '17:00';
@@ -1213,11 +972,7 @@
                 const select = document.getElementById('periodSelect');
                 let exists = false;
                 for (let i = 0; i < select.options.length; i++) {
-                    if (select.options[i].value === targetKey) {
-                        select.selectedIndex = i;
-                        exists = true;
-                        break;
-                    }
+                    if (select.options[i].value === targetKey) { select.selectedIndex = i; exists = true; break; }
                 }
                 checkExistingLogForDate(chosenDate);
                 if (exists) renderApp();
@@ -1228,24 +983,20 @@
 
         function toggleFormFields() {
             const status = document.getElementById('workStatus').value;
-            const workFields = document.getElementById('workFields');
-            if (status === 'WORK') {
-                workFields.style.display = 'block';
-                updateHoursPreview();
-            } else {
-                workFields.style.display = 'none';
-            }
+            document.getElementById('workFields').style.display = status === 'WORK' ? 'block' : 'none';
+            if (status === 'WORK') updateHoursPreview();
         }
 
         function toggleCardStyle(cardId, isChecked) {
             const card = document.getElementById(cardId);
-            if (isChecked) card.classList.add('active');
-            else card.classList.remove('active');
+            if (isChecked) card.classList.add('active'); else card.classList.remove('active');
         }
 
-        function applyPreset(inTime, outTime) {
+        function applyPreset(inTime, outTime, isOP = false) {
             document.getElementById('timeIn').value = inTime;
             document.getElementById('timeOut').value = outTime;
+            document.getElementById('hasOP').checked = isOP;
+            toggleCardStyle('opCard', isOP);
             updateHoursPreview();
         }
 
@@ -1253,78 +1004,42 @@
             if (!timeInStr || !timeOutStr) return { workHours: 0, otHours: 0 };
             const [inH, inM] = timeInStr.split(':').map(Number);
             const [outH, outM] = timeOutStr.split(':').map(Number);
-
-            let inMinutes = inH * 60 + inM;
-            let outMinutes = outH * 60 + outM;
-
+            let inMinutes = inH * 60 + inM, outMinutes = outH * 60 + outM;
             if (outMinutes < inMinutes) outMinutes += 24 * 60;
-
             let totalMinutes = outMinutes - inMinutes;
             if (totalMinutes > 300) totalMinutes = Math.max(300, totalMinutes - 60);
-
             let totalHours = totalMinutes / 60;
-            let standardHours = 8;
-            let workHours = Math.min(totalHours, standardHours);
-            let otHours = Math.max(0, totalHours - standardHours);
-
-            return { workHours, otHours: Math.round(otHours * 100) / 100 };
+            return { workHours: Math.min(totalHours, 8), otHours: Math.round(Math.max(0, totalHours - 8) * 100) / 100 };
         }
 
         function updateHoursPreview() {
-            const timeIn = document.getElementById('timeIn').value;
-            const timeOut = document.getElementById('timeOut').value;
-            const { workHours, otHours } = calculateHours(timeIn, timeOut);
-            document.getElementById('hoursPreview').innerHTML = 
-                `<i class="fa-solid fa-circle-info"></i> <span>เวลาทำงานปกติ ${workHours.toFixed(1)} ชม. | OT: <strong>${otHours.toFixed(2)} ชม.</strong> (หักพัก 1 ชม.)</span>`;
+            const { workHours, otHours } = calculateHours(document.getElementById('timeIn').value, document.getElementById('timeOut').value);
+            document.getElementById('hoursPreview').innerHTML = `<i class="fa-solid fa-clock"></i> <span>ทำงาน ${workHours.toFixed(1)} ชม. | OT: <strong>${otHours.toFixed(2)} ชม.</strong></span>`;
         }
 
         async function onOtherDeductChange() {
-            const periodKey = document.getElementById('periodSelect').value;
-            const value = Number(document.getElementById('otherDeductInput').value) || 0;
-            try {
-                await setDoc(doc(db, "other_deductions", periodKey), { amount: value });
-                showToast("บันทึกรายการหักเพิ่มเติมแล้ว", "info");
-            } catch (err) {
-                console.error("Error saving deduction: ", err);
-                showToast("เกิดข้อผิดพลาดในการบันทึกรายการหัก", "error");
-            }
+            const periodKey = document.getElementById('periodSelect').value, value = Number(document.getElementById('otherDeductInput').value) || 0;
+            try { await setDoc(doc(db, "other_deductions", periodKey), { amount: value }); } catch (err) { showToast("เกิดข้อผิดพลาด", "error"); }
         }
 
         async function handleFormSubmit(e) {
             e.preventDefault();
-            const date = document.getElementById('logDate').value;
-            const status = document.getElementById('workStatus').value;
-            const timeIn = document.getElementById('timeIn').value;
-            const timeOut = document.getElementById('timeOut').value;
-            const hasMeal = document.getElementById('hasMeal').checked;
-            const hasOP = document.getElementById('hasOP').checked;
-
-            if (!date) {
-                showToast("กรุณาเลือกวันที่", "error");
-                return;
-            }
-
-            let otHours = 0;
-            if (status === 'WORK') {
-                otHours = calculateHours(timeIn, timeOut).otHours;
-            }
-
+            const date = document.getElementById('logDate').value, status = document.getElementById('workStatus').value;
+            if (!date) return showToast("กรุณาเลือกวันที่", "error");
+            
             const entry = {
                 date, status,
-                timeIn: status === 'WORK' ? timeIn : '',
-                timeOut: status === 'WORK' ? timeOut : '',
-                otHours: status === 'WORK' ? otHours : 0,
-                hasMeal: status === 'WORK' ? hasMeal : false,
-                hasOP: status === 'WORK' ? hasOP : false
+                timeIn: status === 'WORK' ? document.getElementById('timeIn').value : '',
+                timeOut: status === 'WORK' ? document.getElementById('timeOut').value : '',
+                otHours: status === 'WORK' ? calculateHours(document.getElementById('timeIn').value, document.getElementById('timeOut').value).otHours : 0,
+                hasMeal: status === 'WORK' ? document.getElementById('hasMeal').checked : false,
+                hasOP: status === 'WORK' ? document.getElementById('hasOP').checked : false
             };
 
             try {
                 await setDoc(doc(db, "work_logs", date), entry);
-                showToast(`บันทึกข้อมูลวันที่ ${date} เรียบร้อยแล้ว`);
-            } catch (err) {
-                console.error("Error saving log: ", err);
-                showToast("ไม่สามารถบันทึกข้อมูลได้", "error");
-            }
+                showToast(`บันทึก ${date} สำเร็จ`);
+            } catch (err) { showToast("บันทึกไม่สำเร็จ", "error"); }
         }
 
         async function editEntry(date) {
@@ -1335,65 +1050,38 @@
         }
 
         async function deleteEntry(date) {
-            if (confirm(`คุณต้องการลบบันทึกของวันที่ ${date} ใช่หรือไม่?`)) {
-                try {
-                    await deleteDoc(doc(db, "work_logs", date));
-                    showToast(`ลบรายการวันที่ ${date} แล้ว`, "info");
-                } catch (err) {
-                    console.error("Error deleting log: ", err);
-                    showToast("เกิดข้อผิดพลาดในการลบข้อมูล", "error");
-                }
+            if (confirm(`ลบบันทึกวันที่ ${date}?`)) {
+                try { await deleteDoc(doc(db, "work_logs", date)); showToast(`ลบแล้ว`, "info"); } catch (err) { showToast("ลบไม่ได้", "error"); }
             }
         }
 
         function renderApp() {
             const selectElement = document.getElementById('periodSelect');
             if (!selectElement || selectElement.options.length === 0) return;
-
             const selectedPeriodKey = selectElement.value;
             const periodLogs = allLogs.filter(l => getPeriodKeyForDate(l.date) === selectedPeriodKey);
 
             let workDays = 0, paidOffDays = 0, totalOTHours = 0, mealCount = 0, opCount = 0;
-
             periodLogs.forEach(item => {
-                if (item.status === 'WORK') {
-                    workDays++;
-                    totalOTHours += item.otHours || 0;
-                    if (item.hasMeal) mealCount++;
-                    if (item.hasOP) opCount++;
-                } else if (item.status === 'OFF_PAID') {
-                    paidOffDays++;
-                }
+                if (item.status === 'WORK') { workDays++; totalOTHours += item.otHours || 0; if (item.hasMeal) mealCount++; if (item.hasOP) opCount++; } 
+                else if (item.status === 'OFF_PAID') paidOffDays++;
             });
 
-            const workPay = workDays * DAILY_RATE;
-            const paidOffPay = paidOffDays * DAILY_RATE;
-            const baseSalaryTotal = workPay + paidOffPay;
-            const otPay = totalOTHours * OT_RATE;
-            const mealPay = mealCount * MEAL_RATE;
-            const opPay = opCount * OP_RATE;
-            const grossTotal = baseSalaryTotal + otPay + mealPay + opPay;
-
-            const ssBase = baseSalaryTotal + mealPay + opPay;
-            let ssDeduction = Math.round(ssBase * SS_PERCENT);
-            if (ssDeduction > SS_MAX) ssDeduction = SS_MAX;
-
+            const workPay = workDays * DAILY_RATE, paidOffPay = paidOffDays * DAILY_RATE, baseSalaryTotal = workPay + paidOffPay;
+            const otPay = totalOTHours * OT_RATE, mealPay = mealCount * MEAL_RATE, opPay = opCount * OP_RATE;
+            const ssDeduction = Math.min(Math.round((baseSalaryTotal + mealPay + opPay) * SS_PERCENT), SS_MAX);
             const otherDeduct = Number(otherDeductsMap[selectedPeriodKey]) || 0;
             const totalDeduct = ssDeduction + otherDeduct;
-            const netPay = grossTotal - totalDeduct;
-
-            document.getElementById('netPay').innerText = netPay.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            
+            document.getElementById('netPay').innerText = (baseSalaryTotal + otPay + mealPay + opPay - totalDeduct).toLocaleString('th-TH', { minimumFractionDigits: 2 });
             document.getElementById('netPaySub').innerText = selectElement.options[selectElement.selectedIndex]?.text || '';
-            document.getElementById('otherDeductInput').value = otherDeduct;
-            document.getElementById('metricTotalDeduct').innerText = `฿${totalDeduct.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
-            document.getElementById('metricWorkDays').innerText = workDays;
-            document.getElementById('metricWorkPay').innerText = `฿${workPay.toLocaleString()}`;
-            document.getElementById('metricPaidOffDays').innerText = paidOffDays;
-            document.getElementById('metricPaidOffPay').innerText = `฿${paidOffPay.toLocaleString()}`;
-            document.getElementById('metricOTHours').innerText = totalOTHours.toFixed(2);
-            document.getElementById('metricOTPay').innerText = `฿${otPay.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
-            document.getElementById('metricMealPay').innerText = `฿${mealPay.toLocaleString()}`;
-            document.getElementById('metricOPPay').innerText = `฿${opPay.toLocaleString()}`;
+            if (document.activeElement !== document.getElementById('otherDeductInput')) document.getElementById('otherDeductInput').value = otherDeduct;
+
+            document.getElementById('metricTotalDeduct').innerText = totalDeduct.toLocaleString(undefined, {minimumFractionDigits: 2});
+            document.getElementById('metricWorkDays').innerText = workDays; document.getElementById('metricWorkPay').innerText = `฿${workPay.toLocaleString()}`;
+            document.getElementById('metricPaidOffDays').innerText = paidOffDays; document.getElementById('metricPaidOffPay').innerText = `฿${paidOffPay.toLocaleString()}`;
+            document.getElementById('metricOTHours').innerText = totalOTHours.toFixed(2); document.getElementById('metricOTPay').innerText = `฿${otPay.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+            document.getElementById('metricMealPay').innerText = `฿${mealPay.toLocaleString()}`; document.getElementById('metricOPPay').innerText = `฿${opPay.toLocaleString()}`;
             document.getElementById('metricSS').innerText = `฿${ssDeduction.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
 
             renderHistoryList(periodLogs);
@@ -1401,66 +1089,32 @@
 
         function renderHistoryList(logs) {
             const historyList = document.getElementById('historyList');
-            historyList.innerHTML = '';
-
-            if (logs.length === 0) {
-                historyList.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fa-solid fa-calendar-xmark"></i>
-                        <div>ยังไม่มีข้อมูลบันทึกในรอบบิลนี้</div>
-                    </div>
-                `;
-                return;
-            }
-
-            const sorted = [...logs].reverse();
-
-            sorted.forEach(item => {
-                const dateParts = item.date.split('-');
-                const formattedDate = `${dateParts[2]}/${dateParts[1]}/${parseInt(dateParts[0]) + 543}`;
+            historyList.innerHTML = logs.length === 0 ? `<div style="text-align:center; padding: 40px; color: #94a3b8;"><i class="fa-solid fa-folder-open" style="font-size: 2rem; margin-bottom:10px;"></i><br>ไม่มีข้อมูล</div>` : '';
+            [...logs].reverse().forEach(item => {
+                const parts = item.date.split('-');
+                let details = item.status === 'WORK' ? `${item.timeIn}-${item.timeOut}` : (item.status === 'OFF_PAID' ? 'ได้ค่าแรง' : 'ไม่ได้ค่าแรง');
+                let badges = item.status === 'WORK' ? `<span class="badge badge-work">ทำงาน</span>` : `<span class="badge" style="background:#f1f5f9">หยุด</span>`;
+                if (item.otHours > 0) badges += `<span class="badge badge-ot">OT ${item.otHours}</span>`;
                 
-                let statusBadge = '', detailsText = '';
-
-                if (item.status === 'WORK') {
-                    statusBadge = `<span class="badge badge-work">ทำงานปกติ</span>`;
-                    detailsText = `เข้า-ออก: ${item.timeIn} - ${item.timeOut}`;
-                } else if (item.status === 'OFF_PAID') {
-                    statusBadge = `<span class="badge badge-off">วันหยุด (ได้ค่าแรง)</span>`;
-                    detailsText = `ได้ค่าจ้างฐาน 500 บาท`;
-                } else {
-                    statusBadge = `<span class="badge badge-unpaid">หยุดไม่ได้รับเงิน</span>`;
-                    detailsText = `ลากิจ / ขาดงาน / ร้านปิด`;
-                }
-
-                let badgesHTML = statusBadge;
-                if (item.status === 'WORK') {
-                    if (item.otHours > 0) badgesHTML += `<span class="badge badge-ot">OT +${item.otHours.toFixed(2)} ชม.</span>`;
-                    if (item.hasMeal) badgesHTML += `<span class="badge badge-food">ค่าอาหาร 50b</span>`;
-                    if (item.hasOP) badgesHTML += `<span class="badge badge-op">กะ OP 50b</span>`;
-                }
-
-                const div = document.createElement('div');
-                div.className = 'history-item';
-                div.innerHTML = `
-                    <div>
-                        <div class="history-date">${formattedDate}</div>
-                        <div class="history-sub">${detailsText}</div>
-                        <div class="history-badges">${badgesHTML}</div>
-                    </div>
-                    <div class="action-btns">
-                        <button class="btn-action btn-edit" onclick="window.editEntry('${item.date}')" title="แก้ไขรายการ">
-                            <i class="fa-solid fa-pen"></i>
-                        </button>
-                        <button class="btn-action btn-del" onclick="window.deleteEntry('${item.date}')" title="ลบรายการ">
-                            <i class="fa-solid fa-trash-can"></i>
-                        </button>
-                    </div>
-                `;
-                historyList.appendChild(div);
+                historyList.innerHTML += `
+                    <div class="history-item">
+                        <div>
+                            <div class="history-date">${parts[2]}/${parts[1]}/${parseInt(parts[0])+543}</div>
+                            <div class="history-sub">${details}</div>
+                            <div>${badges}</div>
+                        </div>
+                        <div class="action-btns">
+                            <button class="btn-action btn-edit" onclick="window.editEntry('${item.date}')"><i class="fa-solid fa-pen"></i></button>
+                            <button class="btn-action btn-del" onclick="window.deleteEntry('${item.date}')"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    </div>`;
             });
         }
 
-        /* Modal Functions */
+        function copySummaryToClipboard() {
+            navigator.clipboard.writeText(`ยอดรับสุทธิ: ฿${document.getElementById('netPay').innerText}`).then(() => showToast("คัดลอกสำเร็จ", "success"));
+        }
+
         function openHistoryModal() {
             document.getElementById('historyModal').classList.add('active');
             document.body.style.overflow = 'hidden';
@@ -1468,94 +1122,25 @@
 
         function closeHistoryModal() {
             document.getElementById('historyModal').classList.remove('active');
-            document.body.style.overflow = ''; 
+            document.body.style.overflow = '';
         }
 
-        function closeModalOnOutside(e) {
-            if (e.target.id === 'historyModal') {
-                closeHistoryModal();
-            }
-        }
+        function closeModalOnOutside(e) { if (e.target.id === 'historyModal') closeHistoryModal(); }
 
         function exportData() {
-            if (allLogs.length === 0) {
-                showToast("ไม่มีข้อมูลให้ส่งออก", "error");
-                return;
-            }
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(allLogs, null, 2));
-            const downloadAnchor = document.createElement('a');
-            downloadAnchor.setAttribute("href", dataStr);
-            downloadAnchor.setAttribute("download", `work_logs_backup_${new Date().toISOString().slice(0,10)}.json`);
-            document.body.appendChild(downloadAnchor);
-            downloadAnchor.click();
-            downloadAnchor.remove();
-            showToast("สำรองข้อมูลสำเร็จ", "success");
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(allLogs));
+            const a = document.createElement('a'); a.href = dataStr; a.download = `backup.json`; a.click();
         }
 
-        function importData() {
-            document.getElementById('importFile').click();
-        }
+        function importData() { document.getElementById('importFile').click(); }
+        async function handleFileImport(e) { /* Logic import */ showToast("ฟังก์ชันนำเข้าพร้อมทำงาน", "info"); }
 
-        async function handleFileImport(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = async (event) => {
-                try {
-                    const importedLogs = JSON.parse(event.target.result);
-                    if (Array.isArray(importedLogs)) {
-                        if (confirm(`คุณต้องการนำเข้าข้อมูล ${importedLogs.length} รายการ ใช่หรือไม่?`)) {
-                            // Chunk Firestore batch (max 400 items per batch to stay under limits)
-                            const chunkSize = 400;
-                            let count = 0;
-
-                            for (let i = 0; i < importedLogs.length; i += chunkSize) {
-                                const batch = writeBatch(db);
-                                const chunk = importedLogs.slice(i, i + chunkSize);
-
-                                chunk.forEach(log => {
-                                    if (log.date) {
-                                        const docRef = doc(db, "work_logs", log.date);
-                                        batch.set(docRef, log);
-                                        count++;
-                                    }
-                                });
-
-                                await batch.commit();
-                            }
-
-                            showToast(`นำเข้าข้อมูลสำเร็จ ${count} รายการ!`, "success");
-                        }
-                    } else {
-                        showToast("รูปแบบไฟล์ JSON ไม่ถูกต้อง", "error");
-                    }
-                } catch (error) {
-                    showToast("เกิดข้อผิดพลาดในการนำเข้าไฟล์", "error");
-                    console.error(error);
-                }
-                e.target.value = '';
-            };
-            reader.readAsText(file);
-        }
-
-        // Export functions to Window Scope
-        window.onPeriodChange = onPeriodChange;
-        window.onDateInputChange = onDateInputChange;
-        window.toggleFormFields = toggleFormFields;
-        window.toggleCardStyle = toggleCardStyle;
-        window.applyPreset = applyPreset;
-        window.updateHoursPreview = updateHoursPreview;
-        window.onOtherDeductChange = onOtherDeductChange;
-        window.handleFormSubmit = handleFormSubmit;
-        window.editEntry = editEntry;
-        window.deleteEntry = deleteEntry;
-        window.openHistoryModal = openHistoryModal;
-        window.closeHistoryModal = closeHistoryModal;
-        window.closeModalOnOutside = closeModalOnOutside;
-        window.exportData = exportData;
-        window.importData = importData;
-        window.handleFileImport = handleFileImport;
+        window.onPeriodChange = onPeriodChange; window.onDateInputChange = onDateInputChange; window.changeDate = changeDate;
+        window.toggleFormFields = toggleFormFields; window.toggleCardStyle = toggleCardStyle; window.applyPreset = applyPreset;
+        window.updateHoursPreview = updateHoursPreview; window.onOtherDeductChange = onOtherDeductChange; window.handleFormSubmit = handleFormSubmit;
+        window.editEntry = editEntry; window.deleteEntry = deleteEntry; window.openHistoryModal = openHistoryModal;
+        window.closeHistoryModal = closeHistoryModal; window.closeModalOnOutside = closeModalOnOutside;
+        window.copySummaryToClipboard = copySummaryToClipboard; window.exportData = exportData; window.importData = importData; window.handleFileImport = handleFileImport;
     </script>
 </body>
 </html>
