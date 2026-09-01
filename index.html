@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>ระบบบันทึกเวลาทำงาน & คำนวณเงินเดือน Cook Helper</title>
+    <title>Cook Helper PayTracker</title>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -12,20 +12,20 @@
             --primary: #2563eb;
             --primary-dark: #1d4ed8;
             --primary-light: #60a5fa;
-            --bg-app: #f2f4f7;
-            --header-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #1d4ed8 100%);
-            --net-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            --bg-app: #f4f6f9;
+            --header-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #2563eb 100%);
             --card-bg: #ffffff;
             --text-main: #0f172a;
             --text-muted: #64748b;
             --input-bg: #f1f5f9;
             --border: #e2e8f0;
             --danger: #ef4444;
+            --success: #10b981;
             --radius-xl: 24px;
             --radius-lg: 16px;
             --radius-md: 14px;
             --shadow-sm: 0 2px 4px rgba(15, 23, 42, 0.04);
-            --shadow-card: 0 8px 20px -4px rgba(15, 23, 42, 0.08);
+            --shadow-card: 0 8px 20px -4px rgba(15, 23, 42, 0.06);
             --transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
         }
 
@@ -41,10 +41,11 @@
         html, body {
             width: 100%;
             overflow-x: hidden;
-            overscroll-behavior-y: none; /* ป้องกันเว็บเด้ง */
+            overscroll-behavior-y: none;
             background: var(--bg-app);
             color: var(--text-main);
             min-height: 100vh;
+            padding-bottom: 80px; /* Space for Bottom Nav */
         }
 
         /* Toast Notifications */
@@ -54,593 +55,258 @@
             left: 50%;
             transform: translateX(-50%);
             z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            pointer-events: none;
-            width: 90%;
-            max-width: 400px;
+            display: flex; flex-direction: column; gap: 10px;
+            pointer-events: none; width: 90%; max-width: 400px;
         }
 
         .toast {
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(10px);
-            color: white;
-            padding: 14px 20px;
-            border-radius: var(--radius-lg);
-            font-size: 0.95rem;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            opacity: 0;
-            transform: translateY(-20px) scale(0.95);
+            background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px);
+            color: white; padding: 14px 20px; border-radius: var(--radius-lg);
+            font-size: 0.95rem; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            display: flex; align-items: center; gap: 12px;
+            opacity: 0; transform: translateY(-20px) scale(0.95);
             transition: var(--transition);
         }
-
-        .toast.show {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-        }
-
+        .toast.show { opacity: 1; transform: translateY(0) scale(1); }
         .toast-success i { color: #34d399; }
         .toast-error i { color: #f87171; }
         .toast-info i { color: #38bdf8; }
 
-        /* Modern Native Header */
+        /* Banking App Header */
         .app-header {
             background: var(--header-gradient);
             color: white;
-            padding: calc(24px + env(safe-area-inset-top)) 24px 45px 24px;
-            border-bottom-left-radius: 32px;
-            border-bottom-right-radius: 32px;
+            padding: calc(20px + env(safe-area-inset-top)) 20px 70px 20px;
+            border-bottom-left-radius: 36px;
+            border-bottom-right-radius: 36px;
             position: relative;
-            box-shadow: 0 4px 20px rgba(15, 23, 42, 0.15);
+            box-shadow: 0 4px 20px rgba(37, 99, 235, 0.2);
         }
 
         .header-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;
         }
 
         .brand-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .brand-title i {
-            color: #60a5fa;
-            font-size: 1.4rem;
+            font-size: 1.1rem; font-weight: 600; display: flex; align-items: center; gap: 8px; opacity: 0.9;
         }
 
         .status-badge {
-            font-size: 0.75rem;
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(8px);
-            padding: 6px 14px;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-weight: 500;
+            font-size: 0.75rem; background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(8px);
+            padding: 6px 12px; border-radius: 20px; display: flex; align-items: center; gap: 6px; font-weight: 500;
         }
+        .status-dot { width: 8px; height: 8px; background: #34d399; border-radius: 50%; }
 
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            background: #10b981;
-            border-radius: 50%;
+        /* Balance Display (Like Bank Account) */
+        .balance-section { text-align: center; }
+        .balance-label { font-size: 0.9rem; font-weight: 300; opacity: 0.8; margin-bottom: 4px; }
+        .balance-amount {
+            font-size: 3.2rem; font-weight: 700; line-height: 1; margin-bottom: 16px;
+            letter-spacing: -1px; text-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
         .period-selector-wrapper {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(12px);
-            border-radius: var(--radius-lg);
-            padding: 12px 18px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
+            background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(12px);
+            border-radius: 20px; padding: 8px 16px; display: inline-flex; align-items: center; gap: 8px;
+            max-width: 90%; margin: 0 auto;
         }
-
         .period-select {
-            background: transparent;
-            border: none;
-            color: white;
-            font-weight: 600;
-            font-size: 1rem;
-            width: 100%;
-            outline: none;
-            appearance: none;
+            background: transparent; border: none; color: white; font-weight: 500; font-size: 0.9rem;
+            outline: none; appearance: none; text-align: center; padding-right: 15px;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat; background-position: right center; background-size: 12px;
         }
+        .period-select option { background: var(--card-bg); color: var(--text-main); }
 
-        .period-select option {
-            background: var(--card-bg);
-            color: var(--text-main);
-        }
-
-        /* Layout */
+        /* Main Container & View System */
         .container {
-            width: 100%;
-            max-width: 550px;
-            margin: -30px auto 0 auto;
-            padding: 0 16px calc(30px + env(safe-area-inset-bottom));
+            width: 100%; max-width: 500px; margin: 0 auto; padding: 0 16px;
         }
 
-        @media (min-width: 1024px) {
-            .container {
-                max-width: 1100px;
-                display: grid;
-                grid-template-columns: 400px 1fr;
-                gap: 24px;
-            }
-            .col-left { position: sticky; top: 24px; }
-            .container > .rate-info { grid-column: 1 / -1; }
+        .app-view {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        .app-view.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Native App Cards */
+        /* Action Grid (Banking Quick Menu) */
+        .action-grid {
+            background: var(--card-bg); border-radius: var(--radius-xl);
+            padding: 24px 16px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
+            box-shadow: var(--shadow-card); margin-top: -35px; position: relative; z-index: 10;
+            margin-bottom: 20px;
+        }
+        .action-item {
+            display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; transition: var(--transition);
+        }
+        .action-item:active { transform: scale(0.92); }
+        .action-icon {
+            width: 52px; height: 52px; border-radius: 18px; display: flex; align-items: center; justify-content: center;
+            font-size: 1.3rem; box-shadow: var(--shadow-sm);
+        }
+        .icon-blue { background: #eff6ff; color: var(--primary); }
+        .icon-green { background: #ecfdf5; color: var(--success); }
+        .icon-purple { background: #f5f3ff; color: #8b5cf6; }
+        .icon-gray { background: #f1f5f9; color: var(--text-muted); }
+        .action-item span { font-size: 0.75rem; font-weight: 500; color: var(--text-main); text-align: center; }
+
+        /* Card Styles */
         .card {
-            background: var(--card-bg);
-            border-radius: var(--radius-xl);
-            padding: 24px;
-            margin-bottom: 20px;
-            box-shadow: var(--shadow-card);
+            background: var(--card-bg); border-radius: var(--radius-xl);
+            padding: 24px; margin-bottom: 20px; box-shadow: var(--shadow-card);
         }
-
         .card-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
+            display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;
         }
-
-        .card-header-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .card-header i {
-            font-size: 1.3rem;
-            color: var(--primary);
-        }
-
-        .card-header h2 {
-            font-size: 1.15rem;
-            font-weight: 700;
-            letter-spacing: -0.2px;
-        }
-
-        /* Net Payment Premium Card */
-        .net-pay-card {
-            background: var(--net-gradient);
-            color: white;
-            border-radius: var(--radius-xl);
-            padding: 28px 24px;
-            margin-bottom: 20px;
-            box-shadow: 0 12px 24px -6px rgba(16, 185, 129, 0.4);
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .net-title {
-            font-size: 0.9rem;
-            font-weight: 500;
-            opacity: 0.9;
-            margin-bottom: 8px;
-        }
-
-        .net-amount {
-            font-size: 2.8rem;
-            font-weight: 700;
-            line-height: 1.1;
-            letter-spacing: -0.5px;
-        }
-
-        .net-sub {
-            font-size: 0.85rem;
-            opacity: 0.9;
-            margin-top: 12px;
-            background: rgba(255, 255, 255, 0.2);
-            display: inline-block;
-            padding: 6px 16px;
-            border-radius: 20px;
-            backdrop-filter: blur(4px);
-        }
-
-        .btn-copy-summary {
-            margin-top: 16px;
-            background: #ffffff;
-            color: #059669;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 24px;
-            font-size: 0.9rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: var(--transition);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .btn-copy-summary:active { transform: scale(0.96); }
+        .card-header-left { display: flex; align-items: center; gap: 10px; }
+        .card-header i { font-size: 1.2rem; color: var(--primary); }
+        .card-header h2 { font-size: 1.1rem; font-weight: 700; }
 
         /* Widget Grid */
-        .summary-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-
+        .summary-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px; }
         .metric-box {
-            background: var(--input-bg);
-            padding: 16px;
-            border-radius: var(--radius-lg);
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
+            background: var(--input-bg); padding: 16px; border-radius: var(--radius-lg);
+            display: flex; flex-direction: column; gap: 4px;
         }
-
-        .metric-label {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .metric-value {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--text-main);
-        }
-
+        .metric-label { font-size: 0.8rem; color: var(--text-muted); font-weight: 500; }
+        .metric-value { font-size: 1.1rem; font-weight: 700; color: var(--text-main); }
         .metric-deduct { color: var(--danger); }
 
-        /* Native App Form Inputs */
+        /* Form Elements */
         .form-group { margin-bottom: 20px; }
-        .form-label {
-            display: block;
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: var(--text-main);
-        }
-
+        .form-label { display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 8px; color: var(--text-main); }
         .form-control, .form-select {
-            width: 100%;
-            padding: 14px 16px;
-            background-color: var(--input-bg);
-            border: 2px solid transparent;
-            border-radius: var(--radius-md);
-            font-size: 16px;
-            color: var(--text-main);
-            transition: var(--transition);
-            outline: none;
+            width: 100%; padding: 14px 16px; background-color: var(--input-bg); border: 2px solid transparent;
+            border-radius: var(--radius-md); font-size: 16px; color: var(--text-main); transition: var(--transition); outline: none;
         }
-
-        .form-control:focus, .form-select:focus {
-            background-color: #ffffff;
-            border-color: var(--primary);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08);
-        }
-
+        .form-control:focus, .form-select:focus { background-color: #ffffff; border-color: var(--primary); }
         .form-select {
-            appearance: none;
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2064748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-            background-repeat: no-repeat;
-            background-position: right 16px center;
-            background-size: 16px;
+            appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2064748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat; background-position: right 16px center; background-size: 16px;
         }
 
-        .date-nav-wrapper {
-            display: flex;
-            gap: 10px;
-        }
-
+        .date-nav-wrapper { display: flex; gap: 10px; }
         .btn-date-nav {
-            background: var(--input-bg);
-            border: none;
-            border-radius: var(--radius-md);
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-main);
-            cursor: pointer;
-            transition: var(--transition);
+            background: var(--input-bg); border: none; border-radius: var(--radius-md); width: 50px; height: 50px;
+            display: flex; align-items: center; justify-content: center; color: var(--text-main); cursor: pointer; transition: var(--transition);
         }
+        .btn-date-nav:active { background: #e2e8f0; transform: scale(0.92); }
+        
+        .time-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
-        .btn-date-nav:active {
-            background: #e2e8f0;
-            transform: scale(0.92);
-        }
-
-        .time-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-
-        /* Chips / Segments */
+        /* Chips */
         .preset-container {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 16px;
-            overflow-x: auto;
-            padding-bottom: 4px;
-            scrollbar-width: none;
+            display: flex; gap: 10px; margin-bottom: 16px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none;
         }
-
         .preset-btn {
-            flex-shrink: 0;
-            background: var(--card-bg);
-            border: 1.5px solid var(--border);
-            padding: 8px 16px;
-            border-radius: 24px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--text-muted);
-            cursor: pointer;
-            transition: var(--transition);
+            flex-shrink: 0; background: var(--card-bg); border: 1.5px solid var(--border); padding: 8px 16px;
+            border-radius: 24px; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); cursor: pointer;
         }
+        .preset-btn.active, .preset-btn:active { background: var(--primary); color: white; border-color: var(--primary); }
 
-        .preset-btn:active { transform: scale(0.95); }
-        .preset-btn.active, .preset-btn:focus {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-
-        /* Info Preview Box */
+        /* Preview & Checkbox */
         .preview-box {
-            background: #eff6ff;
-            padding: 14px 16px;
-            border-radius: var(--radius-md);
-            font-size: 0.9rem;
-            color: var(--primary-dark);
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-weight: 500;
+            background: #eff6ff; padding: 14px 16px; border-radius: var(--radius-md); font-size: 0.9rem;
+            color: var(--primary-dark); margin-bottom: 20px; display: flex; align-items: center; gap: 12px; font-weight: 500;
         }
-
-        .checkbox-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-
+        .checkbox-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .checkbox-card {
-            background: var(--input-bg);
-            border: 2px solid transparent;
-            border-radius: var(--radius-md);
-            padding: 14px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-            transition: var(--transition);
-            font-weight: 600;
-            font-size: 0.9rem;
+            background: var(--input-bg); border: 2px solid transparent; border-radius: var(--radius-md);
+            padding: 14px; display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: 600; font-size: 0.85rem;
         }
+        .checkbox-card.active { background: #ecfdf5; border-color: var(--success); color: #065f46; }
+        .checkbox-card input { accent-color: var(--success); width: 18px; height: 18px; }
 
-        .checkbox-card.active {
-            background: #ecfdf5;
-            border-color: #10b981;
-            color: #065f46;
-        }
-
-        .checkbox-card input {
-            accent-color: #10b981;
-            width: 20px;
-            height: 20px;
-        }
-
-        /* Native Buttons */
+        /* Buttons */
         .btn-submit {
-            width: 100%;
-            padding: 16px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: var(--radius-md);
-            font-size: 1.05rem;
-            font-weight: 700;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
-            transition: var(--transition);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
+            width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: var(--radius-md);
+            font-size: 1.05rem; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25); transition: var(--transition);
         }
-
         .btn-submit:active { transform: scale(0.98); box-shadow: none; }
 
-        .btn-open-modal {
-            width: 100%;
-            padding: 16px;
-            margin-top: 16px;
-            background: var(--input-bg);
-            color: var(--text-main);
-            border: none;
-            border-radius: var(--radius-md);
-            font-size: 0.95rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            justify-content: center;
-            gap: 10px;
+        .editing-tag {
+            background: #fef3c7; color: #b45309; font-size: 0.8rem; padding: 6px 12px;
+            border-radius: 12px; font-weight: 600; display: none;
         }
-        
-        .btn-open-modal:active { transform: scale(0.98); background: #e2e8f0; }
 
-        /* iOS Style Bottom Sheet Modal */
+        /* Settings View */
+        .rate-info {
+            background: #fffbeb; border-radius: var(--radius-lg); padding: 20px; font-size: 0.9rem;
+            color: #92400e; margin-bottom: 20px; line-height: 1.6; border: 1px solid #fde68a;
+        }
+        .rate-info-title { font-weight: 700; margin-bottom: 8px; font-size: 1.05rem; display: flex; gap: 8px; align-items: center;}
+        
+        .tools-row { display: flex; flex-direction: column; gap: 12px; margin-top: 10px; }
+        .btn-tool {
+            padding: 16px; background: white; border: 1px solid var(--border); border-radius: var(--radius-md);
+            font-size: 0.95rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 12px; color: var(--text-main);
+        }
+        .btn-tool i { color: var(--text-muted); font-size: 1.2rem; }
+        .btn-tool:active { background: var(--input-bg); }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed; bottom: 0; left: 0; right: 0; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
+            border-top: 1px solid var(--border); display: flex; justify-content: space-around;
+            padding: 12px 0 calc(12px + env(safe-area-inset-bottom)); z-index: 100;
+        }
+        .nav-item {
+            display: flex; flex-direction: column; align-items: center; gap: 6px;
+            color: #94a3b8; text-decoration: none; font-size: 0.75rem; font-weight: 600; width: 33%; transition: var(--transition);
+        }
+        .nav-item i { font-size: 1.3rem; margin-bottom: 2px; }
+        .nav-item.active { color: var(--primary); }
+        .nav-item:active { transform: scale(0.9); }
+
+        /* Bottom Sheet Modal (History) */
         .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.4);
-            z-index: 1000;
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease;
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(3px);
+            z-index: 1000; display: flex; justify-content: center; align-items: flex-end; opacity: 0; visibility: hidden; transition: opacity 0.3s;
         }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
         
-        .modal-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
         .modal-container {
-            background: var(--card-bg);
-            width: 100%;
-            max-width: 600px;
-            max-height: 85vh;
-            border-radius: 24px 24px 0 0;
-            transform: translateY(100%);
-            transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-            display: flex;
-            flex-direction: column;
-            padding-bottom: env(safe-area-inset-bottom);
+            background: var(--bg-app); width: 100%; max-width: 600px; max-height: 85vh;
+            border-radius: 28px 28px 0 0; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+            display: flex; flex-direction: column; padding-bottom: env(safe-area-inset-bottom);
         }
-
         .modal-overlay.active .modal-container { transform: translateY(0); }
-
         @media (min-width: 768px) {
             .modal-overlay { align-items: center; padding: 20px; }
-            .modal-container {
-                border-radius: var(--radius-xl);
-                transform: translateY(20px) scale(0.95);
-            }
+            .modal-container { border-radius: var(--radius-xl); transform: translateY(20px) scale(0.95); }
             .modal-overlay.active .modal-container { transform: translateY(0) scale(1); }
         }
 
-        .modal-drag-handle {
-            width: 40px;
-            height: 5px;
-            background: #cbd5e1;
-            border-radius: 3px;
-            margin: 12px auto 0 auto;
-        }
-
+        .modal-drag-handle { width: 40px; height: 5px; background: #cbd5e1; border-radius: 3px; margin: 12px auto 0; }
         .modal-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 16px 24px;
-            border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; border-bottom: 1px solid var(--border); background: white;
         }
-
         .modal-title { font-size: 1.15rem; font-weight: 700; }
-
-        .btn-close {
-            background: var(--input-bg);
-            border: none;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            font-size: 1.1rem;
-            color: var(--text-muted);
-            cursor: pointer;
-        }
-
-        .modal-body {
-            padding: 24px;
-            overflow-y: auto;
-            flex-grow: 1;
-        }
+        .btn-close { background: var(--input-bg); border: none; width: 36px; height: 36px; border-radius: 50%; font-size: 1.1rem; color: var(--text-muted); cursor: pointer; }
+        .modal-body { padding: 16px; overflow-y: auto; flex-grow: 1; }
 
         /* History Items */
         .history-item {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            padding: 16px;
-            margin-bottom: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            background: white; border: none; border-radius: var(--radius-lg); padding: 16px; margin-bottom: 12px;
+            display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow-sm);
         }
-
-        .history-date { font-weight: 700; font-size: 1rem; }
-        .history-sub { font-size: 0.85rem; color: var(--text-muted); margin-top: 4px; }
-        
+        .history-date { font-weight: 700; font-size: 1rem; color: var(--text-main); }
+        .history-sub { font-size: 0.85rem; color: var(--text-muted); margin-top: 2px; }
         .badge {
-            padding: 4px 10px;
-            border-radius: 8px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            display: inline-block;
-            margin-top: 8px;
-            margin-right: 4px;
+            padding: 4px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 600; display: inline-block; margin-top: 6px; margin-right: 4px;
         }
         .badge-work { background: #dcfce7; color: #15803d; }
         .badge-ot { background: #fef3c7; color: #b45309; }
-
         .action-btns { display: flex; gap: 8px; }
-        .btn-action {
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: transform 0.1s;
-        }
+        .btn-action { border: none; width: 40px; height: 40px; border-radius: 12px; font-size: 1rem; cursor: pointer; transition: transform 0.1s; }
         .btn-action:active { transform: scale(0.9); }
         .btn-edit { background: #eff6ff; color: var(--primary); }
         .btn-del { background: #fee2e2; color: var(--danger); }
-
-        .editing-tag {
-            background: #fef3c7;
-            color: #b45309;
-            font-size: 0.8rem;
-            padding: 6px 12px;
-            border-radius: 12px;
-            font-weight: 600;
-            display: none;
-        }
-
-        .tools-row {
-            display: flex;
-            gap: 12px;
-            margin-top: 24px;
-        }
-        .btn-tool {
-            flex: 1;
-            padding: 14px;
-            background: var(--input-bg);
-            border: none;
-            border-radius: var(--radius-md);
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-        }
-        .btn-tool:active { transform: scale(0.96); }
-
-        .rate-info {
-            background: #fffbeb;
-            border-radius: var(--radius-lg);
-            padding: 20px;
-            font-size: 0.85rem;
-            color: #92400e;
-            margin-bottom: 20px;
-            line-height: 1.6;
-        }
-        .rate-info-title { font-weight: 700; margin-bottom: 8px; font-size: 1rem; }
     </style>
 </head>
 <body>
@@ -649,187 +315,213 @@
 
     <header class="app-header">
         <div class="header-top">
-            <div class="brand-title">
-                <i class="fa-solid fa-utensils"></i> Cook Helper
-            </div>
+            <div class="brand-title"><i class="fa-solid fa-utensils"></i> CookTracker</div>
             <div class="status-badge" id="onlineStatusBadge">
-                <span class="status-dot"></span> Offline Ready
+                <span class="status-dot"></span> ออนไลน์
             </div>
         </div>
 
-        <div class="period-selector-wrapper">
-            <i class="fa-regular fa-calendar-check" style="color: #60a5fa; font-size: 1.2rem;"></i>
-            <select id="periodSelect" class="period-select" onchange="window.onPeriodChange()"></select>
+        <div class="balance-section">
+            <div class="balance-label">ยอดรับสุทธิรอบบิลนี้</div>
+            <div class="balance-amount">฿<span id="netPay">0.00</span></div>
+            <div class="period-selector-wrapper">
+                <i class="fa-regular fa-calendar-check" style="font-size: 1rem;"></i>
+                <select id="periodSelect" class="period-select" onchange="window.onPeriodChange()"></select>
+            </div>
         </div>
     </header>
 
     <div class="container">
-      <div class="col-left">
-        <!-- Net Pay Premium Widget -->
-        <div class="net-pay-card">
-            <div class="net-title">ประมาณการยอดรับสุทธิรอบนี้</div>
-            <div class="net-amount">฿<span id="netPay">0.00</span></div>
-            <div class="net-sub" id="netPaySub">ประจำรอบบิลปัจจุบัน</div>
-            <button type="button" class="btn-copy-summary" onclick="window.copySummaryToClipboard()">
-                <i class="fa-regular fa-copy"></i> คัดลอกสรุปส่งไลน์
-            </button>
-        </div>
-
-        <div class="card">
-            <div class="card-header">
-                <div class="card-header-left">
-                    <i class="fa-solid fa-chart-pie"></i>
-                    <h2>สรุปยอดสะสม</h2>
+        
+        <div id="view-home" class="app-view active">
+            
+            <div class="action-grid">
+                <div class="action-item" onclick="window.switchView('view-log')">
+                    <div class="action-icon icon-blue"><i class="fa-solid fa-calendar-plus"></i></div>
+                    <span>บันทึกเวลา</span>
                 </div>
-            </div>
-            <div class="summary-grid">
-                <div class="metric-box">
-                    <div class="metric-label">ทำงานปกติ (500)</div>
-                    <div class="metric-value"><span id="metricWorkDays">0</span> วัน <small style="font-size:0.8rem;color:#64748b">(<span id="metricWorkPay">฿0</span>)</small></div>
+                <div class="action-item" onclick="window.openHistoryModal()">
+                    <div class="action-icon icon-purple"><i class="fa-solid fa-clock-rotate-left"></i></div>
+                    <span>ดูประวัติ</span>
                 </div>
-                <div class="metric-box">
-                    <div class="metric-label">วันหยุด (500)</div>
-                    <div class="metric-value"><span id="metricPaidOffDays">0</span> วัน <small style="font-size:0.8rem;color:#64748b">(<span id="metricPaidOffPay">฿0</span>)</small></div>
+                <div class="action-item" onclick="window.copySummaryToClipboard()">
+                    <div class="action-icon icon-green"><i class="fa-brands fa-line"></i></div>
+                    <span>ส่งยอดเงิน</span>
                 </div>
-                <div class="metric-box">
-                    <div class="metric-label">OT (93.75/ชม.)</div>
-                    <div class="metric-value"><span id="metricOTHours">0.00</span> ชม. <small style="font-size:0.8rem;color:#64748b">(<span id="metricOTPay">฿0</span>)</small></div>
-                </div>
-                <div class="metric-box">
-                    <div class="metric-label">ค่าอาหาร (50)</div>
-                    <div class="metric-value"><span id="metricMealPay">฿0</span></div>
-                </div>
-                <div class="metric-box">
-                    <div class="metric-label">กะ OP (50)</div>
-                    <div class="metric-value"><span id="metricOPPay">฿0</span></div>
-                </div>
-                <div class="metric-box" style="background: #fef2f2;">
-                    <div class="metric-label metric-deduct">ประกันสังคม (5%)</div>
-                    <div class="metric-value metric-deduct">-<span id="metricSS">฿0</span></div>
+                <div class="action-item" onclick="window.switchView('view-settings')">
+                    <div class="action-icon icon-gray"><i class="fa-solid fa-gear"></i></div>
+                    <span>ตั้งค่า</span>
                 </div>
             </div>
 
-            <div class="form-group" style="margin-bottom: 0; border-top: 1px solid var(--border); padding-top: 16px;">
-                <label class="form-label" for="otherDeductInput">หักอื่นๆ ประจำรอบนี้ (เช่น ค่าชุด)</label>
-                <div style="display: flex; align-items: center; gap: 12px;">
-                    <input type="number" id="otherDeductInput" class="form-control" style="flex: 1;" min="0" step="0.01" value="0" onchange="window.onOtherDeductChange()">
-                    <div style="text-align: right; line-height: 1.2;">
-                        <span style="font-size:0.8rem; color:var(--text-muted)">รวมหักทั้งหมด</span><br>
-                        <span style="font-weight:700; color:var(--danger)">-<span id="metricTotalDeduct">฿0</span></span>
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-header-left">
+                        <i class="fa-solid fa-chart-pie"></i>
+                        <h2>สรุปยอดสะสม</h2>
                     </div>
                 </div>
-            </div>
-        </div>
-      </div>
-
-      <div class="col-right">
-        <!-- Daily Form App Style -->
-        <div class="card">
-            <div class="card-header">
-                <div class="card-header-left">
-                    <i class="fa-solid fa-calendar-plus"></i>
-                    <h2>บันทึกรายวัน</h2>
-                </div>
-                <span class="editing-tag" id="editingTag"><i class="fa-solid fa-pen"></i> แก้ไขอยู่</span>
-            </div>
-
-            <form id="dailyForm" onsubmit="window.handleFormSubmit(event)">
-                <div class="form-group">
-                    <label class="form-label">เลือกวันที่</label>
-                    <div class="date-nav-wrapper">
-                        <button type="button" class="btn-date-nav" onclick="window.changeDate(-1)"><i class="fa-solid fa-chevron-left"></i></button>
-                        <input type="date" id="logDate" class="form-control" style="text-align: center; font-weight: 600;" required onchange="window.onDateInputChange()">
-                        <button type="button" class="btn-date-nav" onclick="window.changeDate(1)"><i class="fa-solid fa-chevron-right"></i></button>
+                <div class="summary-grid">
+                    <div class="metric-box">
+                        <div class="metric-label">ทำงานปกติ (500)</div>
+                        <div class="metric-value"><span id="metricWorkDays">0</span> วัน <small style="font-size:0.8rem;color:#64748b">(<span id="metricWorkPay">฿0</span>)</small></div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-label">วันหยุด (500)</div>
+                        <div class="metric-value"><span id="metricPaidOffDays">0</span> วัน <small style="font-size:0.8rem;color:#64748b">(<span id="metricPaidOffPay">฿0</span>)</small></div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-label">OT (93.75/ชม.)</div>
+                        <div class="metric-value"><span id="metricOTHours">0.00</span> ชม. <small style="font-size:0.8rem;color:#64748b">(<span id="metricOTPay">฿0</span>)</small></div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-label">ค่าอาหาร (50)</div>
+                        <div class="metric-value"><span id="metricMealPay">฿0</span></div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-label">กะ OP (50)</div>
+                        <div class="metric-value"><span id="metricOPPay">฿0</span></div>
+                    </div>
+                    <div class="metric-box" style="background: #fef2f2;">
+                        <div class="metric-label metric-deduct">ประกันสังคม (5%)</div>
+                        <div class="metric-value metric-deduct">-<span id="metricSS">฿0</span></div>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label">สถานะ</label>
-                    <select id="workStatus" class="form-select" onchange="window.toggleFormFields()">
-                        <option value="WORK">ทำงานปกติ</option>
-                        <option value="OFF_PAID">วันหยุดประจำสัปดาห์ (ได้ค่าแรง)</option>
-                        <option value="OFF_UNPAID">วันหยุดไม่ได้รับค่าจ้าง (ลา/ขาด)</option>
-                    </select>
-                </div>
-
-                <div id="workFields">
-                    <div class="preset-container">
-                        <button type="button" class="preset-btn" onclick="window.applyPreset('08:00', '17:00', false)">กะเช้า</button>
-                        <button type="button" class="preset-btn" onclick="window.applyPreset('12:00', '21:00', false)">กะกลางวัน</button>
-                        <button type="button" class="preset-btn" onclick="window.applyPreset('16:00', '01:00', true)">กะปิดร้าน (OP)</button>
-                    </div>
-
-                    <div class="time-grid form-group">
-                        <div>
-                            <label class="form-label">เข้างาน</label>
-                            <input type="time" id="timeIn" class="form-control" value="08:00" onchange="window.updateHoursPreview()">
-                        </div>
-                        <div>
-                            <label class="form-label">ออกงาน</label>
-                            <input type="time" id="timeOut" class="form-control" value="17:00" onchange="window.updateHoursPreview()">
+                <div class="form-group" style="margin-bottom: 0; border-top: 1px dashed var(--border); padding-top: 16px;">
+                    <label class="form-label" for="otherDeductInput">หักอื่นๆ ประจำรอบนี้ (เช่น ค่าชุด)</label>
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <input type="number" id="otherDeductInput" class="form-control" style="flex: 1;" min="0" step="0.01" value="0" onchange="window.onOtherDeductChange()">
+                        <div style="text-align: right; line-height: 1.2; min-width: 80px;">
+                            <span style="font-size:0.75rem; color:var(--text-muted)">รวมหักทั้งหมด</span><br>
+                            <span style="font-weight:700; color:var(--danger)">-<span id="metricTotalDeduct">฿0</span></span>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
 
-                    <div class="preview-box" id="hoursPreview">
-                        <i class="fa-solid fa-circle-info"></i>
-                        <span>ทำงาน 8.0 ชม. | OT: 0.00 ชม.</span>
+        <div id="view-log" class="app-view">
+            <div class="card" style="margin-top: -20px; box-shadow: none; border-radius: 0 0 var(--radius-xl) var(--radius-xl);">
+                <div class="card-header">
+                    <div class="card-header-left">
+                        <i class="fa-solid fa-calendar-plus"></i>
+                        <h2>บันทึกเวลาเข้า-ออก</h2>
+                    </div>
+                    <span class="editing-tag" id="editingTag"><i class="fa-solid fa-pen"></i> แก้ไขอยู่</span>
+                </div>
+
+                <form id="dailyForm" onsubmit="window.handleFormSubmit(event)">
+                    <div class="form-group">
+                        <label class="form-label">เลือกวันที่</label>
+                        <div class="date-nav-wrapper">
+                            <button type="button" class="btn-date-nav" onclick="window.changeDate(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+                            <input type="date" id="logDate" class="form-control" style="text-align: center; font-weight: 600;" required onchange="window.onDateInputChange()">
+                            <button type="button" class="btn-date-nav" onclick="window.changeDate(1)"><i class="fa-solid fa-chevron-right"></i></button>
+                        </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">สวัสดิการเพิ่มเติม</label>
-                        <div class="checkbox-grid">
-                            <label class="checkbox-card active" id="mealCard">
-                                <input type="checkbox" id="hasMeal" checked onchange="window.toggleCardStyle('mealCard', this.checked)">
-                                ค่าอาหาร (+50)
-                            </label>
-                            <label class="checkbox-card" id="opCard">
-                                <input type="checkbox" id="hasOP" onchange="window.toggleCardStyle('opCard', this.checked)">
-                                กะ OP (+50)
-                            </label>
+                        <label class="form-label">สถานะ</label>
+                        <select id="workStatus" class="form-select" onchange="window.toggleFormFields()">
+                            <option value="WORK">ทำงานปกติ</option>
+                            <option value="OFF_PAID">วันหยุดประจำสัปดาห์ (ได้ค่าแรง)</option>
+                            <option value="OFF_UNPAID">วันหยุดไม่ได้รับค่าจ้าง (ลา/ขาด)</option>
+                        </select>
+                    </div>
+
+                    <div id="workFields">
+                        <div class="preset-container">
+                            <button type="button" class="preset-btn" onclick="window.applyPreset('08:00', '17:00', false)">กะเช้า</button>
+                            <button type="button" class="preset-btn" onclick="window.applyPreset('12:00', '21:00', false)">กะกลางวัน</button>
+                            <button type="button" class="preset-btn" onclick="window.applyPreset('16:00', '01:00', true)">กะปิดร้าน (OP)</button>
+                        </div>
+
+                        <div class="time-grid form-group">
+                            <div>
+                                <label class="form-label">เข้างาน</label>
+                                <input type="time" id="timeIn" class="form-control" value="08:00" onchange="window.updateHoursPreview()">
+                            </div>
+                            <div>
+                                <label class="form-label">ออกงาน</label>
+                                <input type="time" id="timeOut" class="form-control" value="17:00" onchange="window.updateHoursPreview()">
+                            </div>
+                        </div>
+
+                        <div class="preview-box" id="hoursPreview">
+                            <i class="fa-solid fa-clock"></i>
+                            <span>ทำงาน 8.0 ชม. | OT: 0.00 ชม.</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">สวัสดิการเพิ่มเติม</label>
+                            <div class="checkbox-grid">
+                                <label class="checkbox-card active" id="mealCard">
+                                    <input type="checkbox" id="hasMeal" checked onchange="window.toggleCardStyle('mealCard', this.checked)">
+                                    ค่าอาหาร (+50)
+                                </label>
+                                <label class="checkbox-card" id="opCard">
+                                    <input type="checkbox" id="hasOP" onchange="window.toggleCardStyle('opCard', this.checked)">
+                                    กะ OP (+50)
+                                </label>
+                            </div>
                         </div>
                     </div>
+
+                    <button type="submit" class="btn-submit" id="btnSubmit">บันทึกข้อมูล</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="view-settings" class="app-view">
+            <div class="card" style="margin-top: -20px; box-shadow: none; border-radius: 0 0 var(--radius-xl) var(--radius-xl);">
+                <div class="rate-info">
+                    <div class="rate-info-title"><i class="fa-solid fa-circle-info"></i> โครงสร้างเงินเดือนปัจจุบัน</div>
+                    • ฐานเงินเดือน 15,000 บ./เดือน (เฉลี่ย 500 บ./วัน)<br>
+                    • ล่วงเวลา (OT) 93.75 บ./ชม.<br>
+                    • ตัดรอบการทำงานทุกวันที่ 20 ของเดือน<br>
+                    • หักประกันสังคม 5% สูงสุด 750 บ. (คิดจากฐาน+อาหาร+OP ไม่รวม OT)
                 </div>
 
-                <button type="submit" class="btn-submit" id="btnSubmit">บันทึกข้อมูล</button>
-            </form>
-
-            <button class="btn-open-modal" onclick="window.openHistoryModal()">
-                <i class="fa-solid fa-list-ul"></i> ดูประวัติรอบบิลนี้
-            </button>
+                <div class="form-label" style="margin-top: 24px;">เครื่องมือข้อมูล</div>
+                <div class="tools-row">
+                    <button class="btn-tool" onclick="window.exportData()">
+                        <i class="fa-solid fa-download"></i> แบ็คอัปข้อมูล (ส่งออก)
+                    </button>
+                    <button class="btn-tool" onclick="window.importData()">
+                        <i class="fa-solid fa-upload"></i> นำเข้าข้อมูลสำรอง
+                    </button>
+                </div>
+            </div>
         </div>
-      </div>
 
-      <div class="rate-info">
-          <div class="rate-info-title"><i class="fa-solid fa-circle-info"></i> โครงสร้างเงินเดือน</div>
-          • ฐาน 15,000 บ./เดือน (500 บ./วัน)<br>
-          • OT 93.75 บ./ชม.<br>
-          • ตัดรอบทุกวันที่ 20 ของเดือน<br>
-          • หักประกันสังคม 5% สูงสุด 750 บ. (ไม่รวม OT)
-      </div>
-    </div>
+    </div> <nav class="bottom-nav">
+        <a href="#" class="nav-item active" id="nav-home" onclick="window.switchView('view-home')">
+            <i class="fa-solid fa-house"></i><span>หน้าแรก</span>
+        </a>
+        <a href="#" class="nav-item" id="nav-log" onclick="window.switchView('view-log')">
+            <i class="fa-solid fa-pen-to-square"></i><span>บันทึกงาน</span>
+        </a>
+        <a href="#" class="nav-item" onclick="window.openHistoryModal()">
+            <i class="fa-solid fa-file-invoice"></i><span>ประวัติ</span>
+        </a>
+    </nav>
 
-    <!-- Bottom Sheet Modal -->
     <div class="modal-overlay" id="historyModal" onclick="window.closeModalOnOutside(event)">
         <div class="modal-container">
             <div class="modal-drag-handle"></div>
             <div class="modal-header">
-                <div class="modal-title">ประวัติการบันทึก</div>
+                <div class="modal-title">ประวัติรอบบิลนี้</div>
                 <button class="btn-close" onclick="window.closeHistoryModal()"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            
             <div class="modal-body">
                 <div id="historyList"></div>
-                <div class="tools-row">
-                    <button class="btn-tool" onclick="window.exportData()"><i class="fa-solid fa-download"></i> สำรองข้อมูล</button>
-                    <button class="btn-tool" onclick="window.importData()"><i class="fa-solid fa-upload"></i> นำเข้า</button>
-                </div>
             </div>
         </div>
     </div>
 
     <input type="file" id="importFile" style="display:none;" accept=".json" onchange="window.handleFileImport(event)">
 
-    <!-- Firebase SDK (คง Logic เดิมไว้ 100%) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { 
@@ -853,6 +545,19 @@
 
         const DAILY_RATE = 500, OT_RATE = 93.75, MEAL_RATE = 50, OP_RATE = 50, SS_PERCENT = 0.05, SS_MAX = 750;
         let allLogs = [], otherDeductsMap = {};
+
+        // ฟังก์ชันเปลี่ยนหน้า (View Switcher)
+        window.switchView = function(viewId) {
+            document.querySelectorAll('.app-view').forEach(el => el.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active');
+
+            // อัปเดตเมนูด้านล่าง
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            if(viewId === 'view-home') document.getElementById('nav-home').classList.add('active');
+            if(viewId === 'view-log') document.getElementById('nav-log').classList.add('active');
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
 
         function showToast(message, type = 'success') {
             const container = document.getElementById('toastContainer');
@@ -1039,6 +744,7 @@
             try {
                 await setDoc(doc(db, "work_logs", date), entry);
                 showToast(`บันทึก ${date} สำเร็จ`);
+                window.switchView('view-home'); // กลับหน้าแรกหลังบันทึกเสร็จ
             } catch (err) { showToast("บันทึกไม่สำเร็จ", "error"); }
         }
 
@@ -1046,7 +752,7 @@
             document.getElementById('logDate').value = date;
             onDateInputChange();
             closeHistoryModal();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.switchView('view-log'); // สลับไปแท็บบันทึกทันที
         }
 
         async function deleteEntry(date) {
@@ -1074,7 +780,7 @@
             const totalDeduct = ssDeduction + otherDeduct;
             
             document.getElementById('netPay').innerText = (baseSalaryTotal + otPay + mealPay + opPay - totalDeduct).toLocaleString('th-TH', { minimumFractionDigits: 2 });
-            document.getElementById('netPaySub').innerText = selectElement.options[selectElement.selectedIndex]?.text || '';
+            
             if (document.activeElement !== document.getElementById('otherDeductInput')) document.getElementById('otherDeductInput').value = otherDeduct;
 
             document.getElementById('metricTotalDeduct').innerText = totalDeduct.toLocaleString(undefined, {minimumFractionDigits: 2});
@@ -1089,10 +795,10 @@
 
         function renderHistoryList(logs) {
             const historyList = document.getElementById('historyList');
-            historyList.innerHTML = logs.length === 0 ? `<div style="text-align:center; padding: 40px; color: #94a3b8;"><i class="fa-solid fa-folder-open" style="font-size: 2rem; margin-bottom:10px;"></i><br>ไม่มีข้อมูล</div>` : '';
+            historyList.innerHTML = logs.length === 0 ? `<div style="text-align:center; padding: 40px; color: #94a3b8;"><i class="fa-solid fa-folder-open" style="font-size: 2rem; margin-bottom:10px;"></i><br>ยังไม่มีข้อมูลในรอบบิลนี้</div>` : '';
             [...logs].reverse().forEach(item => {
                 const parts = item.date.split('-');
-                let details = item.status === 'WORK' ? `${item.timeIn}-${item.timeOut}` : (item.status === 'OFF_PAID' ? 'ได้ค่าแรง' : 'ไม่ได้ค่าแรง');
+                let details = item.status === 'WORK' ? `${item.timeIn} น. - ${item.timeOut} น.` : (item.status === 'OFF_PAID' ? 'วันหยุด (ได้ค่าแรง)' : 'ลา/ขาด (ไม่ได้ค่าแรง)');
                 let badges = item.status === 'WORK' ? `<span class="badge badge-work">ทำงาน</span>` : `<span class="badge" style="background:#f1f5f9">หยุด</span>`;
                 if (item.otHours > 0) badges += `<span class="badge badge-ot">OT ${item.otHours}</span>`;
                 
@@ -1112,7 +818,10 @@
         }
 
         function copySummaryToClipboard() {
-            navigator.clipboard.writeText(`ยอดรับสุทธิ: ฿${document.getElementById('netPay').innerText}`).then(() => showToast("คัดลอกสำเร็จ", "success"));
+            const net = document.getElementById('netPay').innerText;
+            const period = document.getElementById('periodSelect').options[document.getElementById('periodSelect').selectedIndex].text;
+            const textToCopy = `สรุปยอดเงินเดือน (Cook Helper)\nรอบบิล: ${period}\nยอดรับสุทธิ: ฿${net}`;
+            navigator.clipboard.writeText(textToCopy).then(() => showToast("คัดลอกยอดเงินสำเร็จ ส่งไลน์ได้เลย", "success"));
         }
 
         function openHistoryModal() {
@@ -1129,11 +838,11 @@
 
         function exportData() {
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(allLogs));
-            const a = document.createElement('a'); a.href = dataStr; a.download = `backup.json`; a.click();
+            const a = document.createElement('a'); a.href = dataStr; a.download = `cook_helper_backup.json`; a.click();
         }
 
         function importData() { document.getElementById('importFile').click(); }
-        async function handleFileImport(e) { /* Logic import */ showToast("ฟังก์ชันนำเข้าพร้อมทำงาน", "info"); }
+        async function handleFileImport(e) { showToast("พร้อมทำงาน หากต้องการให้นำเข้าข้อมูลจริงโปรดตั้งค่าเพิ่มเติม", "info"); }
 
         window.onPeriodChange = onPeriodChange; window.onDateInputChange = onDateInputChange; window.changeDate = changeDate;
         window.toggleFormFields = toggleFormFields; window.toggleCardStyle = toggleCardStyle; window.applyPreset = applyPreset;
