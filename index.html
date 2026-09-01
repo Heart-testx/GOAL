@@ -188,8 +188,37 @@
             display: flex; align-items: center; justify-content: center; color: var(--text-main); cursor: pointer; transition: var(--transition);
         }
         .btn-date-nav:active { background: #e2e8f0; transform: scale(0.92); }
-        
-        .time-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+        /* UI แก้ไขตรงตามภาพถ่ายหน้าจอ */
+        .time-labels-header {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            margin-bottom: 8px;
+        }
+        .time-labels-header .form-label {
+            margin-bottom: 0;
+            font-size: 0.95rem;
+            font-weight: 700;
+        }
+        .time-card-box {
+            background-color: var(--input-bg);
+            border-radius: var(--radius-lg);
+            padding: 16px 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+        }
+        .time-input-clean {
+            background: transparent;
+            border: none;
+            outline: none;
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--text-main);
+            text-align: center;
+            width: 100%;
+            font-family: 'Kanit', sans-serif;
+        }
 
         .preset-container {
             display: flex; gap: 10px; margin-bottom: 16px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none;
@@ -197,6 +226,7 @@
         .preset-btn {
             flex-shrink: 0; background: var(--card-bg); border: 1.5px solid var(--border); padding: 8px 16px;
             border-radius: 24px; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); cursor: pointer;
+            transition: var(--transition);
         }
         .preset-btn.active, .preset-btn:active { background: var(--primary); color: white; border-color: var(--primary); }
 
@@ -418,25 +448,25 @@
 
                     <div id="workFields">
                         <div class="preset-container">
-                            <button type="button" class="preset-btn" onclick="window.applyPreset('08:00', '17:00', false)">กะเช้า</button>
-                            <button type="button" class="preset-btn" onclick="window.applyPreset('12:00', '21:00', false)">กะกลางวัน</button>
-                            <button type="button" class="preset-btn" onclick="window.applyPreset('16:00', '01:00', true)">กะปิดร้าน (OP)</button>
+                            <button type="button" class="preset-btn" id="presetMorning" onclick="window.applyPreset('08:00', '17:00', false)">กะเช้า</button>
+                            <button type="button" class="preset-btn" id="presetNoon" onclick="window.applyPreset('12:00', '21:00', false)">กะกลางวัน</button>
+                            <button type="button" class="preset-btn" id="presetOP" onclick="window.applyPreset('16:00', '01:00', true)">กะปิดร้าน (OP)</button>
                         </div>
 
-                        <div class="time-grid form-group">
-                            <div>
+                        <div class="form-group">
+                            <div class="time-labels-header">
                                 <label class="form-label">เข้างาน</label>
-                                <input type="time" id="timeIn" class="form-control" value="08:00" onchange="window.updateHoursPreview()">
+                                <label class="form-label" style="text-align: right; padding-right: 10px;">ออกงาน</label>
                             </div>
-                            <div>
-                                <label class="form-label">ออกงาน</label>
-                                <input type="time" id="timeOut" class="form-control" value="17:00" onchange="window.updateHoursPreview()">
+                            <div class="time-card-box">
+                                <input type="time" id="timeIn" class="time-input-clean" value="12:00" onchange="window.updateHoursPreview()">
+                                <input type="time" id="timeOut" class="time-input-clean" value="21:00" onchange="window.updateHoursPreview()">
                             </div>
                         </div>
 
                         <div class="preview-box" id="hoursPreview">
                             <i class="fa-solid fa-clock"></i>
-                            <span>ทำงาน 8.0 ชม. | OT: 0.00 ชม.</span>
+                            <span>ทำงาน 8.0 ชม. | OT: <strong>0.00 ชม.</strong></span>
                         </div>
 
                         <div class="form-group">
@@ -634,8 +664,8 @@
                 document.getElementById('workStatus').value = existing.status || 'WORK';
                 toggleFormFields();
                 if (existing.status === 'WORK') {
-                    document.getElementById('timeIn').value = existing.timeIn || '08:00';
-                    document.getElementById('timeOut').value = existing.timeOut || '17:00';
+                    document.getElementById('timeIn').value = existing.timeIn || '12:00';
+                    document.getElementById('timeOut').value = existing.timeOut || '21:00';
                     document.getElementById('hasMeal').checked = !!existing.hasMeal;
                     document.getElementById('hasOP').checked = !!existing.hasOP;
                     toggleCardStyle('mealCard', existing.hasMeal);
@@ -646,8 +676,8 @@
                 editingTag.style.display = 'none';
                 document.getElementById('workStatus').value = 'WORK';
                 toggleFormFields();
-                document.getElementById('timeIn').value = '08:00';
-                document.getElementById('timeOut').value = '17:00';
+                document.getElementById('timeIn').value = '12:00';
+                document.getElementById('timeOut').value = '21:00';
                 document.getElementById('hasMeal').checked = true;
                 document.getElementById('hasOP').checked = false;
                 toggleCardStyle('mealCard', true);
@@ -691,7 +721,6 @@
             updateHoursPreview();
         }
 
-        // Fix 1: คำนวณเวลาและหักพักถูกต้อง
         function calculateHours(timeInStr, timeOutStr) {
             if (!timeInStr || !timeOutStr) return { workHours: 0, otHours: 0 };
             const [inH, inM] = timeInStr.split(':').map(Number);
@@ -721,7 +750,6 @@
             try { await setDoc(doc(db, "other_deductions", periodKey), { amount: value }); } catch (err) { showToast("เกิดข้อผิดพลาด", "error"); }
         }
 
-        // Fix 2: ป้องกันปุ่มเบิ้ล (Double Submission)
         async function handleFormSubmit(e) {
             e.preventDefault();
             const date = document.getElementById('logDate').value, status = document.getElementById('workStatus').value;
@@ -847,7 +875,6 @@
 
         function importData() { document.getElementById('importFile').click(); }
         
-        // Fix 3: นำเข้าข้อมูลสำรอง (Import) ใช้งานได้จริงผ่าน Firebase Batch
         async function handleFileImport(e) { 
             const file = e.target.files[0];
             if (!file) return;
