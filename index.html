@@ -45,10 +45,9 @@
             background: var(--bg-app);
             color: var(--text-main);
             min-height: 100vh;
-            padding-bottom: 80px; /* Space for Bottom Nav */
+            padding-bottom: 80px;
         }
 
-        /* Toast Notifications */
         #toastContainer {
             position: fixed;
             top: max(20px, env(safe-area-inset-top));
@@ -72,7 +71,6 @@
         .toast-error i { color: #f87171; }
         .toast-info i { color: #38bdf8; }
 
-        /* Banking App Header */
         .app-header {
             background: var(--header-gradient);
             color: white;
@@ -97,7 +95,6 @@
         }
         .status-dot { width: 8px; height: 8px; background: #34d399; border-radius: 50%; }
 
-        /* Balance Display (Like Bank Account) */
         .balance-section { text-align: center; }
         .balance-label { font-size: 0.9rem; font-weight: 300; opacity: 0.8; margin-bottom: 4px; }
         .balance-amount {
@@ -118,7 +115,6 @@
         }
         .period-select option { background: var(--card-bg); color: var(--text-main); }
 
-        /* Main Container & View System */
         .container {
             width: 100%; max-width: 500px; margin: 0 auto; padding: 0 16px;
         }
@@ -134,7 +130,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Action Grid (Banking Quick Menu) */
         .action-grid {
             background: var(--card-bg); border-radius: var(--radius-xl);
             padding: 24px 16px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
@@ -155,7 +150,6 @@
         .icon-gray { background: #f1f5f9; color: var(--text-muted); }
         .action-item span { font-size: 0.75rem; font-weight: 500; color: var(--text-main); text-align: center; }
 
-        /* Card Styles */
         .card {
             background: var(--card-bg); border-radius: var(--radius-xl);
             padding: 24px; margin-bottom: 20px; box-shadow: var(--shadow-card);
@@ -167,7 +161,6 @@
         .card-header i { font-size: 1.2rem; color: var(--primary); }
         .card-header h2 { font-size: 1.1rem; font-weight: 700; }
 
-        /* Widget Grid */
         .summary-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px; }
         .metric-box {
             background: var(--input-bg); padding: 16px; border-radius: var(--radius-lg);
@@ -177,7 +170,6 @@
         .metric-value { font-size: 1.1rem; font-weight: 700; color: var(--text-main); }
         .metric-deduct { color: var(--danger); }
 
-        /* Form Elements */
         .form-group { margin-bottom: 20px; }
         .form-label { display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 8px; color: var(--text-main); }
         .form-control, .form-select {
@@ -199,7 +191,6 @@
         
         .time-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
-        /* Chips */
         .preset-container {
             display: flex; gap: 10px; margin-bottom: 16px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none;
         }
@@ -209,7 +200,6 @@
         }
         .preset-btn.active, .preset-btn:active { background: var(--primary); color: white; border-color: var(--primary); }
 
-        /* Preview & Checkbox */
         .preview-box {
             background: #eff6ff; padding: 14px 16px; border-radius: var(--radius-md); font-size: 0.9rem;
             color: var(--primary-dark); margin-bottom: 20px; display: flex; align-items: center; gap: 12px; font-weight: 500;
@@ -222,19 +212,18 @@
         .checkbox-card.active { background: #ecfdf5; border-color: var(--success); color: #065f46; }
         .checkbox-card input { accent-color: var(--success); width: 18px; height: 18px; }
 
-        /* Buttons */
         .btn-submit {
             width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: var(--radius-md);
             font-size: 1.05rem; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25); transition: var(--transition);
         }
         .btn-submit:active { transform: scale(0.98); box-shadow: none; }
+        .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
 
         .editing-tag {
             background: #fef3c7; color: #b45309; font-size: 0.8rem; padding: 6px 12px;
             border-radius: 12px; font-weight: 600; display: none;
         }
 
-        /* Settings View */
         .rate-info {
             background: #fffbeb; border-radius: var(--radius-lg); padding: 20px; font-size: 0.9rem;
             color: #92400e; margin-bottom: 20px; line-height: 1.6; border: 1px solid #fde68a;
@@ -249,7 +238,6 @@
         .btn-tool i { color: var(--text-muted); font-size: 1.2rem; }
         .btn-tool:active { background: var(--input-bg); }
 
-        /* Bottom Navigation */
         .bottom-nav {
             position: fixed; bottom: 0; left: 0; right: 0; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
             border-top: 1px solid var(--border); display: flex; justify-content: space-around;
@@ -263,7 +251,6 @@
         .nav-item.active { color: var(--primary); }
         .nav-item:active { transform: scale(0.9); }
 
-        /* Bottom Sheet Modal (History) */
         .modal-overlay {
             position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(3px);
             z-index: 1000; display: flex; justify-content: center; align-items: flex-end; opacity: 0; visibility: hidden; transition: opacity 0.3s;
@@ -290,7 +277,6 @@
         .btn-close { background: var(--input-bg); border: none; width: 36px; height: 36px; border-radius: 50%; font-size: 1.1rem; color: var(--text-muted); cursor: pointer; }
         .modal-body { padding: 16px; overflow-y: auto; flex-grow: 1; }
 
-        /* History Items */
         .history-item {
             background: white; border: none; border-radius: var(--radius-lg); padding: 16px; margin-bottom: 12px;
             display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow-sm);
@@ -495,7 +481,9 @@
             </div>
         </div>
 
-    </div> <nav class="bottom-nav">
+    </div>
+
+    <nav class="bottom-nav">
         <a href="#" class="nav-item active" id="nav-home" onclick="window.switchView('view-home')">
             <i class="fa-solid fa-house"></i><span>หน้าแรก</span>
         </a>
@@ -546,12 +534,10 @@
         const DAILY_RATE = 500, OT_RATE = 93.75, MEAL_RATE = 50, OP_RATE = 50, SS_PERCENT = 0.05, SS_MAX = 750;
         let allLogs = [], otherDeductsMap = {};
 
-        // ฟังก์ชันเปลี่ยนหน้า (View Switcher)
         window.switchView = function(viewId) {
             document.querySelectorAll('.app-view').forEach(el => el.classList.remove('active'));
             document.getElementById(viewId).classList.add('active');
 
-            // อัปเดตเมนูด้านล่าง
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             if(viewId === 'view-home') document.getElementById('nav-home').classList.add('active');
             if(viewId === 'view-log') document.getElementById('nav-log').classList.add('active');
@@ -705,16 +691,24 @@
             updateHoursPreview();
         }
 
+        // Fix 1: คำนวณเวลาและหักพักถูกต้อง
         function calculateHours(timeInStr, timeOutStr) {
             if (!timeInStr || !timeOutStr) return { workHours: 0, otHours: 0 };
             const [inH, inM] = timeInStr.split(':').map(Number);
             const [outH, outM] = timeOutStr.split(':').map(Number);
             let inMinutes = inH * 60 + inM, outMinutes = outH * 60 + outM;
             if (outMinutes < inMinutes) outMinutes += 24 * 60;
+            
             let totalMinutes = outMinutes - inMinutes;
-            if (totalMinutes > 300) totalMinutes = Math.max(300, totalMinutes - 60);
+            if (totalMinutes > 300) {
+                totalMinutes -= 60;
+            }
+            
             let totalHours = totalMinutes / 60;
-            return { workHours: Math.min(totalHours, 8), otHours: Math.round(Math.max(0, totalHours - 8) * 100) / 100 };
+            return { 
+                workHours: Math.min(totalHours, 8), 
+                otHours: Math.max(0, totalHours - 8) 
+            };
         }
 
         function updateHoursPreview() {
@@ -727,10 +721,15 @@
             try { await setDoc(doc(db, "other_deductions", periodKey), { amount: value }); } catch (err) { showToast("เกิดข้อผิดพลาด", "error"); }
         }
 
+        // Fix 2: ป้องกันปุ่มเบิ้ล (Double Submission)
         async function handleFormSubmit(e) {
             e.preventDefault();
             const date = document.getElementById('logDate').value, status = document.getElementById('workStatus').value;
+            const btnSubmit = document.getElementById('btnSubmit');
             if (!date) return showToast("กรุณาเลือกวันที่", "error");
+            
+            btnSubmit.disabled = true;
+            btnSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> กำลังบันทึก...';
             
             const entry = {
                 date, status,
@@ -744,15 +743,20 @@
             try {
                 await setDoc(doc(db, "work_logs", date), entry);
                 showToast(`บันทึก ${date} สำเร็จ`);
-                window.switchView('view-home'); // กลับหน้าแรกหลังบันทึกเสร็จ
-            } catch (err) { showToast("บันทึกไม่สำเร็จ", "error"); }
+                window.switchView('view-home');
+            } catch (err) { 
+                showToast("บันทึกไม่สำเร็จ", "error"); 
+            } finally {
+                btnSubmit.disabled = false;
+                btnSubmit.innerHTML = 'บันทึกข้อมูล';
+            }
         }
 
         async function editEntry(date) {
             document.getElementById('logDate').value = date;
             onDateInputChange();
             closeHistoryModal();
-            window.switchView('view-log'); // สลับไปแท็บบันทึกทันที
+            window.switchView('view-log');
         }
 
         async function deleteEntry(date) {
@@ -842,7 +846,36 @@
         }
 
         function importData() { document.getElementById('importFile').click(); }
-        async function handleFileImport(e) { showToast("พร้อมทำงาน หากต้องการให้นำเข้าข้อมูลจริงโปรดตั้งค่าเพิ่มเติม", "info"); }
+        
+        // Fix 3: นำเข้าข้อมูลสำรอง (Import) ใช้งานได้จริงผ่าน Firebase Batch
+        async function handleFileImport(e) { 
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = async function(event) {
+                try {
+                    const data = JSON.parse(event.target.result);
+                    if (!Array.isArray(data)) throw new Error("Invalid format");
+                    
+                    showToast("กำลังนำเข้าข้อมูล...", "info");
+                    const batch = writeBatch(db);
+                    data.forEach(log => {
+                        if (log.date) {
+                            const logRef = doc(db, "work_logs", log.date);
+                            batch.set(logRef, log);
+                        }
+                    });
+                    
+                    await batch.commit();
+                    showToast("นำเข้าข้อมูลสำรองสำเร็จ", "success");
+                } catch (error) {
+                    showToast("ไฟล์ไม่ถูกต้อง หรือเกิดข้อผิดพลาด", "error");
+                }
+                e.target.value = '';
+            };
+            reader.readAsText(file);
+        }
 
         window.onPeriodChange = onPeriodChange; window.onDateInputChange = onDateInputChange; window.changeDate = changeDate;
         window.toggleFormFields = toggleFormFields; window.toggleCardStyle = toggleCardStyle; window.applyPreset = applyPreset;
