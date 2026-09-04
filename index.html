@@ -239,38 +239,73 @@
         }
         .modal-overlay.active { opacity: 1; visibility: visible; }
         
+        /* --- อัปเกรด Modal และ History UI --- */
         .modal-container {
-            background: var(--bg-app); width: 100%; max-width: 600px; max-height: 85vh;
-            border-radius: 28px 28px 0 0; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+            background: var(--bg-app); width: 100%; max-width: 600px; height: 90vh; /* ทำให้สูงขึ้น */
+            border-radius: 32px 32px 0 0; transform: translateY(100%); 
+            transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1); /* แอนิเมชันเด้งสมูทขึ้น */
             display: flex; flex-direction: column; padding-bottom: env(safe-area-inset-bottom);
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.15);
         }
         .modal-overlay.active .modal-container { transform: translateY(0); }
         @media (min-width: 768px) {
             .modal-overlay { align-items: center; padding: 20px; }
-            .modal-container { border-radius: var(--radius-xl); transform: translateY(20px) scale(0.95); }
+            .modal-container { border-radius: var(--radius-xl); transform: translateY(20px) scale(0.95); height: 85vh; }
             .modal-overlay.active .modal-container { transform: translateY(0) scale(1); }
         }
 
-        .modal-drag-handle { width: 40px; height: 5px; background: #cbd5e1; border-radius: 3px; margin: 12px auto 0; }
-        .modal-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; border-bottom: 1px solid var(--border); background: white; }
+        .modal-drag-handle { 
+            width: 48px; height: 6px; background: #cbd5e1; 
+            border-radius: 4px; margin: 16px auto 8px; cursor: grab;
+        }
+
+        .modal-header { 
+            display: flex; align-items: center; justify-content: space-between; 
+            padding: 10px 24px 20px; border-bottom: 1px solid var(--border); background: var(--bg-app); 
+            border-radius: 32px 32px 0 0;
+        }
         .modal-title { font-size: 1.15rem; font-weight: 700; }
         .btn-close { background: var(--input-bg); border: none; width: 36px; height: 36px; border-radius: 50%; font-size: 1.1rem; color: var(--text-muted); cursor: pointer; }
         .modal-body { padding: 16px; overflow-y: auto; flex-grow: 1; }
 
         .history-item {
-            background: white; border: none; border-radius: var(--radius-lg); padding: 16px; margin-bottom: 12px;
-            display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow-sm);
+            background: var(--card-bg); border: 1px solid transparent; border-radius: var(--radius-xl); 
+            padding: 18px; margin-bottom: 16px; display: flex; justify-content: space-between; 
+            align-items: flex-start; box-shadow: var(--shadow-sm); transition: var(--transition);
         }
-        .history-date { font-weight: 700; font-size: 1rem; color: var(--text-main); }
-        .history-sub { font-size: 0.85rem; color: var(--text-muted); margin-top: 2px; line-height: 1.4; }
-        .badge { padding: 4px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 600; display: inline-block; margin-top: 6px; margin-right: 4px; }
+        .history-item:active { transform: scale(0.98); border-color: var(--primary-light); }
+        
+        .history-icon-box {
+            width: 48px; height: 48px; border-radius: 14px; display: flex; 
+            align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; margin-right: 14px;
+        }
+        .history-details { flex-grow: 1; }
+        .history-date { font-weight: 700; font-size: 1.05rem; color: var(--text-main); margin-bottom: 4px; display: flex; justify-content: space-between; align-items: center;}
+        .history-time { font-size: 0.85rem; font-weight: 500; color: var(--text-muted); }
+        
+        .badge { 
+            padding: 6px 10px; border-radius: 8px; font-size: 0.75rem; 
+            font-weight: 600; display: inline-flex; align-items: center; gap: 4px; margin-top: 6px; margin-right: 4px; 
+        }
         .badge-work { background: #dcfce7; color: #15803d; }
         .badge-ot { background: #fef3c7; color: #b45309; }
-        .action-btns { display: flex; gap: 8px; }
-        .btn-action { border: none; width: 40px; height: 40px; border-radius: 12px; font-size: 1rem; cursor: pointer; transition: transform 0.1s; }
+        .badge-meal { background: #e0f2fe; color: #0369a1; }
+        .badge-op { background: #f3e8ff; color: #7e22ce; }
+
+        .note-box {
+            background: var(--input-bg); padding: 10px 12px; border-radius: 10px;
+            font-size: 0.85rem; color: var(--text-muted); margin-top: 10px;
+            display: flex; gap: 8px; align-items: flex-start; line-height: 1.4;
+        }
+
+        .action-btns { display: flex; flex-direction: column; gap: 8px; margin-left: 12px; }
+        .btn-action { border: none; width: 38px; height: 38px; border-radius: 12px; font-size: 1rem; cursor: pointer; transition: transform 0.1s; }
         .btn-action:active { transform: scale(0.9); }
         .btn-edit { background: #eff6ff; color: var(--primary); }
         .btn-del { background: #fee2e2; color: var(--danger); }
+        
+        .empty-state { text-align: center; padding: 60px 20px; color: var(--text-muted); }
+        .empty-state i { font-size: 3.5rem; color: #cbd5e1; margin-bottom: 20px; display: block; }
     </style>
 </head>
 <body>
@@ -477,7 +512,7 @@
     </nav>
 
     <div class="modal-overlay" id="historyModal" onclick="window.closeModalOnOutside(event)">
-        <div class="modal-container">
+        <div class="modal-container" id="modalContainer">
             <div class="modal-drag-handle"></div>
             <div class="modal-header">
                 <div class="modal-title">ประวัติรอบบิลนี้</div>
@@ -515,7 +550,13 @@
         const DAILY_RATE = 500, OT_RATE = 93.75, MEAL_RATE = 50, OP_RATE = 50, SS_PERCENT = 0.05, SS_MAX = 750;
         let allLogs = [], otherDeductsMap = {};
 
+        // --- เพิ่มระบบ Haptic Feedback ให้แอปดูมีชีวิตชีวา ---
+        function triggerHaptic() {
+            if (navigator.vibrate) navigator.vibrate(40); // สั่นเบาๆ 40ms
+        }
+
         window.switchView = function(viewId) {
+            triggerHaptic(); // สั่นทุกครั้งที่เปลี่ยนหน้า
             document.querySelectorAll('.app-view').forEach(el => el.classList.remove('active'));
             document.getElementById(viewId).classList.add('active');
 
@@ -537,7 +578,7 @@
             setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 300); }, 3000);
         }
 
-        document.addEventListener('DOMContentLoaded', () => { initDateAndPeriods(); setupFirestoreListeners(); });
+        document.addEventListener('DOMContentLoaded', () => { initDateAndPeriods(); setupFirestoreListeners(); setupSwipeToClose(); });
 
         function setupFirestoreListeners() {
             onSnapshot(collection(db, "work_logs"), (snapshot) => {
@@ -613,7 +654,7 @@
             if (existing) {
                 editingTag.style.display = 'inline-block';
                 document.getElementById('workStatus').value = existing.status || 'WORK';
-                document.getElementById('logNote').value = existing.note || ''; // Load Note
+                document.getElementById('logNote').value = existing.note || '';
                 
                 toggleFormFields();
                 if (existing.status === 'WORK') {
@@ -628,7 +669,7 @@
             } else {
                 editingTag.style.display = 'none';
                 document.getElementById('workStatus').value = 'WORK';
-                document.getElementById('logNote').value = ''; // Reset Note
+                document.getElementById('logNote').value = '';
                 
                 toggleFormFields();
                 document.getElementById('timeIn').value = '12:00';
@@ -669,6 +710,7 @@
         }
 
         function applyPreset(inTime, outTime, isOP = false) {
+            triggerHaptic();
             document.getElementById('timeIn').value = inTime;
             document.getElementById('timeOut').value = outTime;
             document.getElementById('hasOP').checked = isOP;
@@ -713,10 +755,11 @@
             
             btnSubmit.disabled = true;
             btnSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> กำลังบันทึก...';
+            triggerHaptic();
             
             const entry = {
                 date, status,
-                note: document.getElementById('logNote').value, // เพิ่ม Note เข้าไปในฐานข้อมูล
+                note: document.getElementById('logNote').value,
                 timeIn: status === 'WORK' ? document.getElementById('timeIn').value : '',
                 timeOut: status === 'WORK' ? document.getElementById('timeOut').value : '',
                 otHours: status === 'WORK' ? calculateHours(document.getElementById('timeIn').value, document.getElementById('timeOut').value).otHours : 0,
@@ -744,6 +787,7 @@
         }
 
         async function deleteEntry(date) {
+            triggerHaptic();
             if (confirm(`ลบบันทึกวันที่ ${date}?`)) {
                 try { await deleteDoc(doc(db, "work_logs", date)); showToast(`ลบแล้ว`, "info"); } catch (err) { showToast("ลบไม่ได้", "error"); }
             }
@@ -781,27 +825,59 @@
             renderHistoryList(periodLogs);
         }
 
+        // --- ฟังก์ชันแสดงประวัติที่อัปเกรดแล้ว ---
         function renderHistoryList(logs) {
             const historyList = document.getElementById('historyList');
-            historyList.innerHTML = logs.length === 0 ? `<div style="text-align:center; padding: 40px; color: #94a3b8;"><i class="fa-solid fa-folder-open" style="font-size: 2rem; margin-bottom:10px;"></i><br>ยังไม่มีข้อมูลในรอบบิลนี้</div>` : '';
+            
+            if (logs.length === 0) {
+                historyList.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fa-solid fa-receipt"></i>
+                        <h3 style="color: var(--text-main); margin-bottom: 8px;">ยังไม่มีข้อมูลในรอบบิลนี้</h3>
+                        <p style="font-size: 0.9rem;">บันทึกเวลาทำงานของคุณจะแสดงที่นี่</p>
+                    </div>`;
+                return;
+            }
+
+            let html = '';
             [...logs].reverse().forEach(item => {
                 const parts = item.date.split('-');
-                let details = item.status === 'WORK' ? `${item.timeIn} น. - ${item.timeOut} น.` : (item.status === 'OFF_PAID' ? 'วันหยุด (ได้ค่าแรง)' : 'ลา/ขาด (ไม่ได้ค่าแรง)');
+                const day = parts[2], month = parts[1], year = parseInt(parts[0]) + 543;
                 
-                // แทรกหมายเหตุในประวัติถ้ามีการบันทึกไว้
-                if (item.note) {
-                    details += `<div style="color: var(--primary-dark); font-size: 0.8rem; margin-top: 4px; font-weight: 500;"><i class="fa-solid fa-comment-dots"></i> ${item.note}</div>`;
+                // กำหนดไอคอนและสีตามสถานะ
+                let iconClass = 'icon-gray', iconName = 'fa-bed', timeText = 'ลา/ขาด';
+                if (item.status === 'WORK') {
+                    iconClass = 'icon-blue'; iconName = 'fa-briefcase'; timeText = `${item.timeIn} - ${item.timeOut} น.`;
+                } else if (item.status === 'OFF_PAID') {
+                    iconClass = 'icon-green'; iconName = 'fa-mug-hot'; timeText = 'วันหยุด (ได้ค่าแรง)';
                 }
+
+                // จัดการป้ายกำกับ (Badges)
+                let badges = '';
+                if (item.status === 'WORK') badges += `<span class="badge badge-work"><i class="fa-solid fa-check"></i> ทำงาน</span>`;
+                else badges += `<span class="badge" style="background:#f1f5f9; color: #64748b"><i class="fa-solid fa-pause"></i> หยุด</span>`;
                 
-                let badges = item.status === 'WORK' ? `<span class="badge badge-work">ทำงาน</span>` : `<span class="badge" style="background:#f1f5f9">หยุด</span>`;
-                if (item.otHours > 0) badges += `<span class="badge badge-ot">OT ${item.otHours}</span>`;
-                
-                historyList.innerHTML += `
+                if (item.otHours > 0) badges += `<span class="badge badge-ot"><i class="fa-solid fa-fire"></i> OT ${item.otHours} ชม.</span>`;
+                if (item.hasMeal) badges += `<span class="badge badge-meal"><i class="fa-solid fa-utensils"></i> อาหาร</span>`;
+                if (item.hasOP) badges += `<span class="badge badge-op"><i class="fa-solid fa-moon"></i> OP</span>`;
+
+                // กล่องหมายเหตุ
+                let noteHtml = item.note ? `
+                    <div class="note-box">
+                        <i class="fa-solid fa-comment-dots" style="margin-top: 3px; color: var(--primary-light);"></i>
+                        <span>${item.note}</span>
+                    </div>` : '';
+
+                html += `
                     <div class="history-item">
-                        <div>
-                            <div class="history-date">${parts[2]}/${parts[1]}/${parseInt(parts[0])+543}</div>
-                            <div class="history-sub">${details}</div>
+                        <div class="history-icon-box ${iconClass}"><i class="fa-solid ${iconName}"></i></div>
+                        <div class="history-details">
+                            <div class="history-date">
+                                <span>${day}/${month}/${year}</span>
+                                <span class="history-time">${timeText}</span>
+                            </div>
                             <div>${badges}</div>
+                            ${noteHtml}
                         </div>
                         <div class="action-btns">
                             <button class="btn-action btn-edit" onclick="window.editEntry('${item.date}')"><i class="fa-solid fa-pen"></i></button>
@@ -809,9 +885,11 @@
                         </div>
                     </div>`;
             });
+            historyList.innerHTML = html;
         }
 
         function copySummaryToClipboard() {
+            triggerHaptic();
             const net = document.getElementById('netPay').innerText;
             const period = document.getElementById('periodSelect').options[document.getElementById('periodSelect').selectedIndex].text;
             const textToCopy = `สรุปยอดเงินเดือน (Cook Helper)\nรอบบิล: ${period}\nยอดรับสุทธิ: ฿${net}`;
@@ -819,6 +897,7 @@
         }
 
         function openHistoryModal() {
+            triggerHaptic();
             document.getElementById('historyModal').classList.add('active');
             document.body.style.overflow = 'hidden';
         }
@@ -829,6 +908,46 @@
         }
 
         function closeModalOnOutside(e) { if (e.target.id === 'historyModal') closeHistoryModal(); }
+
+        // --- ระบบ Swipe ปัดลงเพื่อปิด Modal (App-like feel) ---
+        function setupSwipeToClose() {
+            let modalStartY = 0;
+            let currentY = 0;
+            const modalContainer = document.getElementById('modalContainer');
+            
+            modalContainer.addEventListener('touchstart', (e) => {
+                // จับเฉพาะส่วนหัวหรือที่จับ (Drag handle)
+                if(e.target.closest('.modal-header') || e.target.classList.contains('modal-drag-handle')) {
+                    modalStartY = e.touches[0].clientY;
+                    modalContainer.style.transition = 'none'; // ปิดแอนิเมชันตอนลาก
+                }
+            }, { passive: true });
+
+            modalContainer.addEventListener('touchmove', (e) => {
+                if (!modalStartY) return;
+                currentY = e.touches[0].clientY;
+                let dy = currentY - modalStartY;
+                if (dy > 0) {
+                    modalContainer.style.transform = `translateY(${dy}px)`;
+                }
+            }, { passive: true });
+
+            modalContainer.addEventListener('touchend', (e) => {
+                if (!modalStartY) return;
+                let dy = currentY - modalStartY;
+                modalContainer.style.transition = 'transform 0.4s cubic-bezier(0.32, 0.72, 0, 1)';
+                
+                // ถ้าลากลงมามากกว่า 100px ให้ปิด Modal
+                if (dy > 100) {
+                    window.closeHistoryModal();
+                    // เคลียร์ style inline ทิ้งเพื่อให้เปิดครั้งหน้าแอนิเมชันทำงานปกติ
+                    setTimeout(() => { modalContainer.style.transform = ''; }, 400); 
+                } else {
+                    modalContainer.style.transform = ''; // เด้งกลับที่เดิม
+                }
+                modalStartY = 0;
+            });
+        }
 
         function exportData() {
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(allLogs));
