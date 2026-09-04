@@ -88,6 +88,8 @@
             border: 1px solid rgba(255,255,255,0.1);
         }
         .status-dot { width: 8px; height: 8px; background: #34d399; border-radius: 50%; box-shadow: 0 0 8px #34d399; }
+        .status-badge.offline .status-dot { background: #f87171; box-shadow: 0 0 8px #f87171; animation: pulse-dot 1.5s ease-in-out infinite; }
+        @keyframes pulse-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
         .header-actions { display: flex; align-items: center; gap: 10px; }
         .btn-refresh {
@@ -413,7 +415,7 @@
                     <i class="fa-solid fa-arrows-rotate"></i>
                 </button>
                 <div class="status-badge" id="onlineStatusBadge">
-                    <span class="status-dot"></span> ออนไลน์
+                    <span class="status-dot" id="onlineStatusDot"></span><span id="onlineStatusText">ออนไลน์</span>
                 </div>
             </div>
         </div>
@@ -748,6 +750,24 @@
         let isBalanceHidden = false;
 
         function triggerHaptic() { if (navigator.vibrate) navigator.vibrate(30); }
+
+        // อัพเดทป้ายสถานะ "ออนไลน์/ออฟไลน์" ให้ตรงกับการเชื่อมต่อจริง
+        // (เดิมเป็นข้อความตายตัว ไม่เคยเปลี่ยนตามสถานะเน็ตจริง)
+        function updateOnlineStatus() {
+            const badge = document.getElementById('onlineStatusBadge');
+            const text = document.getElementById('onlineStatusText');
+            if (!badge || !text) return;
+            if (navigator.onLine) {
+                badge.classList.remove('offline');
+                text.textContent = 'ออนไลน์';
+            } else {
+                badge.classList.add('offline');
+                text.textContent = 'ออฟไลน์ (ยังบันทึกได้)';
+            }
+        }
+        window.addEventListener('online', () => { updateOnlineStatus(); if (typeof showToast === 'function') showToast('เชื่อมต่ออินเทอร์เน็ตแล้ว กำลังซิงค์ข้อมูล', 'success'); });
+        window.addEventListener('offline', () => { updateOnlineStatus(); if (typeof showToast === 'function') showToast('ขาดการเชื่อมต่อ ข้อมูลจะซิงค์อัตโนมัติเมื่อกลับมาออนไลน์', 'info'); });
+        document.addEventListener('DOMContentLoaded', updateOnlineStatus);
 
         // รีเฟรชแอป: ล้าง Service Worker + Cache Storage ทั้งหมด แล้วโหลดหน้าใหม่แบบข้าม cache
         // ใช้แก้ปัญหาแอปที่ Add to Home Screen บน iPhone ไม่อัพเดทตามโค้ดใหม่
