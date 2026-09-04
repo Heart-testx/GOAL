@@ -133,6 +133,7 @@
         .icon-green { background: #ecfdf5; color: var(--success); }
         .icon-purple { background: #f5f3ff; color: #8b5cf6; }
         .icon-gold { background: #fffbeb; color: var(--accent-gold); }
+        .icon-gray { background: #f1f5f9; color: #64748b; }
         .action-item span { font-size: 0.75rem; font-weight: 500; color: var(--text-main); text-align: center; }
 
         /* Card Elements */
@@ -261,7 +262,7 @@
             border-radius: 28px 28px 0 0; transform: translateY(100%); 
             transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
             display: flex; flex-direction: column; padding-bottom: max(16px, env(safe-area-inset-bottom));
-            box-shadow: 0 -10px 40px rgba(0,0,0,0.2); border-t: 1px solid var(--border);
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.2); border-top: 1px solid var(--border);
         }
         .modal-overlay.active .modal-container { transform: translateY(0); }
         @media (min-width: 768px) {
@@ -1036,7 +1037,7 @@
                 let badges = '';
                 if (item.status === 'WORK') badges += `<span class="badge badge-work"><i class="fa-solid fa-check"></i> ทำงาน</span>`;
                 else badges += `<span class="badge" style="background:#f1f5f9; color: #64748b"><i class="fa-solid fa-pause"></i> หยุด</span>`;
-                if (item.otHours > 0) badges += `<span class="badge badge-ot"><i class="fa-solid fa-fire"></i> OT ${item.otHours} ชม.</span>`;
+                if (item.otHours > 0) badges += `<span class="badge badge-ot"><i class="fa-solid fa-fire"></i> OT ${item.otHours.toFixed(2)} ชม.</span>`;
                 if (item.hasMeal) badges += `<span class="badge badge-meal"><i class="fa-solid fa-utensils"></i> อาหาร</span>`;
                 if (item.hasOP) badges += `<span class="badge badge-op"><i class="fa-solid fa-moon"></i> OP</span>`;
 
