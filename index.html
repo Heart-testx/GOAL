@@ -3,6 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#2563eb">
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/3565/3565418.png">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3565/3565418.png">
+    
     <title>Cook Helper PayTracker</title>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -81,14 +88,8 @@
             box-shadow: 0 4px 20px rgba(37, 99, 235, 0.2);
         }
 
-        .header-top {
-            display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;
-        }
-
-        .brand-title {
-            font-size: 1.1rem; font-weight: 600; display: flex; align-items: center; gap: 8px; opacity: 0.9;
-        }
-
+        .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+        .brand-title { font-size: 1.1rem; font-weight: 600; display: flex; align-items: center; gap: 8px; opacity: 0.9; }
         .status-badge {
             font-size: 0.75rem; background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(8px);
             padding: 6px 12px; border-radius: 20px; display: flex; align-items: center; gap: 6px; font-weight: 500;
@@ -115,30 +116,18 @@
         }
         .period-select option { background: var(--card-bg); color: var(--text-main); }
 
-        .container {
-            width: 100%; max-width: 500px; margin: 0 auto; padding: 0 16px;
-        }
+        .container { width: 100%; max-width: 500px; margin: 0 auto; padding: 0 16px; }
 
-        .app-view {
-            display: none;
-            animation: fadeIn 0.3s ease;
-        }
+        .app-view { display: none; animation: fadeIn 0.3s ease; }
         .app-view.active { display: block; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         .action-grid {
             background: var(--card-bg); border-radius: var(--radius-xl);
             padding: 24px 16px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
-            box-shadow: var(--shadow-card); margin-top: -35px; position: relative; z-index: 10;
-            margin-bottom: 20px;
+            box-shadow: var(--shadow-card); margin-top: -35px; position: relative; z-index: 10; margin-bottom: 20px;
         }
-        .action-item {
-            display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; transition: var(--transition);
-        }
+        .action-item { display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; transition: var(--transition); }
         .action-item:active { transform: scale(0.92); }
         .action-icon {
             width: 52px; height: 52px; border-radius: 18px; display: flex; align-items: center; justify-content: center;
@@ -150,22 +139,14 @@
         .icon-gray { background: #f1f5f9; color: var(--text-muted); }
         .action-item span { font-size: 0.75rem; font-weight: 500; color: var(--text-main); text-align: center; }
 
-        .card {
-            background: var(--card-bg); border-radius: var(--radius-xl);
-            padding: 24px; margin-bottom: 20px; box-shadow: var(--shadow-card);
-        }
-        .card-header {
-            display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;
-        }
+        .card { background: var(--card-bg); border-radius: var(--radius-xl); padding: 24px; margin-bottom: 20px; box-shadow: var(--shadow-card); }
+        .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
         .card-header-left { display: flex; align-items: center; gap: 10px; }
         .card-header i { font-size: 1.2rem; color: var(--primary); }
         .card-header h2 { font-size: 1.1rem; font-weight: 700; }
 
         .summary-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px; }
-        .metric-box {
-            background: var(--input-bg); padding: 16px; border-radius: var(--radius-lg);
-            display: flex; flex-direction: column; gap: 4px;
-        }
+        .metric-box { background: var(--input-bg); padding: 16px; border-radius: var(--radius-lg); display: flex; flex-direction: column; gap: 4px; }
         .metric-label { font-size: 0.8rem; color: var(--text-muted); font-weight: 500; }
         .metric-value { font-size: 1.1rem; font-weight: 700; color: var(--text-main); }
         .metric-deduct { color: var(--danger); }
@@ -189,44 +170,18 @@
         }
         .btn-date-nav:active { background: #e2e8f0; transform: scale(0.92); }
 
-        /* UI แก้ไขตรงตามภาพถ่ายหน้าจอ */
-        .time-labels-header {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            margin-bottom: 8px;
-        }
-        .time-labels-header .form-label {
-            margin-bottom: 0;
-            font-size: 0.95rem;
-            font-weight: 700;
-        }
-        .time-card-box {
-            background-color: var(--input-bg);
-            border-radius: var(--radius-lg);
-            padding: 16px 20px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            align-items: center;
-        }
+        .time-labels-header { display: grid; grid-template-columns: 1fr 1fr; margin-bottom: 8px; }
+        .time-labels-header .form-label { margin-bottom: 0; font-size: 0.95rem; font-weight: 700; }
+        .time-card-box { background-color: var(--input-bg); border-radius: var(--radius-lg); padding: 16px 20px; display: grid; grid-template-columns: 1fr 1fr; align-items: center; }
         .time-input-clean {
-            background: transparent;
-            border: none;
-            outline: none;
-            font-size: 1.15rem;
-            font-weight: 600;
-            color: var(--text-main);
-            text-align: center;
-            width: 100%;
-            font-family: 'Kanit', sans-serif;
+            background: transparent; border: none; outline: none; font-size: 1.15rem; font-weight: 600;
+            color: var(--text-main); text-align: center; width: 100%; font-family: 'Kanit', sans-serif;
         }
 
-        .preset-container {
-            display: flex; gap: 10px; margin-bottom: 16px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none;
-        }
+        .preset-container { display: flex; gap: 10px; margin-bottom: 16px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
         .preset-btn {
             flex-shrink: 0; background: var(--card-bg); border: 1.5px solid var(--border); padding: 8px 16px;
-            border-radius: 24px; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); cursor: pointer;
-            transition: var(--transition);
+            border-radius: 24px; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); cursor: pointer; transition: var(--transition);
         }
         .preset-btn.active, .preset-btn:active { background: var(--primary); color: white; border-color: var(--primary); }
 
@@ -249,10 +204,7 @@
         .btn-submit:active { transform: scale(0.98); box-shadow: none; }
         .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
 
-        .editing-tag {
-            background: #fef3c7; color: #b45309; font-size: 0.8rem; padding: 6px 12px;
-            border-radius: 12px; font-weight: 600; display: none;
-        }
+        .editing-tag { background: #fef3c7; color: #b45309; font-size: 0.8rem; padding: 6px 12px; border-radius: 12px; font-weight: 600; display: none; }
 
         .rate-info {
             background: #fffbeb; border-radius: var(--radius-lg); padding: 20px; font-size: 0.9rem;
@@ -300,9 +252,7 @@
         }
 
         .modal-drag-handle { width: 40px; height: 5px; background: #cbd5e1; border-radius: 3px; margin: 12px auto 0; }
-        .modal-header {
-            display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; border-bottom: 1px solid var(--border); background: white;
-        }
+        .modal-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; border-bottom: 1px solid var(--border); background: white; }
         .modal-title { font-size: 1.15rem; font-weight: 700; }
         .btn-close { background: var(--input-bg); border: none; width: 36px; height: 36px; border-radius: 50%; font-size: 1.1rem; color: var(--text-muted); cursor: pointer; }
         .modal-body { padding: 16px; overflow-y: auto; flex-grow: 1; }
@@ -312,10 +262,8 @@
             display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow-sm);
         }
         .history-date { font-weight: 700; font-size: 1rem; color: var(--text-main); }
-        .history-sub { font-size: 0.85rem; color: var(--text-muted); margin-top: 2px; }
-        .badge {
-            padding: 4px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 600; display: inline-block; margin-top: 6px; margin-right: 4px;
-        }
+        .history-sub { font-size: 0.85rem; color: var(--text-muted); margin-top: 2px; line-height: 1.4; }
+        .badge { padding: 4px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 600; display: inline-block; margin-top: 6px; margin-right: 4px; }
         .badge-work { background: #dcfce7; color: #15803d; }
         .badge-ot { background: #fef3c7; color: #b45309; }
         .action-btns { display: flex; gap: 8px; }
@@ -348,9 +296,7 @@
     </header>
 
     <div class="container">
-        
         <div id="view-home" class="app-view active">
-            
             <div class="action-grid">
                 <div class="action-item" onclick="window.switchView('view-log')">
                     <div class="action-icon icon-blue"><i class="fa-solid fa-calendar-plus"></i></div>
@@ -482,6 +428,11 @@
                                 </label>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="form-group" style="margin-top: 15px;">
+                        <label class="form-label">หมายเหตุ (ถ้ามี)</label>
+                        <input type="text" id="logNote" class="form-control" placeholder="เช่น แลกกะ, ลาป่วย, มาสาย...">
                     </div>
 
                     <button type="submit" class="btn-submit" id="btnSubmit">บันทึกข้อมูล</button>
@@ -662,6 +613,8 @@
             if (existing) {
                 editingTag.style.display = 'inline-block';
                 document.getElementById('workStatus').value = existing.status || 'WORK';
+                document.getElementById('logNote').value = existing.note || ''; // Load Note
+                
                 toggleFormFields();
                 if (existing.status === 'WORK') {
                     document.getElementById('timeIn').value = existing.timeIn || '12:00';
@@ -675,6 +628,8 @@
             } else {
                 editingTag.style.display = 'none';
                 document.getElementById('workStatus').value = 'WORK';
+                document.getElementById('logNote').value = ''; // Reset Note
+                
                 toggleFormFields();
                 document.getElementById('timeIn').value = '12:00';
                 document.getElementById('timeOut').value = '21:00';
@@ -761,6 +716,7 @@
             
             const entry = {
                 date, status,
+                note: document.getElementById('logNote').value, // เพิ่ม Note เข้าไปในฐานข้อมูล
                 timeIn: status === 'WORK' ? document.getElementById('timeIn').value : '',
                 timeOut: status === 'WORK' ? document.getElementById('timeOut').value : '',
                 otHours: status === 'WORK' ? calculateHours(document.getElementById('timeIn').value, document.getElementById('timeOut').value).otHours : 0,
@@ -831,6 +787,12 @@
             [...logs].reverse().forEach(item => {
                 const parts = item.date.split('-');
                 let details = item.status === 'WORK' ? `${item.timeIn} น. - ${item.timeOut} น.` : (item.status === 'OFF_PAID' ? 'วันหยุด (ได้ค่าแรง)' : 'ลา/ขาด (ไม่ได้ค่าแรง)');
+                
+                // แทรกหมายเหตุในประวัติถ้ามีการบันทึกไว้
+                if (item.note) {
+                    details += `<div style="color: var(--primary-dark); font-size: 0.8rem; margin-top: 4px; font-weight: 500;"><i class="fa-solid fa-comment-dots"></i> ${item.note}</div>`;
+                }
+                
                 let badges = item.status === 'WORK' ? `<span class="badge badge-work">ทำงาน</span>` : `<span class="badge" style="background:#f1f5f9">หยุด</span>`;
                 if (item.otHours > 0) badges += `<span class="badge badge-ot">OT ${item.otHours}</span>`;
                 
