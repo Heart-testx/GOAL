@@ -1255,6 +1255,24 @@
         }
 
         window.importData = function() { document.getElementById('importFile').click(); }
+
+        /* ================= EXPOSE FUNCTIONS TO WINDOW =================
+           This script runs as type="module", so top-level `function` declarations
+           stay module-scoped and are NOT automatically added to window.
+           All the functions below are invoked from inline onclick/onchange/onsubmit
+           attributes in the HTML (which call them via window.xxx), so without this
+           block those buttons/inputs silently fail to respond. */
+        window.changeDate = changeDate;
+        window.onDateInputChange = onDateInputChange;
+        window.onPeriodChange = onPeriodChange;
+        window.toggleFormFields = toggleFormFields;
+        window.toggleCardStyle = toggleCardStyle;
+        window.applyPreset = applyPreset;
+        window.updateHoursPreview = updateHoursPreview;
+        window.onOtherDeductChange = onOtherDeductChange;
+        window.handleFormSubmit = handleFormSubmit;
+        window.editEntry = editEntry;
+        window.deleteEntry = deleteEntry;
         
         window.handleFileImport = async function(e) { 
             const file = e.target.files[0];
