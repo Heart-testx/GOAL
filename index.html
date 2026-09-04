@@ -584,8 +584,6 @@
             <button class="btn-submit btn-outline" onclick="window.openTxHistoryModal()" style="display: flex; align-items: center; justify-content: center; gap: 8px;">
                 <i class="fa-solid fa-list-ul"></i> ดูประวัติรายรับ-รายจ่ายทั้งหมด
             </button>
-
-            <button class="fab-btn" onclick="window.openTxModal()"><i class="fa-solid fa-plus"></i></button>
         </div>
 
         <div id="view-settings" class="app-view">
@@ -610,6 +608,8 @@
             </div>
         </div>
     </div>
+
+    <button class="fab-btn" id="fabBtn" style="display: none;" onclick="window.openTxModal()"><i class="fa-solid fa-plus"></i></button>
 
     <nav class="bottom-nav">
         <a href="#" class="nav-item active" id="nav-home" onclick="window.switchView('view-home')">
@@ -743,7 +743,9 @@
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             const navMap = {'view-home': 'nav-home', 'view-log': 'nav-log', 'view-finance': 'nav-finance', 'view-settings': 'nav-settings'};
             if(navMap[viewId]) document.getElementById(navMap[viewId]).classList.add('active');
-            
+
+            document.getElementById('fabBtn').style.display = (viewId === 'view-finance') ? 'flex' : 'none';
+
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
