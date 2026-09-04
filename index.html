@@ -36,58 +36,37 @@
             --transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
         }
 
-        * {
-            box-sizing: border-box;
-            font-family: 'Kanit', sans-serif;
-            margin: 0;
-            padding: 0;
-            -webkit-tap-highlight-color: transparent;
-            min-width: 0;
-        }
+        * { box-sizing: border-box; font-family: 'Kanit', sans-serif; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; min-width: 0; }
 
         html, body {
-            width: 100%;
-            overflow-x: hidden;
-            overscroll-behavior-y: none;
-            background: var(--bg-app);
-            color: var(--text-main);
-            min-height: 100vh;
-            padding-bottom: 80px;
+            width: 100%; overflow-x: hidden; overscroll-behavior-y: none;
+            background: var(--bg-app); color: var(--text-main);
+            min-height: 100vh; padding-bottom: 80px;
         }
 
+        /* Toasts */
         #toastContainer {
-            position: fixed;
-            top: max(20px, env(safe-area-inset-top));
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 9999;
-            display: flex; flex-direction: column; gap: 10px;
+            position: fixed; top: max(20px, env(safe-area-inset-top)); left: 50%;
+            transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px;
             pointer-events: none; width: 90%; max-width: 400px;
         }
-
         .toast {
             background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px);
             color: white; padding: 14px 20px; border-radius: var(--radius-lg);
             font-size: 0.95rem; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
             display: flex; align-items: center; gap: 12px;
-            opacity: 0; transform: translateY(-20px) scale(0.95);
-            transition: var(--transition);
+            opacity: 0; transform: translateY(-20px) scale(0.95); transition: var(--transition);
         }
         .toast.show { opacity: 1; transform: translateY(0) scale(1); }
-        .toast-success i { color: #34d399; }
-        .toast-error i { color: #f87171; }
-        .toast-info i { color: #38bdf8; }
+        .toast-success i { color: #34d399; } .toast-error i { color: #f87171; } .toast-info i { color: #38bdf8; }
 
+        /* App Header */
         .app-header {
-            background: var(--header-gradient);
-            color: white;
+            background: var(--header-gradient); color: white;
             padding: calc(20px + env(safe-area-inset-top)) 20px 70px 20px;
-            border-bottom-left-radius: 36px;
-            border-bottom-right-radius: 36px;
-            position: relative;
-            box-shadow: 0 4px 20px rgba(37, 99, 235, 0.2);
+            border-bottom-left-radius: 36px; border-bottom-right-radius: 36px;
+            position: relative; box-shadow: 0 4px 20px rgba(37, 99, 235, 0.2);
         }
-
         .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
         .brand-title { font-size: 1.1rem; font-weight: 600; display: flex; align-items: center; gap: 8px; opacity: 0.9; }
         .status-badge {
@@ -102,7 +81,6 @@
             font-size: 3.2rem; font-weight: 700; line-height: 1; margin-bottom: 16px;
             letter-spacing: -1px; text-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-
         .period-selector-wrapper {
             background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(12px);
             border-radius: 20px; padding: 8px 16px; display: inline-flex; align-items: center; gap: 8px;
@@ -122,6 +100,7 @@
         .app-view.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* Dashboard UI */
         .action-grid {
             background: var(--card-bg); border-radius: var(--radius-xl);
             padding: 24px 16px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
@@ -137,6 +116,7 @@
         .icon-green { background: #ecfdf5; color: var(--success); }
         .icon-purple { background: #f5f3ff; color: #8b5cf6; }
         .icon-gray { background: #f1f5f9; color: var(--text-muted); }
+        .icon-gold { background: #fffbeb; color: #d97706; }
         .action-item span { font-size: 0.75rem; font-weight: 500; color: var(--text-main); text-align: center; }
 
         .card { background: var(--card-bg); border-radius: var(--radius-xl); padding: 24px; margin-bottom: 20px; box-shadow: var(--shadow-card); }
@@ -151,6 +131,7 @@
         .metric-value { font-size: 1.1rem; font-weight: 700; color: var(--text-main); }
         .metric-deduct { color: var(--danger); }
 
+        /* Forms */
         .form-group { margin-bottom: 20px; }
         .form-label { display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 8px; color: var(--text-main); }
         .form-control, .form-select {
@@ -220,6 +201,7 @@
         .btn-tool i { color: var(--text-muted); font-size: 1.2rem; }
         .btn-tool:active { background: var(--input-bg); }
 
+        /* Nav */
         .bottom-nav {
             position: fixed; bottom: 0; left: 0; right: 0; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
             border-top: 1px solid var(--border); display: flex; justify-content: space-around;
@@ -227,38 +209,33 @@
         }
         .nav-item {
             display: flex; flex-direction: column; align-items: center; gap: 6px;
-            color: #94a3b8; text-decoration: none; font-size: 0.75rem; font-weight: 600; width: 33%; transition: var(--transition);
+            color: #94a3b8; text-decoration: none; font-size: 0.75rem; font-weight: 600; width: 25%; transition: var(--transition);
         }
         .nav-item i { font-size: 1.3rem; margin-bottom: 2px; }
         .nav-item.active { color: var(--primary); }
         .nav-item:active { transform: scale(0.9); }
 
+        /* Modals */
         .modal-overlay {
             position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(3px);
             z-index: 1000; display: flex; justify-content: center; align-items: flex-end; opacity: 0; visibility: hidden; transition: opacity 0.3s;
         }
         .modal-overlay.active { opacity: 1; visibility: visible; }
         
-        /* --- อัปเกรด Modal และ History UI --- */
         .modal-container {
-            background: var(--bg-app); width: 100%; max-width: 600px; height: 90vh; /* ทำให้สูงขึ้น */
+            background: var(--bg-app); width: 100%; max-width: 600px; max-height: 90vh; 
             border-radius: 32px 32px 0 0; transform: translateY(100%); 
-            transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1); /* แอนิเมชันเด้งสมูทขึ้น */
+            transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1);
             display: flex; flex-direction: column; padding-bottom: env(safe-area-inset-bottom);
             box-shadow: 0 -10px 40px rgba(0,0,0,0.15);
         }
         .modal-overlay.active .modal-container { transform: translateY(0); }
         @media (min-width: 768px) {
             .modal-overlay { align-items: center; padding: 20px; }
-            .modal-container { border-radius: var(--radius-xl); transform: translateY(20px) scale(0.95); height: 85vh; }
+            .modal-container { border-radius: var(--radius-xl); transform: translateY(20px) scale(0.95); max-height: 85vh; }
             .modal-overlay.active .modal-container { transform: translateY(0) scale(1); }
         }
-
-        .modal-drag-handle { 
-            width: 48px; height: 6px; background: #cbd5e1; 
-            border-radius: 4px; margin: 16px auto 8px; cursor: grab;
-        }
-
+        .modal-drag-handle { width: 48px; height: 6px; background: #cbd5e1; border-radius: 4px; margin: 16px auto 8px; cursor: grab; }
         .modal-header { 
             display: flex; align-items: center; justify-content: space-between; 
             padding: 10px 24px 20px; border-bottom: 1px solid var(--border); background: var(--bg-app); 
@@ -268,13 +245,13 @@
         .btn-close { background: var(--input-bg); border: none; width: 36px; height: 36px; border-radius: 50%; font-size: 1.1rem; color: var(--text-muted); cursor: pointer; }
         .modal-body { padding: 16px; overflow-y: auto; flex-grow: 1; }
 
+        /* History Items */
         .history-item {
             background: var(--card-bg); border: 1px solid transparent; border-radius: var(--radius-xl); 
             padding: 18px; margin-bottom: 16px; display: flex; justify-content: space-between; 
             align-items: flex-start; box-shadow: var(--shadow-sm); transition: var(--transition);
         }
         .history-item:active { transform: scale(0.98); border-color: var(--primary-light); }
-        
         .history-icon-box {
             width: 48px; height: 48px; border-radius: 14px; display: flex; 
             align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; margin-right: 14px;
@@ -282,7 +259,6 @@
         .history-details { flex-grow: 1; }
         .history-date { font-weight: 700; font-size: 1.05rem; color: var(--text-main); margin-bottom: 4px; display: flex; justify-content: space-between; align-items: center;}
         .history-time { font-size: 0.85rem; font-weight: 500; color: var(--text-muted); }
-        
         .badge { 
             padding: 6px 10px; border-radius: 8px; font-size: 0.75rem; 
             font-weight: 600; display: inline-flex; align-items: center; gap: 4px; margin-top: 6px; margin-right: 4px; 
@@ -291,21 +267,79 @@
         .badge-ot { background: #fef3c7; color: #b45309; }
         .badge-meal { background: #e0f2fe; color: #0369a1; }
         .badge-op { background: #f3e8ff; color: #7e22ce; }
-
         .note-box {
             background: var(--input-bg); padding: 10px 12px; border-radius: 10px;
             font-size: 0.85rem; color: var(--text-muted); margin-top: 10px;
             display: flex; gap: 8px; align-items: flex-start; line-height: 1.4;
         }
-
         .action-btns { display: flex; flex-direction: column; gap: 8px; margin-left: 12px; }
         .btn-action { border: none; width: 38px; height: 38px; border-radius: 12px; font-size: 1rem; cursor: pointer; transition: transform 0.1s; }
         .btn-action:active { transform: scale(0.9); }
         .btn-edit { background: #eff6ff; color: var(--primary); }
         .btn-del { background: #fee2e2; color: var(--danger); }
-        
         .empty-state { text-align: center; padding: 60px 20px; color: var(--text-muted); }
         .empty-state i { font-size: 3.5rem; color: #cbd5e1; margin-bottom: 20px; display: block; }
+
+        /* ==================== 
+           BANKING / FINANCE UI 
+           ==================== */
+        .finance-header { margin-top: -20px; margin-bottom: 20px; position: relative; }
+        .bank-card-ui {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border-radius: 20px; padding: 24px; color: white;
+            box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.3); position: relative; overflow: hidden;
+        }
+        .bank-card-ui::after {
+            content: ''; position: absolute; right: -30px; top: -30px;
+            width: 150px; height: 150px; background: rgba(255,255,255,0.05); border-radius: 50%;
+        }
+        .bank-label { font-size: 0.85rem; color: #94a3b8; margin-bottom: 5px; }
+        .bank-balance-total { font-size: 2.5rem; font-weight: 700; margin-bottom: 20px; letter-spacing: -0.5px; }
+        .bank-summary-row { display: flex; gap: 16px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 16px; }
+        .bank-summary-item { flex: 1; }
+        .bank-summary-item div:first-child { font-size: 0.75rem; color: #94a3b8; margin-bottom: 2px;}
+        .bank-summary-item div:last-child { font-size: 1.1rem; font-weight: 600; }
+        .text-green { color: #34d399; } .text-red { color: #f87171; }
+
+        .tx-list-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding: 0 4px;}
+        .tx-list-title { font-size: 1.1rem; font-weight: 700; color: var(--text-main); }
+        
+        .tx-item {
+            background: var(--card-bg); border-radius: var(--radius-lg); padding: 16px; margin-bottom: 12px;
+            display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow-sm);
+            cursor: pointer; transition: var(--transition); border: 1px solid transparent;
+        }
+        .tx-item:active { transform: scale(0.98); border-color: var(--border); }
+        .tx-left { display: flex; align-items: center; gap: 14px; }
+        .tx-icon {
+            width: 44px; height: 44px; border-radius: 12px; display: flex;
+            align-items: center; justify-content: center; font-size: 1.2rem;
+        }
+        .tx-icon.in { background: #ecfdf5; color: #10b981; }
+        .tx-icon.out { background: #fef2f2; color: #ef4444; }
+        .tx-details h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 2px; color: var(--text-main); }
+        .tx-details p { font-size: 0.75rem; color: var(--text-muted); }
+        .tx-amount { font-size: 1.05rem; font-weight: 700; }
+        .tx-amount.in { color: #10b981; } .tx-amount.out { color: #ef4444; }
+
+        .fab-btn {
+            position: fixed; bottom: 90px; right: 20px; width: 56px; height: 56px;
+            background: var(--primary); color: white; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; font-size: 1.5rem;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4); z-index: 90; cursor: pointer; transition: transform 0.2s; border: none;
+        }
+        .fab-btn:active { transform: scale(0.9); }
+
+        .tx-radio-group { display: flex; gap: 10px; margin-bottom: 20px; }
+        .tx-radio { flex: 1; }
+        .tx-radio input { display: none; }
+        .tx-radio label {
+            display: block; text-align: center; padding: 12px; border-radius: var(--radius-md);
+            background: var(--input-bg); font-weight: 600; cursor: pointer; transition: var(--transition);
+            border: 2px solid transparent; color: var(--text-muted);
+        }
+        .tx-radio input[value="INCOME"]:checked + label { background: #ecfdf5; border-color: var(--success); color: #065f46; }
+        .tx-radio input[value="EXPENSE"]:checked + label { background: #fef2f2; border-color: var(--danger); color: #991b1b; }
     </style>
 </head>
 <body>
@@ -321,7 +355,7 @@
         </div>
 
         <div class="balance-section">
-            <div class="balance-label">ยอดรับสุทธิรอบบิลนี้</div>
+            <div class="balance-label">ยอดรับสุทธิรอบบิลนี้ (งาน)</div>
             <div class="balance-amount">฿<span id="netPay">0.00</span></div>
             <div class="period-selector-wrapper">
                 <i class="fa-regular fa-calendar-check" style="font-size: 1rem;"></i>
@@ -335,19 +369,19 @@
             <div class="action-grid">
                 <div class="action-item" onclick="window.switchView('view-log')">
                     <div class="action-icon icon-blue"><i class="fa-solid fa-calendar-plus"></i></div>
-                    <span>บันทึกเวลา</span>
+                    <span>บันทึกงาน</span>
+                </div>
+                <div class="action-item" onclick="window.switchView('view-finance')">
+                    <div class="action-icon icon-gold"><i class="fa-solid fa-wallet"></i></div>
+                    <span>การเงิน</span>
                 </div>
                 <div class="action-item" onclick="window.openHistoryModal()">
                     <div class="action-icon icon-purple"><i class="fa-solid fa-clock-rotate-left"></i></div>
-                    <span>ดูประวัติ</span>
+                    <span>ประวัติงาน</span>
                 </div>
                 <div class="action-item" onclick="window.copySummaryToClipboard()">
                     <div class="action-icon icon-green"><i class="fa-brands fa-line"></i></div>
-                    <span>ส่งยอดเงิน</span>
-                </div>
-                <div class="action-item" onclick="window.switchView('view-settings')">
-                    <div class="action-icon icon-gray"><i class="fa-solid fa-gear"></i></div>
-                    <span>ตั้งค่า</span>
+                    <span>ส่งยอดงาน</span>
                 </div>
             </div>
 
@@ -355,7 +389,7 @@
                 <div class="card-header">
                     <div class="card-header-left">
                         <i class="fa-solid fa-chart-pie"></i>
-                        <h2>สรุปยอดสะสม</h2>
+                        <h2>สรุปยอดสะสม (งาน)</h2>
                     </div>
                 </div>
                 <div class="summary-grid">
@@ -475,6 +509,34 @@
             </div>
         </div>
 
+        <div id="view-finance" class="app-view">
+            <div class="finance-header">
+                <div class="bank-card-ui">
+                    <div class="bank-label">ยอดเงินคงเหลือรวม (บัญชีส่วนตัว)</div>
+                    <div class="bank-balance-total">฿<span id="bankTotalBalance">0.00</span></div>
+                    <div class="bank-summary-row">
+                        <div class="bank-summary-item">
+                            <div><i class="fa-solid fa-arrow-down text-green"></i> รายรับรวม</div>
+                            <div class="text-green">฿<span id="bankTotalIncome">0.00</span></div>
+                        </div>
+                        <div class="bank-summary-item">
+                            <div><i class="fa-solid fa-arrow-up text-red"></i> รายจ่ายรวม</div>
+                            <div class="text-red">฿<span id="bankTotalExpense">0.00</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tx-list-header">
+                <span class="tx-list-title">รายการล่าสุด</span>
+            </div>
+            
+            <div id="txListContainer">
+                </div>
+
+            <button class="fab-btn" onclick="window.openTxModal()"><i class="fa-solid fa-plus"></i></button>
+        </div>
+
         <div id="view-settings" class="app-view">
             <div class="card" style="margin-top: -20px; box-shadow: none; border-radius: 0 0 var(--radius-xl) var(--radius-xl);">
                 <div class="rate-info">
@@ -504,22 +566,71 @@
             <i class="fa-solid fa-house"></i><span>หน้าแรก</span>
         </a>
         <a href="#" class="nav-item" id="nav-log" onclick="window.switchView('view-log')">
-            <i class="fa-solid fa-pen-to-square"></i><span>บันทึกงาน</span>
+            <i class="fa-solid fa-pen-to-square"></i><span>งาน</span>
         </a>
-        <a href="#" class="nav-item" onclick="window.openHistoryModal()">
-            <i class="fa-solid fa-file-invoice"></i><span>ประวัติ</span>
+        <a href="#" class="nav-item" id="nav-finance" onclick="window.switchView('view-finance')">
+            <i class="fa-solid fa-wallet"></i><span>การเงิน</span>
+        </a>
+        <a href="#" class="nav-item" id="nav-settings" onclick="window.switchView('view-settings')">
+            <i class="fa-solid fa-gear"></i><span>ตั้งค่า</span>
         </a>
     </nav>
 
-    <div class="modal-overlay" id="historyModal" onclick="window.closeModalOnOutside(event)">
+    <div class="modal-overlay" id="historyModal" onclick="window.closeModalOnOutside(event, 'historyModal')">
         <div class="modal-container" id="modalContainer">
             <div class="modal-drag-handle"></div>
             <div class="modal-header">
-                <div class="modal-title">ประวัติรอบบิลนี้</div>
+                <div class="modal-title">ประวัติรอบบิลนี้ (งาน)</div>
                 <button class="btn-close" onclick="window.closeHistoryModal()"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="modal-body">
                 <div id="historyList"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="txModal" onclick="window.closeModalOnOutside(event, 'txModal')">
+        <div class="modal-container" id="txModalContainer">
+            <div class="modal-drag-handle"></div>
+            <div class="modal-header">
+                <div class="modal-title" id="txModalTitle">บันทึกรายการ</div>
+                <button class="btn-close" onclick="window.closeTxModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="txForm" onsubmit="window.handleTxSubmit(event)">
+                    <input type="hidden" id="txId">
+                    
+                    <div class="tx-radio-group">
+                        <div class="tx-radio">
+                            <input type="radio" id="typeExpense" name="txType" value="EXPENSE" checked>
+                            <label for="typeExpense">รายจ่าย</label>
+                        </div>
+                        <div class="tx-radio">
+                            <input type="radio" id="typeIncome" name="txType" value="INCOME">
+                            <label for="typeIncome">รายรับ</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">จำนวนเงิน (บาท)</label>
+                        <input type="number" id="txAmount" class="form-control" style="font-size: 1.5rem; font-weight: bold; text-align: right;" step="0.01" min="0" required placeholder="0.00">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">หมายเหตุ / หมวดหมู่</label>
+                        <input type="text" id="txNote" class="form-control" placeholder="เช่น ค่าอาหาร, เติมน้ำมัน, โอนให้แม่..." required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">วันที่รายการ</label>
+                        <input type="date" id="txDate" class="form-control" required>
+                    </div>
+
+                    <div style="display: flex; gap: 10px;">
+                        <button type="button" id="btnDelTx" class="btn-submit" style="display:none; background: #fee2e2; color: var(--danger); flex: 1;" onclick="window.deleteTx()">ลบ</button>
+                        <button type="submit" class="btn-submit" style="flex: 2;">บันทึกรายการ</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -548,21 +659,18 @@
         });
 
         const DAILY_RATE = 500, OT_RATE = 93.75, MEAL_RATE = 50, OP_RATE = 50, SS_PERCENT = 0.05, SS_MAX = 750;
-        let allLogs = [], otherDeductsMap = {};
+        let allLogs = [], otherDeductsMap = {}, allTransactions = [];
 
-        // --- เพิ่มระบบ Haptic Feedback ให้แอปดูมีชีวิตชีวา ---
-        function triggerHaptic() {
-            if (navigator.vibrate) navigator.vibrate(40); // สั่นเบาๆ 40ms
-        }
+        function triggerHaptic() { if (navigator.vibrate) navigator.vibrate(40); }
 
         window.switchView = function(viewId) {
-            triggerHaptic(); // สั่นทุกครั้งที่เปลี่ยนหน้า
+            triggerHaptic();
             document.querySelectorAll('.app-view').forEach(el => el.classList.remove('active'));
             document.getElementById(viewId).classList.add('active');
 
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            if(viewId === 'view-home') document.getElementById('nav-home').classList.add('active');
-            if(viewId === 'view-log') document.getElementById('nav-log').classList.add('active');
+            const navMap = {'view-home': 'nav-home', 'view-log': 'nav-log', 'view-finance': 'nav-finance', 'view-settings': 'nav-settings'};
+            if(navMap[viewId]) document.getElementById(navMap[viewId]).classList.add('active');
             
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
@@ -578,32 +686,49 @@
             setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 300); }, 3000);
         }
 
-        document.addEventListener('DOMContentLoaded', () => { initDateAndPeriods(); setupFirestoreListeners(); setupSwipeToClose(); });
+        document.addEventListener('DOMContentLoaded', () => { 
+            initDateAndPeriods(); 
+            setupFirestoreListeners(); 
+            setupSwipeToClose('modalContainer', window.closeHistoryModal);
+            setupSwipeToClose('txModalContainer', window.closeTxModal);
+        });
 
         function setupFirestoreListeners() {
+            // Work Logs
             onSnapshot(collection(db, "work_logs"), (snapshot) => {
                 allLogs = snapshot.docs.map(doc => doc.data());
                 allLogs.sort((a, b) => a.date.localeCompare(b.date));
                 renderApp();
                 checkExistingLogForDate(document.getElementById('logDate').value);
-            }, (error) => showToast("ใช้งานโหมด Offline", "info"));
+            }, (error) => showToast("ใช้งานโหมด Offline (งาน)", "info"));
 
+            // Other Deductions
             onSnapshot(collection(db, "other_deductions"), (snapshot) => {
                 otherDeductsMap = {};
                 snapshot.docs.forEach(doc => { otherDeductsMap[doc.id] = doc.data().amount || 0; });
                 renderApp();
             });
+
+            // Financial Transactions
+            onSnapshot(collection(db, "transactions"), (snapshot) => {
+                allTransactions = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                // Sort by timestamp descending (newest first)
+                allTransactions.sort((a, b) => b.timestamp - a.timestamp);
+                renderFinanceApp();
+            }, (error) => console.error(error));
         }
 
+        /* ================= WORK LOG LOGIC ================= */
         function initDateAndPeriods() {
             const today = new Date();
-            setFormattedDate(today);
+            setFormattedDate(today, 'logDate');
+            setFormattedDate(today, 'txDate');
             generatePeriodOptions(today);
         }
 
-        function setFormattedDate(d) {
+        function setFormattedDate(d, elementId) {
             const y = d.getFullYear(), m = String(d.getMonth() + 1).padStart(2, '0'), day = String(d.getDate()).padStart(2, '0');
-            document.getElementById('logDate').value = `${y}-${m}-${day}`;
+            document.getElementById(elementId).value = `${y}-${m}-${day}`;
         }
 
         function changeDate(days) {
@@ -611,7 +736,7 @@
             if (!input.value) return;
             const current = new Date(input.value);
             current.setDate(current.getDate() + days);
-            setFormattedDate(current);
+            setFormattedDate(current, 'logDate');
             onDateInputChange();
         }
 
@@ -726,15 +851,10 @@
             if (outMinutes < inMinutes) outMinutes += 24 * 60;
             
             let totalMinutes = outMinutes - inMinutes;
-            if (totalMinutes > 300) {
-                totalMinutes -= 60;
-            }
+            if (totalMinutes > 300) totalMinutes -= 60;
             
             let totalHours = totalMinutes / 60;
-            return { 
-                workHours: Math.min(totalHours, 8), 
-                otHours: Math.max(0, totalHours - 8) 
-            };
+            return { workHours: Math.min(totalHours, 8), otHours: Math.max(0, totalHours - 8) };
         }
 
         function updateHoursPreview() {
@@ -825,17 +945,10 @@
             renderHistoryList(periodLogs);
         }
 
-        // --- ฟังก์ชันแสดงประวัติที่อัปเกรดแล้ว ---
         function renderHistoryList(logs) {
             const historyList = document.getElementById('historyList');
-            
             if (logs.length === 0) {
-                historyList.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fa-solid fa-receipt"></i>
-                        <h3 style="color: var(--text-main); margin-bottom: 8px;">ยังไม่มีข้อมูลในรอบบิลนี้</h3>
-                        <p style="font-size: 0.9rem;">บันทึกเวลาทำงานของคุณจะแสดงที่นี่</p>
-                    </div>`;
+                historyList.innerHTML = `<div class="empty-state"><i class="fa-solid fa-receipt"></i><h3 style="color: var(--text-main); margin-bottom: 8px;">ยังไม่มีข้อมูลในรอบบิลนี้</h3></div>`;
                 return;
             }
 
@@ -843,41 +956,25 @@
             [...logs].reverse().forEach(item => {
                 const parts = item.date.split('-');
                 const day = parts[2], month = parts[1], year = parseInt(parts[0]) + 543;
-                
-                // กำหนดไอคอนและสีตามสถานะ
                 let iconClass = 'icon-gray', iconName = 'fa-bed', timeText = 'ลา/ขาด';
-                if (item.status === 'WORK') {
-                    iconClass = 'icon-blue'; iconName = 'fa-briefcase'; timeText = `${item.timeIn} - ${item.timeOut} น.`;
-                } else if (item.status === 'OFF_PAID') {
-                    iconClass = 'icon-green'; iconName = 'fa-mug-hot'; timeText = 'วันหยุด (ได้ค่าแรง)';
-                }
+                if (item.status === 'WORK') { iconClass = 'icon-blue'; iconName = 'fa-briefcase'; timeText = `${item.timeIn} - ${item.timeOut} น.`; } 
+                else if (item.status === 'OFF_PAID') { iconClass = 'icon-green'; iconName = 'fa-mug-hot'; timeText = 'วันหยุด (ได้ค่าแรง)'; }
 
-                // จัดการป้ายกำกับ (Badges)
                 let badges = '';
                 if (item.status === 'WORK') badges += `<span class="badge badge-work"><i class="fa-solid fa-check"></i> ทำงาน</span>`;
                 else badges += `<span class="badge" style="background:#f1f5f9; color: #64748b"><i class="fa-solid fa-pause"></i> หยุด</span>`;
-                
                 if (item.otHours > 0) badges += `<span class="badge badge-ot"><i class="fa-solid fa-fire"></i> OT ${item.otHours} ชม.</span>`;
                 if (item.hasMeal) badges += `<span class="badge badge-meal"><i class="fa-solid fa-utensils"></i> อาหาร</span>`;
                 if (item.hasOP) badges += `<span class="badge badge-op"><i class="fa-solid fa-moon"></i> OP</span>`;
 
-                // กล่องหมายเหตุ
-                let noteHtml = item.note ? `
-                    <div class="note-box">
-                        <i class="fa-solid fa-comment-dots" style="margin-top: 3px; color: var(--primary-light);"></i>
-                        <span>${item.note}</span>
-                    </div>` : '';
+                let noteHtml = item.note ? `<div class="note-box"><i class="fa-solid fa-comment-dots" style="margin-top: 3px; color: var(--primary-light);"></i><span>${item.note}</span></div>` : '';
 
                 html += `
                     <div class="history-item">
                         <div class="history-icon-box ${iconClass}"><i class="fa-solid ${iconName}"></i></div>
                         <div class="history-details">
-                            <div class="history-date">
-                                <span>${day}/${month}/${year}</span>
-                                <span class="history-time">${timeText}</span>
-                            </div>
-                            <div>${badges}</div>
-                            ${noteHtml}
+                            <div class="history-date"><span>${day}/${month}/${year}</span><span class="history-time">${timeText}</span></div>
+                            <div>${badges}</div>${noteHtml}
                         </div>
                         <div class="action-btns">
                             <button class="btn-action btn-edit" onclick="window.editEntry('${item.date}')"><i class="fa-solid fa-pen"></i></button>
@@ -888,38 +985,149 @@
             historyList.innerHTML = html;
         }
 
-        function copySummaryToClipboard() {
-            triggerHaptic();
-            const net = document.getElementById('netPay').innerText;
-            const period = document.getElementById('periodSelect').options[document.getElementById('periodSelect').selectedIndex].text;
-            const textToCopy = `สรุปยอดเงินเดือน (Cook Helper)\nรอบบิล: ${period}\nยอดรับสุทธิ: ฿${net}`;
-            navigator.clipboard.writeText(textToCopy).then(() => showToast("คัดลอกยอดเงินสำเร็จ ส่งไลน์ได้เลย", "success"));
+        /* ================= FINANCE (TRANSACTION) LOGIC ================= */
+        function renderFinanceApp() {
+            let totalIncome = 0, totalExpense = 0;
+            const listContainer = document.getElementById('txListContainer');
+            
+            if (allTransactions.length === 0) {
+                listContainer.innerHTML = `<div class="empty-state" style="padding: 30px;"><i class="fa-solid fa-wallet"></i><p>ยังไม่มีรายการเข้า-ออก</p></div>`;
+            } else {
+                let html = '';
+                allTransactions.forEach(tx => {
+                    if(tx.type === 'INCOME') totalIncome += tx.amount;
+                    else totalExpense += tx.amount;
+
+                    const isIncome = tx.type === 'INCOME';
+                    const iconClass = isIncome ? 'in' : 'out';
+                    const iconSign = isIncome ? 'fa-arrow-down' : 'fa-arrow-up';
+                    const amountSign = isIncome ? '+' : '-';
+                    const parts = tx.date.split('-');
+                    const dateFormatted = `${parts[2]}/${parts[1]}/${parseInt(parts[0])+543}`;
+
+                    html += `
+                    <div class="tx-item" onclick="window.openTxModal('${tx.id}')">
+                        <div class="tx-left">
+                            <div class="tx-icon ${iconClass}"><i class="fa-solid ${iconSign}"></i></div>
+                            <div class="tx-details">
+                                <h4>${tx.note}</h4>
+                                <p>${dateFormatted}</p>
+                            </div>
+                        </div>
+                        <div class="tx-amount ${iconClass}">${amountSign}฿${tx.amount.toLocaleString(undefined, {minimumFractionDigits: 2})}</div>
+                    </div>`;
+                });
+                listContainer.innerHTML = html;
+            }
+
+            document.getElementById('bankTotalIncome').innerText = totalIncome.toLocaleString(undefined, {minimumFractionDigits: 2});
+            document.getElementById('bankTotalExpense').innerText = totalExpense.toLocaleString(undefined, {minimumFractionDigits: 2});
+            document.getElementById('bankTotalBalance').innerText = (totalIncome - totalExpense).toLocaleString(undefined, {minimumFractionDigits: 2});
         }
 
-        function openHistoryModal() {
+        window.openTxModal = function(txId = null) {
+            triggerHaptic();
+            const modal = document.getElementById('txModal');
+            document.getElementById('btnDelTx').style.display = txId ? 'block' : 'none';
+            document.getElementById('txModalTitle').innerText = txId ? 'แก้ไขรายการ' : 'เพิ่มรายการ';
+
+            if (txId) {
+                const tx = allTransactions.find(t => t.id === txId);
+                if (tx) {
+                    document.getElementById('txId').value = tx.id;
+                    if(tx.type === 'INCOME') document.getElementById('typeIncome').checked = true;
+                    else document.getElementById('typeExpense').checked = true;
+                    document.getElementById('txAmount').value = tx.amount;
+                    document.getElementById('txNote').value = tx.note;
+                    document.getElementById('txDate').value = tx.date;
+                }
+            } else {
+                document.getElementById('txId').value = '';
+                document.getElementById('typeExpense').checked = true;
+                document.getElementById('txAmount').value = '';
+                document.getElementById('txNote').value = '';
+                setFormattedDate(new Date(), 'txDate');
+            }
+            
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        window.closeTxModal = function() {
+            document.getElementById('txModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        window.handleTxSubmit = async function(e) {
+            e.preventDefault();
+            triggerHaptic();
+            
+            const id = document.getElementById('txId').value || Date.now().toString();
+            const type = document.querySelector('input[name="txType"]:checked').value;
+            const amount = parseFloat(document.getElementById('txAmount').value) || 0;
+            const note = document.getElementById('txNote').value;
+            const date = document.getElementById('txDate').value;
+            
+            // Get original timestamp if editing, or create new
+            let timestamp = new Date(date).getTime();
+            if(document.getElementById('txId').value) {
+                const existing = allTransactions.find(t => t.id === id);
+                if(existing) timestamp = existing.timestamp; 
+            }
+
+            try {
+                await setDoc(doc(db, "transactions", id), { type, amount, note, date, timestamp });
+                showToast("บันทึกรายการสำเร็จ");
+                closeTxModal();
+            } catch (error) {
+                showToast("เกิดข้อผิดพลาดในการบันทึก", "error");
+            }
+        }
+
+        window.deleteTx = async function() {
+            triggerHaptic();
+            const id = document.getElementById('txId').value;
+            if(!id) return;
+            
+            if (confirm(`ลบรายการนี้ใช่หรือไม่?`)) {
+                try {
+                    await deleteDoc(doc(db, "transactions", id));
+                    showToast("ลบรายการแล้ว", "info");
+                    closeTxModal();
+                } catch (error) {
+                    showToast("ลบไม่ได้ เกิดข้อผิดพลาด", "error");
+                }
+            }
+        }
+
+        /* ================= UTILS & MODALS ================= */
+        window.openHistoryModal = function() {
             triggerHaptic();
             document.getElementById('historyModal').classList.add('active');
             document.body.style.overflow = 'hidden';
         }
-
-        function closeHistoryModal() {
+        window.closeHistoryModal = function() {
             document.getElementById('historyModal').classList.remove('active');
             document.body.style.overflow = '';
         }
 
-        function closeModalOnOutside(e) { if (e.target.id === 'historyModal') closeHistoryModal(); }
+        window.closeModalOnOutside = function(e, modalId) {
+            if (e.target.id === modalId) {
+                if(modalId === 'historyModal') closeHistoryModal();
+                if(modalId === 'txModal') closeTxModal();
+            }
+        }
 
-        // --- ระบบ Swipe ปัดลงเพื่อปิด Modal (App-like feel) ---
-        function setupSwipeToClose() {
+        function setupSwipeToClose(containerId, closeFunc) {
             let modalStartY = 0;
             let currentY = 0;
-            const modalContainer = document.getElementById('modalContainer');
-            
+            const modalContainer = document.getElementById(containerId);
+            if(!modalContainer) return;
+
             modalContainer.addEventListener('touchstart', (e) => {
-                // จับเฉพาะส่วนหัวหรือที่จับ (Drag handle)
                 if(e.target.closest('.modal-header') || e.target.classList.contains('modal-drag-handle')) {
                     modalStartY = e.touches[0].clientY;
-                    modalContainer.style.transition = 'none'; // ปิดแอนิเมชันตอนลาก
+                    modalContainer.style.transition = 'none';
                 }
             }, { passive: true });
 
@@ -927,9 +1135,7 @@
                 if (!modalStartY) return;
                 currentY = e.touches[0].clientY;
                 let dy = currentY - modalStartY;
-                if (dy > 0) {
-                    modalContainer.style.transform = `translateY(${dy}px)`;
-                }
+                if (dy > 0) modalContainer.style.transform = `translateY(${dy}px)`;
             }, { passive: true });
 
             modalContainer.addEventListener('touchend', (e) => {
@@ -937,43 +1143,53 @@
                 let dy = currentY - modalStartY;
                 modalContainer.style.transition = 'transform 0.4s cubic-bezier(0.32, 0.72, 0, 1)';
                 
-                // ถ้าลากลงมามากกว่า 100px ให้ปิด Modal
                 if (dy > 100) {
-                    window.closeHistoryModal();
-                    // เคลียร์ style inline ทิ้งเพื่อให้เปิดครั้งหน้าแอนิเมชันทำงานปกติ
+                    closeFunc();
                     setTimeout(() => { modalContainer.style.transform = ''; }, 400); 
                 } else {
-                    modalContainer.style.transform = ''; // เด้งกลับที่เดิม
+                    modalContainer.style.transform = ''; 
                 }
                 modalStartY = 0;
             });
         }
 
-        function exportData() {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(allLogs));
-            const a = document.createElement('a'); a.href = dataStr; a.download = `cook_helper_backup.json`; a.click();
+        window.copySummaryToClipboard = function() {
+            triggerHaptic();
+            const net = document.getElementById('netPay').innerText;
+            const period = document.getElementById('periodSelect').options[document.getElementById('periodSelect').selectedIndex].text;
+            const textToCopy = `สรุปยอดเงินเดือน (Cook Helper)\nรอบบิล: ${period}\nยอดรับสุทธิ: ฿${net}`;
+            navigator.clipboard.writeText(textToCopy).then(() => showToast("คัดลอกยอดเงินสำเร็จ ส่งไลน์ได้เลย", "success"));
         }
 
-        function importData() { document.getElementById('importFile').click(); }
+        window.exportData = function() {
+            const dataToExport = { logs: allLogs, transactions: allTransactions };
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(dataToExport));
+            const a = document.createElement('a'); a.href = dataStr; a.download = `cook_tracker_backup.json`; a.click();
+        }
+
+        window.importData = function() { document.getElementById('importFile').click(); }
         
-        async function handleFileImport(e) { 
+        window.handleFileImport = async function(e) { 
             const file = e.target.files[0];
             if (!file) return;
-            
             const reader = new FileReader();
             reader.onload = async function(event) {
                 try {
                     const data = JSON.parse(event.target.result);
-                    if (!Array.isArray(data)) throw new Error("Invalid format");
-                    
                     showToast("กำลังนำเข้าข้อมูล...", "info");
                     const batch = writeBatch(db);
-                    data.forEach(log => {
-                        if (log.date) {
-                            const logRef = doc(db, "work_logs", log.date);
-                            batch.set(logRef, log);
-                        }
+                    
+                    // Support old format (array) or new format (object)
+                    let logsToImport = Array.isArray(data) ? data : (data.logs || []);
+                    logsToImport.forEach(log => {
+                        if (log.date) batch.set(doc(db, "work_logs", log.date), log);
                     });
+
+                    if(!Array.isArray(data) && data.transactions) {
+                        data.transactions.forEach(tx => {
+                            if(tx.id) batch.set(doc(db, "transactions", tx.id), tx);
+                        });
+                    }
                     
                     await batch.commit();
                     showToast("นำเข้าข้อมูลสำรองสำเร็จ", "success");
@@ -984,13 +1200,6 @@
             };
             reader.readAsText(file);
         }
-
-        window.onPeriodChange = onPeriodChange; window.onDateInputChange = onDateInputChange; window.changeDate = changeDate;
-        window.toggleFormFields = toggleFormFields; window.toggleCardStyle = toggleCardStyle; window.applyPreset = applyPreset;
-        window.updateHoursPreview = updateHoursPreview; window.onOtherDeductChange = onOtherDeductChange; window.handleFormSubmit = handleFormSubmit;
-        window.editEntry = editEntry; window.deleteEntry = deleteEntry; window.openHistoryModal = openHistoryModal;
-        window.closeHistoryModal = closeHistoryModal; window.closeModalOnOutside = closeModalOnOutside;
-        window.copySummaryToClipboard = copySummaryToClipboard; window.exportData = exportData; window.importData = importData; window.handleFileImport = handleFileImport;
     </script>
 </body>
 </html>
