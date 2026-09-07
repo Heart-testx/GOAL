@@ -196,6 +196,13 @@
             background: transparent; border: none; outline: none; font-size: 1.1rem; font-weight: 600;
             color: var(--text-main); text-align: center; width: 100%; font-family: 'Kanit', sans-serif;
         }
+        /* ตัวเลือกเวลาแบบ 24 ชม. เอง เพื่อไม่ให้ขึ้น AM/PM ตามการตั้งค่าเครื่อง (เช่น 6 โมงเย็น ต้องขึ้น 18.00 เสมอ) */
+        .time-select-wrap { display: flex; align-items: center; justify-content: center; gap: 2px; }
+        .time-select-clean {
+            background: transparent; border: none; outline: none; -webkit-appearance: none; appearance: none;
+            font-size: 1.1rem; font-weight: 600; color: var(--text-main); text-align: center; font-family: 'Kanit', sans-serif;
+        }
+        .time-select-sep { font-size: 1.1rem; font-weight: 700; color: var(--text-main); }
 
         .preset-container { display: flex; gap: 8px; margin-bottom: 16px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
         .preset-btn {
@@ -545,8 +552,18 @@
                                 <label class="form-label" style="text-align: right; padding-right: 10px;">ออกงาน</label>
                             </div>
                             <div class="time-card-box">
-                                <input type="time" id="timeIn" class="time-input-clean" value="12:00" onchange="window.updateHoursPreview()">
-                                <input type="time" id="timeOut" class="time-input-clean" value="21:00" onchange="window.updateHoursPreview()">
+                                <div class="time-select-wrap">
+                                    <input type="hidden" id="timeIn" value="12:00">
+                                    <select id="timeInHour" class="time-select-clean" onchange="window.syncTimeSelect('timeIn')"></select>
+                                    <span class="time-select-sep">.</span>
+                                    <select id="timeInMinute" class="time-select-clean" onchange="window.syncTimeSelect('timeIn')"></select>
+                                </div>
+                                <div class="time-select-wrap">
+                                    <input type="hidden" id="timeOut" value="21:00">
+                                    <select id="timeOutHour" class="time-select-clean" onchange="window.syncTimeSelect('timeOut')"></select>
+                                    <span class="time-select-sep">.</span>
+                                    <select id="timeOutMinute" class="time-select-clean" onchange="window.syncTimeSelect('timeOut')"></select>
+                                </div>
                             </div>
                         </div>
 
@@ -747,9 +764,72 @@
 
         const DAILY_RATE = 500, OT_RATE = 93.75, MEAL_RATE = 50, OP_RATE = 50, SS_PERCENT = 0.05, SS_MAX = 750;
         let allLogs = [], otherDeductsMap = {}, allTransactions = [];
-        let isBalanceHidden = false;
+        // จำสถานะ "ซ่อนยอดเงิน" ไว้ใน localStorage เพื่อไม่ให้รีเซ็ตทุกครั้งที่เปิดแอปใหม่
+        let isBalanceHidden = localStorage.getItem('isBalanceHidden') === 'true';
 
         function triggerHaptic() { if (navigator.vibrate) navigator.vibrate(30); }
+
+        // ตัวเลือกเวลาแบบ 24 ชม. เอง (ไม่พึ่ง input type=time ที่โชว์ AM/PM ตามเครื่อง)
+        // เติมตัวเลือกชั่วโมง 00-23 และนาที 00,05,...,55 ให้ select ทั้งสี่ตัว
+        function populateHourMinuteSelects() {
+            ['timeInHour', 'timeOutHour'].forEach(id => {
+                const sel = document.getElementById(id);
+                if (!sel) return;
+                sel.innerHTML = '';
+                for (let h = 0; h < 24; h++) {
+                    const v = String(h).padStart(2, '0');
+                    const opt = document.createElement('option');
+                    opt.value = v; opt.textContent = v;
+                    sel.appendChild(opt);
+                }
+            });
+            ['timeInMinute', 'timeOutMinute'].forEach(id => {
+                const sel = document.getElementById(id);
+                if (!sel) return;
+                sel.innerHTML = '';
+                for (let m = 0; m < 60; m += 5) {
+                    const v = String(m).padStart(2, '0');
+                    const opt = document.createElement('option');
+                    opt.value = v; opt.textContent = v;
+                    sel.appendChild(opt);
+                }
+            });
+        }
+
+        // เรียกตอนผู้ใช้เปลี่ยนค่าจาก select ชั่วโมง/นาที เพื่อรวมเป็น "HH:MM" ลง hidden input เดิม
+        window.syncTimeSelect = function(baseId) {
+            const hourSel = document.getElementById(baseId + 'Hour');
+            const minSel = document.getElementById(baseId + 'Minute');
+            const hidden = document.getElementById(baseId);
+            if (!hourSel || !minSel || !hidden) return;
+            hidden.value = `${hourSel.value}:${minSel.value}`;
+            window.updateHoursPreview();
+        };
+
+        // เรียกตอนตั้งค่าเวลาจากโค้ด (โหลดข้อมูลเดิม / กะพรีเซ็ต / ค่าเริ่มต้น) ให้ select แสดงผลตรงกับค่าจริงเสมอ
+        window.setTimeValue = function(baseId, timeStr) {
+            const hidden = document.getElementById(baseId);
+            const hourSel = document.getElementById(baseId + 'Hour');
+            const minSel = document.getElementById(baseId + 'Minute');
+            if (!hidden) return;
+            const parts = (timeStr || '00:00').split(':');
+            let h = parts[0] || '00', m = parts[1] || '00';
+            if (hourSel) hourSel.value = h;
+            if (minSel) {
+                minSel.value = m;
+                if (minSel.value !== m) {
+                    // ถ้านาทีไม่ตรงตัวเลือกที่มี (ห่างทีละ 5) ให้ปัดไปตัวที่ใกล้ที่สุด
+                    let closest = '00', minDiff = Infinity;
+                    Array.from(minSel.options).forEach(o => {
+                        const diff = Math.abs(Number(o.value) - Number(m));
+                        if (diff < minDiff) { minDiff = diff; closest = o.value; }
+                    });
+                    minSel.value = closest;
+                    m = closest;
+                }
+            }
+            hidden.value = `${h}:${m}`;
+        };
 
         // อัพเดทป้ายสถานะ "ออนไลน์/ออฟไลน์" ให้ตรงกับการเชื่อมต่อจริง
         // (เดิมเป็นข้อความตายตัว ไม่เคยเปลี่ยนตามสถานะเน็ตจริง)
@@ -798,6 +878,7 @@
 
         window.toggleBalanceVisibility = function() {
             isBalanceHidden = !isBalanceHidden;
+            localStorage.setItem('isBalanceHidden', isBalanceHidden ? 'true' : 'false');
             const eyeIcon = document.getElementById('btnToggleEye');
             eyeIcon.innerHTML = isBalanceHidden ? '<i class="fa-solid fa-eye-slash"></i>' : '<i class="fa-solid fa-eye"></i>';
             renderApp();
@@ -830,11 +911,17 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => { 
+            populateHourMinuteSelects();
+            window.setTimeValue('timeIn', '12:00');
+            window.setTimeValue('timeOut', '21:00');
             initDateAndPeriods(); 
             setupFirestoreListeners(); 
             setupSwipeToClose('modalContainer', window.closeHistoryModal);
             setupSwipeToClose('txModalContainer', window.closeTxModal);
             setupSwipeToClose('txHistoryModalContainer', window.closeTxHistoryModal);
+            // ตั้งค่าไอคอนตาให้ตรงกับสถานะที่จำไว้ (แก้ปัญหาไอคอนไม่ตรงกับค่าที่โหลดมา)
+            const eyeIcon = document.getElementById('btnToggleEye');
+            if (eyeIcon) eyeIcon.innerHTML = isBalanceHidden ? '<i class="fa-solid fa-eye-slash"></i>' : '<i class="fa-solid fa-eye"></i>';
         });
 
         function setupFirestoreListeners() {
@@ -927,8 +1014,8 @@
                 
                 toggleFormFields();
                 if (existing.status === 'WORK') {
-                    document.getElementById('timeIn').value = existing.timeIn || '12:00';
-                    document.getElementById('timeOut').value = existing.timeOut || '21:00';
+                    window.setTimeValue('timeIn', existing.timeIn || '12:00');
+                    window.setTimeValue('timeOut', existing.timeOut || '21:00');
                     document.getElementById('hasMeal').checked = !!existing.hasMeal;
                     document.getElementById('hasOP').checked = !!existing.hasOP;
                     toggleCardStyle('mealCard', existing.hasMeal);
@@ -941,8 +1028,8 @@
                 document.getElementById('logNote').value = '';
                 
                 toggleFormFields();
-                document.getElementById('timeIn').value = '12:00';
-                document.getElementById('timeOut').value = '21:00';
+                window.setTimeValue('timeIn', '12:00');
+                window.setTimeValue('timeOut', '21:00');
                 document.getElementById('hasMeal').checked = true;
                 document.getElementById('hasOP').checked = false;
                 toggleCardStyle('mealCard', true);
@@ -980,8 +1067,8 @@
 
         function applyPreset(inTime, outTime, isOP = false) {
             triggerHaptic();
-            document.getElementById('timeIn').value = inTime;
-            document.getElementById('timeOut').value = outTime;
+            window.setTimeValue('timeIn', inTime);
+            window.setTimeValue('timeOut', outTime);
             document.getElementById('hasOP').checked = isOP;
             toggleCardStyle('opCard', isOP);
             updateHoursPreview();
@@ -1016,6 +1103,9 @@
             const date = document.getElementById('logDate').value, status = document.getElementById('workStatus').value;
             const btnSubmit = document.getElementById('btnSubmit');
             if (!date) return showToast("กรุณาเลือกวันที่", "error");
+
+            // จำไว้ก่อนบันทึกว่าวันนี้เคยมีข้อมูลอยู่แล้วหรือไม่ (กำลังแก้ไขของเก่า) หรือเป็นการบันทึกวันใหม่
+            const isEditingExisting = allLogs.some(l => l.date === date);
             
             btnSubmit.disabled = true;
             btnSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> กำลังบันทึก...';
@@ -1034,7 +1124,12 @@
             try {
                 await setDoc(doc(db, "work_logs", date), entry);
                 showToast(`บันทึก ${date} สำเร็จ`);
-                window.switchView('view-home');
+                // ไม่พาออกไปหน้าแรกอีกต่อไป (เดิมทำให้ต้องกดเข้ามาหน้านี้ใหม่ทุกครั้ง)
+                // ถ้าเป็นการบันทึกวันใหม่ ให้เลื่อนไปวันถัดไปให้อัตโนมัติ เพื่อบันทึกต่อเนื่องได้เลย
+                // ถ้าเป็นการแก้ไขข้อมูลเก่า ให้ค้างอยู่ที่วันเดิมเพื่อให้ตรวจสอบผลได้
+                if (!isEditingExisting) {
+                    window.changeDate(1);
+                }
             } catch (err) { 
                 showToast("บันทึกไม่สำเร็จ", "error"); 
             } finally {
@@ -1102,7 +1197,7 @@
                 const parts = item.date.split('-');
                 const day = parts[2], month = parts[1], year = parseInt(parts[0]) + 543;
                 let iconClass = 'icon-gray', iconName = 'fa-bed', timeText = 'ลา/ขาด';
-                if (item.status === 'WORK') { iconClass = 'icon-blue'; iconName = 'fa-briefcase'; timeText = `${item.timeIn} - ${item.timeOut} น.`; } 
+                if (item.status === 'WORK') { iconClass = 'icon-blue'; iconName = 'fa-briefcase'; timeText = `${(item.timeIn || '').replace(':', '.')} - ${(item.timeOut || '').replace(':', '.')} น.`; } 
                 else if (item.status === 'OFF_PAID') { iconClass = 'icon-green'; iconName = 'fa-mug-hot'; timeText = 'วันหยุด (ได้ค่าแรง)'; }
 
                 let badges = '';
