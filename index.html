@@ -402,6 +402,144 @@
         }
         .tx-radio input[value="INCOME"]:checked + label { background: #ecfdf5; border-color: var(--success); color: #065f46; }
         .tx-radio input[value="EXPENSE"]:checked + label { background: #fef2f2; border-color: var(--danger); color: #991b1b; }
+
+        /* ================= MONTHLY OVERVIEW PATCH ================= */
+        .monthly-overview-card { margin-top: -30px; }
+        .monthly-toolbar {
+            display:flex; align-items:center; justify-content:space-between; gap:10px;
+            margin-bottom:16px; padding:10px; background:var(--input-bg);
+            border:1px solid var(--border); border-radius:var(--radius-lg);
+        }
+        .monthly-title-wrap { min-width:0; text-align:center; flex:1; }
+        .monthly-title { font-size:1.08rem; font-weight:800; color:var(--text-main); }
+        .monthly-subtitle { font-size:.72rem; color:var(--text-muted); margin-top:2px; }
+        .monthly-nav-btn {
+            width:38px; height:38px; border:1px solid var(--border); border-radius:12px;
+            background:var(--card-bg); color:var(--text-main); cursor:pointer;
+            display:flex; align-items:center; justify-content:center; flex:0 0 auto;
+        }
+        .monthly-nav-btn:active { transform:scale(.92); }
+        .monthly-today-btn {
+            border:0; background:#eff6ff; color:var(--primary); padding:9px 11px;
+            border-radius:10px; font-size:.75rem; font-weight:700; cursor:pointer; white-space:nowrap;
+        }
+        .monthly-summary {
+            display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:14px;
+        }
+        .monthly-summary-box {
+            padding:11px 9px; border:1px solid var(--border); background:var(--card-bg);
+            border-radius:12px; text-align:center;
+        }
+        .monthly-summary-label { font-size:.68rem; color:var(--text-muted); }
+        .monthly-summary-value { font-size:.95rem; font-weight:800; color:var(--text-main); margin-top:3px; font-variant-numeric:tabular-nums; }
+        .monthly-summary-value.expense { color:var(--danger); }
+        .monthly-weekdays, .monthly-calendar {
+            display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); gap:5px;
+        }
+        .monthly-weekdays { margin-bottom:5px; }
+        .monthly-weekday {
+            text-align:center; color:var(--text-muted); font-size:.68rem; font-weight:700; padding:4px 0;
+        }
+        .monthly-day {
+            min-width:0; min-height:94px; border:1px solid var(--border); border-radius:12px;
+            background:var(--card-bg); padding:7px; cursor:pointer; transition:var(--transition);
+            display:flex; flex-direction:column; gap:4px; position:relative; overflow:hidden;
+        }
+        .monthly-day:hover { border-color:#bfdbfe; transform:translateY(-1px); }
+        .monthly-day:active { transform:scale(.98); }
+        .monthly-day.muted { opacity:.42; background:#f8fafc; cursor:default; }
+        .monthly-day.today { border:2px solid #60a5fa; padding:6px; }
+        .monthly-day-number { font-size:.75rem; font-weight:800; color:var(--text-main); }
+        .monthly-month-mini { font-size:.48rem; color:var(--text-muted); margin-left:2px; font-weight:700; }
+        .monthly-day.cross-month { background:linear-gradient(180deg,#ffffff,#f8fbff); }
+        .monthly-shift-badge {
+            font-size:.58rem; font-weight:800; border-radius:7px; padding:3px 5px; line-height:1.15;
+            width:max-content; max-width:100%; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+        }
+        /* สีแยกแต่ละกะใน Monthly Overview */
+        .monthly-shift-morning { background:#fff7ed; color:#c2410c; border:1px solid #fed7aa; }
+        .monthly-shift-noon { background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe; }
+        .monthly-shift-op { background:#f5f3ff; color:#7c3aed; border:1px solid #ddd6fe; }
+        .monthly-shift-work { background:#f8fafc; color:#475569; border:1px solid #e2e8f0; }
+        .monthly-shift-paid { background:#ecfdf5; color:#047857; border:1px solid #a7f3d0; }
+        .monthly-shift-unpaid { background:#f1f5f9; color:#64748b; border:1px solid #cbd5e1; }
+        .monthly-expense { margin-top:auto; font-size:.65rem; font-weight:800; color:var(--danger); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .monthly-expense.zero { color:#94a3b8; font-weight:600; }
+        .monthly-mini-dot { position:absolute; right:6px; top:7px; width:6px; height:6px; border-radius:50%; background:#ef4444; }
+        .monthly-empty { color:#cbd5e1; font-size:.6rem; margin-top:auto; }
+        .monthly-legend { display:flex; flex-wrap:wrap; gap:8px 14px; margin-top:12px; color:var(--text-muted); font-size:.67rem; }
+        .monthly-legend-item { display:flex; align-items:center; gap:5px; }
+        .monthly-legend-dot { width:8px; height:8px; border-radius:50%; display:inline-block; }
+        .monthly-modal .modal-container { max-width:560px; width:min(560px,100%); }
+        .monthly-detail-date {
+            padding:13px 14px; border-radius:14px; background:linear-gradient(135deg,#eff6ff,#f8fafc);
+            border:1px solid #dbeafe; margin-bottom:14px;
+        }
+        .monthly-detail-date-main { font-size:1.15rem; font-weight:800; color:var(--text-main); }
+        .monthly-detail-status { margin-top:5px; font-size:.78rem; font-weight:700; color:var(--primary); }
+        .monthly-detail-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:9px; margin-bottom:14px; }
+        .monthly-detail-box {
+            background:var(--input-bg); border:1px solid var(--border); border-radius:12px; padding:11px 12px;
+        }
+        .monthly-detail-box-label { font-size:.68rem; color:var(--text-muted); }
+        .monthly-detail-box-value { font-size:.9rem; font-weight:750; color:var(--text-main); margin-top:3px; }
+        .monthly-section-title { font-size:.82rem; font-weight:800; color:var(--text-main); margin:15px 0 8px; }
+        .monthly-expense-list { display:flex; flex-direction:column; gap:7px; }
+        .monthly-expense-row {
+            display:flex; align-items:center; justify-content:space-between; gap:10px;
+            padding:10px 11px; border:1px solid var(--border); border-radius:11px; background:var(--card-bg);
+        }
+        .monthly-expense-note { min-width:0; font-size:.78rem; color:var(--text-main); font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+        .monthly-expense-amount { color:var(--danger); font-weight:800; font-size:.8rem; white-space:nowrap; }
+        .monthly-note-box {
+            background:#fffbeb; border:1px solid #fde68a; color:#92400e; border-radius:12px;
+            padding:11px 12px; font-size:.78rem; line-height:1.5; white-space:pre-wrap;
+        }
+        .monthly-empty-box {
+            padding:18px 12px; text-align:center; color:var(--text-muted);
+            border:1px dashed var(--border); border-radius:12px; font-size:.78rem;
+        }
+        .monthly-period-banner {
+            display:flex; align-items:center; gap:10px; margin-bottom:12px; padding:11px 12px;
+            background:linear-gradient(135deg,#eff6ff,#f8fafc); border:1px solid #dbeafe; border-radius:14px;
+        }
+        .monthly-period-banner-icon {
+            width:34px; height:34px; border-radius:10px; background:#dbeafe; color:#2563eb;
+            display:flex; align-items:center; justify-content:center; flex:0 0 auto;
+        }
+        .monthly-period-banner-text { min-width:0; flex:1; }
+        .monthly-period-label { font-size:.62rem; color:var(--text-muted); font-weight:700; }
+        .monthly-period-range { margin-top:1px; font-size:.9rem; color:var(--text-main); font-weight:800; }
+        .monthly-cutoff-badge {
+            padding:6px 8px; border-radius:9px; background:#fff7ed; border:1px solid #fed7aa;
+            color:#c2410c; font-size:.6rem; font-weight:800; white-space:nowrap;
+        }
+        .monthly-summary-easy { grid-template-columns:repeat(2,1fr); }
+        .monthly-summary-box-expense { background:#fff7f7; border-color:#fee2e2; }
+        .monthly-summary-box-income { background:#f0fdf4; border-color:#dcfce7; }
+        .monthly-summary-box-net { background:#f5f3ff; border-color:#e9d5ff; }
+        .monthly-summary-value.income { color:#15803d; }
+        .monthly-summary-value.net { color:#7c3aed; }
+        @media (min-width:700px) {
+            .monthly-summary-easy { grid-template-columns:repeat(5,1fr); }
+        }
+        @media (max-width:560px) {
+            .monthly-day { min-height:78px; padding:6px; border-radius:10px; }
+            .monthly-day.today { padding:5px; }
+            .monthly-shift-badge { font-size:.52rem; padding:3px 4px; }
+            .monthly-expense { font-size:.56rem; }
+            .monthly-weekday { font-size:.6rem; }
+            .monthly-summary-value { font-size:.83rem; }
+            .monthly-toolbar { padding:8px; }
+            .monthly-today-btn { padding:8px 9px; }
+        }
+        @media (max-width:390px) {
+            .monthly-day { min-height:70px; }
+            .monthly-day-number { font-size:.68rem; }
+            .monthly-shift-badge { max-width:100%; }
+            .monthly-expense { font-size:.52rem; }
+        }
+
     </style>
 </head>
 <body>
@@ -506,6 +644,77 @@
                             <span style="font-weight:700; color:var(--danger)">-<span id="metricTotalDeduct">฿0</span></span>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div id="view-monthly" class="app-view">
+            <div class="card monthly-overview-card">
+                <div class="card-header">
+                    <div class="card-header-left">
+                        <i class="fa-solid fa-calendar-days"></i>
+                        <h2>Monthly Overview</h2>
+                    </div>
+                </div>
+
+                <div class="monthly-toolbar">
+                    <button type="button" class="monthly-nav-btn" onclick="window.changeOverviewMonth(-1)" aria-label="เดือนก่อนหน้า">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+                    <div class="monthly-title-wrap">
+                        <div id="monthlyTitle" class="monthly-title">-</div>
+                        <div class="monthly-subtitle">กดวันที่เพื่อดูรายละเอียด</div>
+                    </div>
+                    <button type="button" class="monthly-nav-btn" onclick="window.changeOverviewMonth(1)" aria-label="เดือนถัดไป">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                    <button type="button" class="monthly-today-btn" onclick="window.goOverviewToday()">วันนี้</button>
+                </div>
+
+                <div class="monthly-period-banner">
+                    <div class="monthly-period-banner-icon"><i class="fa-solid fa-calendar-check"></i></div>
+                    <div class="monthly-period-banner-text">
+                        <div class="monthly-period-label">รอบเงินเดือน</div>
+                        <div id="monthlyPeriodRange" class="monthly-period-range">21 — 20</div>
+                    </div>
+                    <div class="monthly-cutoff-badge">ตัดยอดวันที่ 20</div>
+                </div>
+
+                <div class="monthly-summary monthly-summary-easy">
+                    <div class="monthly-summary-box">
+                        <div class="monthly-summary-label">วันทำงาน</div>
+                        <div id="monthlyWorkDays" class="monthly-summary-value">0 วัน</div>
+                    </div>
+                    <div class="monthly-summary-box">
+                        <div class="monthly-summary-label">หยุดมีค่าแรง</div>
+                        <div id="monthlyPaidOffDays" class="monthly-summary-value">0 วัน</div>
+                    </div>
+                    <div class="monthly-summary-box monthly-summary-box-expense">
+                        <div class="monthly-summary-label">รายจ่ายในรอบ</div>
+                        <div id="monthlyExpenseTotal" class="monthly-summary-value expense">฿0.00</div>
+                    </div>
+                    <div class="monthly-summary-box monthly-summary-box-income">
+                        <div class="monthly-summary-label">รายรับจากงาน</div>
+                        <div id="monthlyGrossPay" class="monthly-summary-value income">฿0.00</div>
+                    </div>
+                    <div class="monthly-summary-box monthly-summary-box-net">
+                        <div class="monthly-summary-label">สุทธิหลังหัก</div>
+                        <div id="monthlyNetPay" class="monthly-summary-value net">฿0.00</div>
+                    </div>
+                </div>
+
+                <div class="monthly-weekdays">
+                    <div class="monthly-weekday">อา</div><div class="monthly-weekday">จ</div><div class="monthly-weekday">อ</div>
+                    <div class="monthly-weekday">พ</div><div class="monthly-weekday">พฤ</div><div class="monthly-weekday">ศ</div><div class="monthly-weekday">ส</div>
+                </div>
+                <div id="monthlyCalendar" class="monthly-calendar"></div>
+
+                <div class="monthly-legend">
+                    <span class="monthly-legend-item"><span class="monthly-legend-dot" style="background:#3b82f6;"></span>ทำงาน</span>
+                    <span class="monthly-legend-item"><span class="monthly-legend-dot" style="background:#10b981;"></span>หยุดได้ค่าแรง</span>
+                    <span class="monthly-legend-item"><span class="monthly-legend-dot" style="background:#94a3b8;"></span>ลา/ขาด</span>
+                    <span class="monthly-legend-item"><span class="monthly-legend-dot" style="background:#ef4444;"></span>มีรายจ่าย</span>
                 </div>
             </div>
         </div>
@@ -656,6 +865,9 @@
         <a href="#" class="nav-item active" id="nav-home" onclick="window.switchView('view-home')">
             <i class="fa-solid fa-house"></i><span>หน้าแรก</span>
         </a>
+        <a href="#" class="nav-item" id="nav-monthly" onclick="window.switchView('view-monthly')">
+            <i class="fa-solid fa-calendar-days"></i><span>ภาพรวม</span>
+        </a>
         <a href="#" class="nav-item" id="nav-log" onclick="window.switchView('view-log')">
             <i class="fa-solid fa-pen-to-square"></i><span>งาน</span>
         </a>
@@ -666,6 +878,20 @@
             <i class="fa-solid fa-gear"></i><span>ตั้งค่า</span>
         </a>
     </nav>
+
+
+    <div class="modal-overlay monthly-modal" id="monthlyDayModal" onclick="window.closeModalOnOutside(event, 'monthlyDayModal')">
+        <div class="modal-container" id="monthlyDayModalContainer">
+            <div class="modal-drag-handle"></div>
+            <div class="modal-header">
+                <div class="modal-title">รายละเอียดประจำวัน</div>
+                <button class="btn-close" onclick="window.closeMonthlyDayModal()" aria-label="ปิด"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div id="monthlyDayDetails"></div>
+            </div>
+        </div>
+    </div>
 
     <div class="modal-overlay" id="historyModal" onclick="window.closeModalOnOutside(event, 'historyModal')">
         <div class="modal-container" id="modalContainer">
@@ -891,10 +1117,11 @@
             document.getElementById(viewId).classList.add('active');
 
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            const navMap = {'view-home': 'nav-home', 'view-log': 'nav-log', 'view-finance': 'nav-finance', 'view-settings': 'nav-settings'};
+            const navMap = {'view-home': 'nav-home', 'view-monthly': 'nav-monthly', 'view-log': 'nav-log', 'view-finance': 'nav-finance', 'view-settings': 'nav-settings'};
             if(navMap[viewId]) document.getElementById(navMap[viewId]).classList.add('active');
 
             document.getElementById('fabBtn').style.display = (viewId === 'view-finance') ? 'flex' : 'none';
+            if (viewId === 'view-monthly') window.renderMonthlyOverview();
 
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
@@ -919,6 +1146,7 @@
             setupSwipeToClose('modalContainer', window.closeHistoryModal);
             setupSwipeToClose('txModalContainer', window.closeTxModal);
             setupSwipeToClose('txHistoryModalContainer', window.closeTxHistoryModal);
+            setupSwipeToClose('monthlyDayModalContainer', window.closeMonthlyDayModal);
             // ตั้งค่าไอคอนตาให้ตรงกับสถานะที่จำไว้ (แก้ปัญหาไอคอนไม่ตรงกับค่าที่โหลดมา)
             const eyeIcon = document.getElementById('btnToggleEye');
             if (eyeIcon) eyeIcon.innerHTML = isBalanceHidden ? '<i class="fa-solid fa-eye-slash"></i>' : '<i class="fa-solid fa-eye"></i>';
@@ -929,6 +1157,7 @@
                 allLogs = snapshot.docs.map(doc => doc.data());
                 allLogs.sort((a, b) => a.date.localeCompare(b.date));
                 renderApp();
+                if (typeof window.renderMonthlyOverview === 'function') window.renderMonthlyOverview();
                 checkExistingLogForDate(document.getElementById('logDate').value);
             }, (error) => showToast("ใช้งานโหมด Offline (งาน)", "info"));
 
@@ -946,6 +1175,7 @@
                     return timeB - timeA;
                 });
                 renderFinanceApp();
+                if (typeof window.renderMonthlyOverview === 'function') window.renderMonthlyOverview();
             }, (error) => console.error(error));
         }
 
@@ -1225,6 +1455,253 @@
             historyList.innerHTML = html;
         }
 
+
+        /* ================= MONTHLY OVERVIEW LOGIC ================= */
+        let monthlyOverviewDate = (() => {
+            const now = new Date();
+            return now.getDate() <= 20
+                ? new Date(now.getFullYear(), now.getMonth(), 1)
+                : new Date(now.getFullYear(), now.getMonth() + 1, 1);
+        })();
+
+        function escapeMonthlyHtml(value) {
+            return String(value ?? '').replace(/[&<>"']/g, ch => ({
+                '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#039;'
+            }[ch]));
+        }
+
+        function formatMonthlyCurrency(value) {
+            return `฿${Number(value || 0).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        }
+
+        function getLocalDateKey(dateObj) {
+            const y = dateObj.getFullYear();
+            const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+            const d = String(dateObj.getDate()).padStart(2, '0');
+            return `${y}-${m}-${d}`;
+        }
+
+        function getMonthlyShiftLabel(log) {
+            if (!log) return { text: 'ไม่มีบันทึก', cls: '' };
+            if (log.status === 'OFF_PAID') return { text: 'หยุด', cls: 'monthly-shift-paid' };
+            if (log.status === 'OFF_UNPAID') return { text: 'ลา/ขาด', cls: 'monthly-shift-unpaid' };
+            if (log.status === 'WORK') {
+                const ti = log.timeIn || '', to = log.timeOut || '';
+                if (ti === '08:00' && to === '17:00') return { text: 'กะเช้า', cls: 'monthly-shift-morning' };
+                if (ti === '12:00' && to === '21:00') return { text: 'กะกลางวัน', cls: 'monthly-shift-noon' };
+                if (ti === '16:00' && to === '01:00') return { text: 'กะปิดร้าน (OP)', cls: 'monthly-shift-op' };
+                return { text: 'ทำงาน', cls: 'monthly-shift-work' };
+            }
+            return { text: 'ไม่มีบันทึก', cls: '' };
+        }
+
+        function getMonthlyExpenseTotal(dateKey) {
+            return allTransactions
+                .filter(tx => tx.date === dateKey && tx.type === 'EXPENSE')
+                .reduce((sum, tx) => sum + (Number(tx.amount) || 0), 0);
+        }
+
+        function getOverviewPeriodEndDate(anchorDate = monthlyOverviewDate) {
+            const y = anchorDate.getFullYear();
+            const m = anchorDate.getMonth();
+            return new Date(y, m, 20);
+        }
+
+        function getOverviewPeriodStartDate(anchorDate = monthlyOverviewDate) {
+            const end = getOverviewPeriodEndDate(anchorDate);
+            return new Date(end.getFullYear(), end.getMonth() - 1, 21);
+        }
+
+        function getCurrentOverviewAnchor() {
+            const now = new Date();
+            // รอบปัจจุบันใช้วันสิ้นรอบเป็นวันที่ 20 ของเดือนที่เหมาะสม
+            return now.getDate() <= 20
+                ? new Date(now.getFullYear(), now.getMonth(), 1)
+                : new Date(now.getFullYear(), now.getMonth() + 1, 1);
+        }
+
+        function calculateOverviewPay(periodLogs) {
+            let workDays = 0, paidOffDays = 0, totalOTHours = 0, mealCount = 0, opCount = 0;
+            periodLogs.forEach(item => {
+                if (item.status === 'WORK') {
+                    workDays++;
+                    totalOTHours += Number(item.otHours) || 0;
+                    if (item.hasMeal) mealCount++;
+                    if (item.hasOP) opCount++;
+                } else if (item.status === 'OFF_PAID') {
+                    paidOffDays++;
+                }
+            });
+            const baseSalaryTotal = (workDays + paidOffDays) * DAILY_RATE;
+            const otPay = totalOTHours * OT_RATE;
+            const mealPay = mealCount * MEAL_RATE;
+            const opPay = opCount * OP_RATE;
+            const ssDeduction = Math.min(Math.round((baseSalaryTotal + mealPay + opPay) * SS_PERCENT), SS_MAX);
+            const periodKey = getPeriodKeyForDate(getLocalDateKey(getOverviewPeriodEndDate()));
+            const otherDeduct = Number(otherDeductsMap[periodKey]) || 0;
+            const gross = baseSalaryTotal + otPay + mealPay + opPay;
+            const net = gross - ssDeduction - otherDeduct;
+            return { workDays, paidOffDays, gross, net };
+        }
+
+        function renderMonthlyOverview() {
+            const calendar = document.getElementById('monthlyCalendar');
+            if (!calendar) return;
+
+            const startDate = getOverviewPeriodStartDate(monthlyOverviewDate);
+            const endDate = getOverviewPeriodEndDate(monthlyOverviewDate);
+            const startKey = getLocalDateKey(startDate);
+            const endKey = getLocalDateKey(endDate);
+            const thaiMonthsLong = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+            const title = document.getElementById('monthlyTitle');
+
+            const startText = `${startDate.getDate()} ${thaiMonthsLong[startDate.getMonth()]}`;
+            const endText = `${endDate.getDate()} ${thaiMonthsLong[endDate.getMonth()]} ${endDate.getFullYear() + 543}`;
+            if (title) title.textContent = `รอบ ${startDate.getDate()}–${endDate.getDate()} ${thaiMonthsLong[endDate.getMonth()]} ${endDate.getFullYear() + 543}`;
+            const periodRange = document.getElementById('monthlyPeriodRange');
+            if (periodRange) periodRange.textContent = `${startText} ${startDate.getFullYear() + 543} — ${endText}`;
+
+            const logMap = new Map(allLogs.map(log => [log.date, log]));
+            const expenseMap = new Map();
+            allTransactions.forEach(tx => {
+                if (tx.type !== 'EXPENSE' || !tx.date) return;
+                expenseMap.set(tx.date, (expenseMap.get(tx.date) || 0) + (Number(tx.amount) || 0));
+            });
+
+            const periodLogs = allLogs.filter(log => log.date >= startKey && log.date <= endKey);
+            const pay = calculateOverviewPay(periodLogs);
+            let expenseTotal = 0;
+            const dates = [];
+            for (let dt = new Date(startDate); dt <= endDate; dt.setDate(dt.getDate() + 1)) {
+                const key = getLocalDateKey(dt);
+                dates.push(key);
+                expenseTotal += expenseMap.get(key) || 0;
+            }
+
+            document.getElementById('monthlyWorkDays').textContent = `${pay.workDays} วัน`;
+            document.getElementById('monthlyPaidOffDays').textContent = `${pay.paidOffDays} วัน`;
+            document.getElementById('monthlyExpenseTotal').textContent = isBalanceHidden ? '••••••' : formatMonthlyCurrency(expenseTotal);
+            document.getElementById('monthlyGrossPay').textContent = isBalanceHidden ? '••••••' : formatMonthlyCurrency(pay.gross);
+            document.getElementById('monthlyNetPay').textContent = isBalanceHidden ? '••••••' : formatMonthlyCurrency(pay.net);
+
+            // ทำ grid ตามวันจริงของรอบ 21 -> 20 และจัดช่องว่างก่อนวันเริ่มต้นตามวันในสัปดาห์
+            let html = '';
+            const startOffset = startDate.getDay();
+            for (let i = 0; i < startOffset; i++) {
+                html += `<div class="monthly-day muted"><div class="monthly-day-number">—</div></div>`;
+            }
+
+            const todayKey = getLocalDateKey(new Date());
+            dates.forEach(key => {
+                const log = logMap.get(key);
+                const expense = expenseMap.get(key) || 0;
+                const [y,m,d] = key.split('-').map(Number);
+                const shift = getMonthlyShiftLabel(log);
+                const todayClass = key === todayKey ? ' today' : '';
+                const dateNumber = d;
+                const crossMonth = m !== startDate.getMonth() ? ' cross-month' : '';
+                const shiftHtml = shift.cls
+                    ? `<div class="monthly-shift-badge ${shift.cls}">${escapeMonthlyHtml(shift.text)}</div>`
+                    : `<div class="monthly-empty">ไม่มีบันทึก</div>`;
+                const expenseHtml = expense > 0
+                    ? `<div class="monthly-expense">${isBalanceHidden ? '••••' : escapeMonthlyHtml(formatMonthlyCurrency(expense))}</div>`
+                    : `<div class="monthly-expense zero">—</div>`;
+                html += `
+                    <button type="button" class="monthly-day${todayClass}${crossMonth}" onclick="window.openMonthlyDayModal('${key}')" aria-label="ดูรายละเอียดวันที่ ${key}">
+                        <div class="monthly-day-number">${dateNumber}<span class="monthly-month-mini">${m !== startDate.getMonth() ? `/${m}` : ''}</span></div>
+                        ${shiftHtml}
+                        ${expenseHtml}
+                    </button>`;
+            });
+
+            const totalCells = startOffset + dates.length;
+            const trailing = (7 - (totalCells % 7)) % 7;
+            for (let i = 0; i < trailing; i++) {
+                html += `<div class="monthly-day muted"><div class="monthly-day-number">—</div></div>`;
+            }
+            calendar.innerHTML = html;
+        }
+
+        window.changeOverviewMonth = function(offset) {
+            triggerHaptic();
+            monthlyOverviewDate = new Date(monthlyOverviewDate.getFullYear(), monthlyOverviewDate.getMonth() + offset, 1);
+            renderMonthlyOverview();
+        };
+
+        window.goOverviewToday = function() {
+            triggerHaptic();
+            monthlyOverviewDate = getCurrentOverviewAnchor();
+            renderMonthlyOverview();
+        };
+
+        window.openMonthlyDayModal = function(dateKey) {
+            triggerHaptic();
+            const log = allLogs.find(item => item.date === dateKey);
+            const expenses = allTransactions.filter(tx => tx.date === dateKey && tx.type === 'EXPENSE');
+            const totalExpense = expenses.reduce((sum, tx) => sum + (Number(tx.amount) || 0), 0);
+
+            const [y,m,d] = dateKey.split('-').map(Number);
+            const dateObj = new Date(y, m - 1, d);
+            const weekdays = ['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัสบดี','ศุกร์','เสาร์'];
+            const months = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+            const dateTitle = `${weekdays[dateObj.getDay()]}ที่ ${d} ${months[m-1]} ${y + 543}`;
+
+            let statusText = 'ยังไม่มีบันทึกงาน';
+            let timeText = '—';
+            if (log?.status === 'WORK') {
+                statusText = getMonthlyShiftLabel(log).text;
+                timeText = `${log.timeIn || '—'} - ${log.timeOut || '—'} น.`;
+            } else if (log?.status === 'OFF_PAID') {
+                statusText = 'หยุดประจำสัปดาห์ (ได้ค่าแรง)';
+            } else if (log?.status === 'OFF_UNPAID') {
+                statusText = 'หยุดไม่ได้รับค่าจ้าง (ลา/ขาด)';
+            }
+
+            const expenseHtml = expenses.length
+                ? expenses.map(tx => `
+                    <div class="monthly-expense-row">
+                        <div class="monthly-expense-note">${escapeMonthlyHtml(tx.note || 'รายจ่าย')}</div>
+                        <div class="monthly-expense-amount">${isBalanceHidden ? '••••' : '-' + formatMonthlyCurrency(tx.amount)}</div>
+                    </div>`).join('')
+                : `<div class="monthly-empty-box">ไม่มีรายการรายจ่ายในวันนี้</div>`;
+
+            const noteHtml = log?.note
+                ? `<div class="monthly-section-title">หมายเหตุงาน</div><div class="monthly-note-box">${escapeMonthlyHtml(log.note)}</div>`
+                : '';
+
+            document.getElementById('monthlyDayDetails').innerHTML = `
+                <div class="monthly-detail-date">
+                    <div class="monthly-detail-date-main">${escapeMonthlyHtml(dateTitle)}</div>
+                    <div class="monthly-detail-status"><i class="fa-solid fa-circle-info"></i> ${escapeMonthlyHtml(statusText)}</div>
+                </div>
+
+                <div class="monthly-detail-grid">
+                    <div class="monthly-detail-box">
+                        <div class="monthly-detail-box-label">เวลาเริ่ม-เลิกงาน</div>
+                        <div class="monthly-detail-box-value">${escapeMonthlyHtml(timeText)}</div>
+                    </div>
+                    <div class="monthly-detail-box">
+                        <div class="monthly-detail-box-label">รายจ่ายรวมวันนี้</div>
+                        <div class="monthly-detail-box-value" style="color:var(--danger);">
+                            ${isBalanceHidden ? '••••••' : escapeMonthlyHtml(formatMonthlyCurrency(totalExpense))}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="monthly-section-title">รายการแจกแจงค่าใช้จ่าย</div>
+                <div class="monthly-expense-list">${expenseHtml}</div>
+                ${noteHtml}
+            `;
+
+            document.getElementById('monthlyDayModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        };
+
+        window.closeMonthlyDayModal = function() {
+            document.getElementById('monthlyDayModal').classList.remove('active');
+            document.body.style.overflow = '';
+        };
+
         /* ================= FINANCE LOGIC ================= */
         function renderFinanceApp() {
             let totalIncome = 0, totalExpense = 0;
@@ -1369,6 +1846,7 @@
                 if(modalId === 'historyModal') closeHistoryModal();
                 if(modalId === 'txModal') closeTxModal();
                 if(modalId === 'txHistoryModal') closeTxHistoryModal();
+                if(modalId === 'monthlyDayModal') closeMonthlyDayModal();
             }
         }
 
