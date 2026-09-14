@@ -773,6 +773,396 @@
     .monthly-expense{font-size:.5rem}
 }
 
+
+/* ================= MONTHLY OVERVIEW — FINTECH CALENDAR PATCH v2 ================= */
+.monthly-overview-card{
+    background:#f7f9fc !important;
+    border:1px solid #e7edf4 !important;
+    border-radius:22px !important;
+    box-shadow:0 16px 42px rgba(15,23,42,.075) !important;
+    overflow:hidden;
+}
+.monthly-overview-card > .card-header{
+    background:linear-gradient(145deg,#0b1220,#172033) !important;
+    padding:18px 16px 15px !important;
+    border:0 !important;
+}
+.monthly-overview-card > .card-header .card-header-left h2{color:#fff !important}
+.monthly-overview-card > .card-header .card-header-left i{color:#7dd3fc !important}
+
+.monthly-toolbar{
+    position:relative;
+    margin:14px 0 12px !important;
+    padding:8px !important;
+    background:rgba(255,255,255,.92) !important;
+    border:1px solid #e5ebf2 !important;
+    border-radius:17px !important;
+    box-shadow:0 8px 22px rgba(15,23,42,.045) !important;
+}
+.monthly-nav-btn,
+.monthly-today-btn{
+    -webkit-tap-highlight-color:transparent;
+    touch-action:manipulation;
+}
+.monthly-nav-btn{
+    width:40px !important;height:40px !important;
+    border-radius:12px !important;
+    background:#f8fafc !important;
+    border:1px solid #e2e8f0 !important;
+    color:#334155 !important;
+    transition:transform .16s ease,background .16s ease,border-color .16s ease,box-shadow .16s ease !important;
+}
+.monthly-nav-btn:hover{background:#eff6ff !important;border-color:#bfdbfe !important}
+.monthly-nav-btn:active{transform:scale(.91) !important}
+.monthly-today-btn{
+    padding:9px 11px !important;
+    border:1px solid #dbeafe !important;
+    background:#eff6ff !important;color:#2563eb !important;
+    border-radius:11px !important;
+    font-weight:800 !important;
+}
+
+.monthly-title{font-size:1rem !important;font-weight:850 !important;color:#0f172a !important}
+.monthly-subtitle{font-size:.68rem !important;color:#64748b !important}
+
+.monthly-period-banner{
+    margin:10px 0 12px !important;
+    padding:11px 12px !important;
+    border-radius:16px !important;
+    background:linear-gradient(135deg,#fff,#f8fbff) !important;
+    border:1px solid #dce9f7 !important;
+    box-shadow:0 6px 18px rgba(37,99,235,.045) !important;
+}
+.monthly-period-banner-icon{
+    width:36px !important;height:36px !important;
+    border-radius:11px !important;
+    background:#eff6ff !important;color:#2563eb !important;
+}
+.monthly-period-label{font-size:.61rem !important;color:#64748b !important}
+.monthly-period-range{font-size:.88rem !important;font-weight:850 !important;color:#0f172a !important}
+.monthly-cutoff-badge{
+    padding:6px 8px !important;border-radius:9px !important;
+    background:#fff7ed !important;border-color:#fed7aa !important;color:#c2410c !important;
+}
+
+.monthly-summary-easy{
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+    gap:9px !important;
+    margin:10px 0 15px !important;
+}
+.monthly-summary-box{
+    min-width:0 !important;
+    min-height:76px !important;
+    padding:11px 12px !important;
+    border-radius:16px !important;
+    border:1px solid #e4eaf1 !important;
+    background:#fff !important;
+    box-shadow:0 6px 16px rgba(15,23,42,.035) !important;
+}
+.monthly-summary-label{font-size:.65rem !important;color:#64748b !important;font-weight:750 !important}
+.monthly-summary-value{
+    margin-top:4px !important;
+    font-size:.98rem !important;
+    font-weight:850 !important;
+    letter-spacing:-.01em !important;
+}
+.monthly-summary-box-expense{background:linear-gradient(135deg,#fff7f7,#fff) !important;border-color:#fee2e2 !important}
+.monthly-summary-box-income{background:linear-gradient(135deg,#f2fff7,#fff) !important;border-color:#dcfce7 !important}
+.monthly-summary-box-net{
+    grid-column:1 / -1 !important;
+    min-height:82px !important;
+    background:linear-gradient(135deg,#f7f4ff,#fff) !important;
+    border-color:#e9d5ff !important;
+}
+.monthly-summary-value.expense{color:#dc2626 !important}
+.monthly-summary-value.income{color:#15803d !important}
+.monthly-summary-value.net{color:#6d28d9 !important;font-size:1.16rem !important}
+
+.monthly-weekdays{
+    display:grid !important;
+    grid-template-columns:repeat(7,minmax(0,1fr)) !important;
+    gap:4px !important;
+    padding:5px !important;
+    margin:0 !important;
+    border:1px solid #e4eaf1 !important;
+    border-radius:13px !important;
+    background:#eef2f7 !important;
+}
+.monthly-weekday{
+    min-width:0;
+    padding:4px 0 !important;
+    color:#64748b !important;
+    font-size:.61rem !important;
+    font-weight:850 !important;
+}
+
+.monthly-calendar{
+    display:grid !important;
+    grid-template-columns:repeat(7,minmax(0,1fr)) !important;
+    gap:6px !important;
+    margin-top:6px !important;
+}
+.monthly-day{
+    --day-accent:#cbd5e1;
+    min-width:0 !important;
+    min-height:86px !important;
+    padding:8px !important;
+    border:1px solid #dfe6ef !important;
+    border-radius:15px !important;
+    background:#fff !important;
+    box-shadow:0 5px 14px rgba(15,23,42,.035) !important;
+    display:flex !important;
+    flex-direction:column !important;
+    gap:6px !important;
+    position:relative !important;
+    overflow:hidden !important;
+    isolation:isolate;
+    cursor:pointer !important;
+    -webkit-tap-highlight-color:transparent;
+    touch-action:manipulation;
+    transition:transform .16s ease,border-color .16s ease,box-shadow .16s ease,background .16s ease !important;
+}
+.monthly-day::before{
+    content:"";
+    position:absolute;
+    left:0;top:0;bottom:0;
+    width:3px;
+    border-radius:0 3px 3px 0;
+    background:var(--day-accent);
+    opacity:.9;
+    z-index:-1;
+}
+.monthly-day:hover{
+    transform:translateY(-2px) !important;
+    border-color:#bfd0e2 !important;
+    box-shadow:0 10px 20px rgba(15,23,42,.075) !important;
+}
+.monthly-day:active{
+    transform:scale(.965) !important;
+    box-shadow:0 4px 10px rgba(15,23,42,.055) !important;
+}
+.monthly-day:focus-visible{
+    outline:3px solid rgba(59,130,246,.22) !important;
+    outline-offset:1px;
+}
+.monthly-day.today{
+    border:2px solid #60a5fa !important;
+    padding:7px !important;
+    box-shadow:0 0 0 3px rgba(96,165,250,.12),0 8px 18px rgba(37,99,235,.07) !important;
+}
+.monthly-day.muted{
+    min-height:86px !important;
+    opacity:.32 !important;
+    background:#f8fafc !important;
+    border-color:#edf1f5 !important;
+    box-shadow:none !important;
+    cursor:default !important;
+}
+.monthly-day.muted::before{display:none}
+.monthly-day.cross-month{background:linear-gradient(180deg,#fff,#f8fbff) !important}
+
+.monthly-day-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    min-width:0;
+    gap:4px;
+}
+.monthly-day-number{
+    min-width:0;
+    font-size:.78rem !important;
+    line-height:1 !important;
+    font-weight:850 !important;
+    color:#0f172a !important;
+    font-variant-numeric:tabular-nums;
+}
+.monthly-month-mini{
+    font-size:.46rem !important;
+    color:#94a3b8 !important;
+    margin-left:2px !important;
+}
+.monthly-status-dot{
+    width:7px;height:7px;
+    flex:0 0 auto;
+    border-radius:50%;
+    background:#cbd5e1;
+    box-shadow:0 0 0 3px rgba(203,213,225,.18);
+}
+.monthly-status-dot.morning{background:#f59e0b;box-shadow:0 0 0 3px rgba(245,158,11,.14)}
+.monthly-status-dot.noon{background:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,.14)}
+.monthly-status-dot.op{background:#8b5cf6;box-shadow:0 0 0 3px rgba(139,92,246,.14)}
+.monthly-status-dot.work{background:#64748b;box-shadow:0 0 0 3px rgba(100,116,139,.13)}
+.monthly-status-dot.paid{background:#10b981;box-shadow:0 0 0 3px rgba(16,185,129,.14)}
+.monthly-status-dot.unpaid{background:#94a3b8;box-shadow:0 0 0 3px rgba(148,163,184,.14)}
+
+.monthly-day-summary{
+    display:flex;
+    align-items:center;
+    gap:5px;
+    min-width:0;
+    margin-top:auto;
+}
+.monthly-shift-icon{
+    width:24px;height:24px;
+    flex:0 0 24px;
+    display:flex;align-items:center;justify-content:center;
+    border-radius:8px;
+    font-size:.64rem;
+    background:#f8fafc;
+    color:#64748b;
+    border:1px solid #e2e8f0;
+}
+.monthly-shift-icon.morning{background:#fff7ed;color:#d97706;border-color:#fed7aa}
+.monthly-shift-icon.noon{background:#eff6ff;color:#2563eb;border-color:#bfdbfe}
+.monthly-shift-icon.op{background:#f5f3ff;color:#7c3aed;border-color:#ddd6fe}
+.monthly-shift-icon.work{background:#f8fafc;color:#475569;border-color:#e2e8f0}
+.monthly-shift-icon.paid{background:#ecfdf5;color:#059669;border-color:#a7f3d0}
+.monthly-shift-icon.unpaid{background:#f1f5f9;color:#64748b;border-color:#cbd5e1}
+
+.monthly-shift-short{
+    min-width:0;
+    flex:1;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    font-size:.55rem;
+    font-weight:800;
+    color:#475569;
+}
+.monthly-finance-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:4px;
+    min-width:0;
+}
+.monthly-expense{
+    min-width:0;
+    margin-top:0 !important;
+    padding:0 !important;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    font-size:.56rem !important;
+    font-weight:850 !important;
+    color:#dc2626 !important;
+    font-variant-numeric:tabular-nums;
+}
+.monthly-expense.zero{color:#cbd5e1 !important;font-weight:700 !important}
+.monthly-wallet-icon{
+    width:18px;height:18px;
+    display:flex;align-items:center;justify-content:center;
+    border-radius:6px;
+    font-size:.5rem;
+    color:#94a3b8;
+    background:#f8fafc;
+}
+.monthly-wallet-icon.has-expense{color:#dc2626;background:#fff1f2}
+
+.monthly-empty{
+    margin-top:auto;
+    color:#cbd5e1;
+    font-size:.53rem;
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+}
+
+.monthly-ripple{
+    position:absolute;
+    border-radius:50%;
+    transform:scale(0);
+    animation:monthlyRipple .48s ease-out;
+    background:rgba(59,130,246,.18);
+    pointer-events:none;
+    z-index:3;
+}
+@keyframes monthlyRipple{to{transform:scale(4);opacity:0}}
+
+.monthly-legend{
+    display:flex !important;
+    flex-wrap:wrap !important;
+    gap:8px 13px !important;
+    margin-top:13px !important;
+    padding:10px 11px !important;
+    border:1px solid #e4eaf1 !important;
+    border-radius:14px !important;
+    background:#fff !important;
+    box-shadow:0 5px 14px rgba(15,23,42,.035) !important;
+}
+.monthly-legend-item{font-size:.64rem !important;font-weight:750 !important;color:#64748b !important}
+.monthly-legend-dot{width:8px !important;height:8px !important;box-shadow:0 0 0 3px rgba(148,163,184,.08)}
+
+.monthly-modal .modal-container{
+    max-width:560px !important;
+    width:min(560px,calc(100% - 20px)) !important;
+    border-radius:22px !important;
+}
+.monthly-detail-date{
+    padding:14px !important;
+    border-radius:16px !important;
+    background:linear-gradient(135deg,#eff6ff,#fff) !important;
+    border:1px solid #dbeafe !important;
+    box-shadow:0 6px 18px rgba(37,99,235,.045);
+}
+.monthly-detail-date-main{font-size:1.08rem !important;font-weight:850 !important}
+.monthly-detail-status{font-size:.76rem !important}
+.monthly-detail-box{
+    border-radius:13px !important;
+    background:#f8fafc !important;
+}
+.monthly-expense-row{
+    border-radius:12px !important;
+    padding:10px 11px !important;
+    background:#fff !important;
+}
+.monthly-expense-note{min-width:0 !important}
+.monthly-note-box{border-radius:12px !important}
+
+@media (min-width:700px){
+    .monthly-summary-easy{grid-template-columns:repeat(4,minmax(0,1fr)) !important}
+    .monthly-summary-box-net{grid-column:auto !important}
+}
+@media (max-width:560px){
+    .monthly-overview-card{border-radius:18px !important}
+    .monthly-calendar{gap:4px !important}
+    .monthly-day{
+        min-height:76px !important;
+        padding:6px !important;
+        border-radius:12px !important;
+        gap:5px !important;
+    }
+    .monthly-day.today{padding:5px !important}
+    .monthly-day.muted{min-height:76px !important}
+    .monthly-day-number{font-size:.69rem !important}
+    .monthly-month-mini{font-size:.42rem !important}
+    .monthly-status-dot{width:6px;height:6px}
+    .monthly-shift-icon{width:21px;height:21px;flex-basis:21px;border-radius:7px;font-size:.55rem}
+    .monthly-shift-short{font-size:.49rem}
+    .monthly-expense{font-size:.51rem !important}
+    .monthly-wallet-icon{width:16px;height:16px;font-size:.45rem}
+    .monthly-summary-box{min-height:70px !important;padding:10px !important}
+    .monthly-summary-value{font-size:.86rem !important}
+    .monthly-summary-value.net{font-size:1.04rem !important}
+    .monthly-weekday{font-size:.57rem !important}
+    .monthly-today-btn{padding:8px 9px !important}
+}
+@media (max-width:390px){
+    .monthly-calendar{gap:3px !important}
+    .monthly-day{min-height:68px !important;padding:5px !important;border-radius:10px !important}
+    .monthly-day.today{padding:4px !important}
+    .monthly-day.muted{min-height:68px !important}
+    .monthly-day-number{font-size:.65rem !important}
+    .monthly-shift-icon{width:19px;height:19px;flex-basis:19px;font-size:.5rem}
+    .monthly-shift-short{font-size:.44rem}
+    .monthly-expense{font-size:.47rem !important}
+    .monthly-wallet-icon{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+    .monthly-day,.monthly-nav-btn{transition:none !important}
+    .monthly-ripple{animation:none !important;display:none}
+}
+
 </style>
 </head>
 <body>
@@ -1817,42 +2207,107 @@
             document.getElementById('monthlyGrossPay').textContent = isBalanceHidden ? '••••••' : formatMonthlyCurrency(pay.gross);
             document.getElementById('monthlyNetPay').textContent = isBalanceHidden ? '••••••' : formatMonthlyCurrency(pay.net);
 
-            // ทำ grid ตามวันจริงของรอบ 21 -> 20 และจัดช่องว่างก่อนวันเริ่มต้นตามวันในสัปดาห์
             let html = '';
             const startOffset = startDate.getDay();
+
             for (let i = 0; i < startOffset; i++) {
-                html += `<div class="monthly-day muted"><div class="monthly-day-number">—</div></div>`;
+                html += `<div class="monthly-day muted" aria-hidden="true"><div class="monthly-day-number">—</div></div>`;
             }
 
             const todayKey = getLocalDateKey(new Date());
+
+            const getVisualMeta = (log) => {
+                if (!log) return { icon:'fa-minus', short:'—', tone:'', dot:'', accent:'#cbd5e1', title:'ไม่มีบันทึก' };
+                if (log.status === 'OFF_PAID') {
+                    return { icon:'fa-mug-hot', short:'หยุด', tone:'paid', dot:'paid', accent:'#10b981', title:'หยุดมีค่าแรง' };
+                }
+                if (log.status === 'OFF_UNPAID') {
+                    return { icon:'fa-bed', short:'ลา/ขาด', tone:'unpaid', dot:'unpaid', accent:'#94a3b8', title:'ลา/ขาด' };
+                }
+                if (log.status === 'WORK') {
+                    const ti = log.timeIn || '', to = log.timeOut || '';
+                    if (ti === '08:00' && to === '17:00') {
+                        return { icon:'fa-sun', short:'เช้า', tone:'morning', dot:'morning', accent:'#f59e0b', title:'กะเช้า' };
+                    }
+                    if (ti === '12:00' && to === '21:00') {
+                        return { icon:'fa-cloud-sun', short:'กลางวัน', tone:'noon', dot:'noon', accent:'#3b82f6', title:'กะกลางวัน' };
+                    }
+                    if (ti === '16:00' && to === '01:00') {
+                        return { icon:'fa-moon', short:'OP', tone:'op', dot:'op', accent:'#8b5cf6', title:'กะปิดร้าน (OP)' };
+                    }
+                    return { icon:'fa-briefcase', short:'ทำงาน', tone:'work', dot:'work', accent:'#64748b', title:'ทำงาน' };
+                }
+                return { icon:'fa-circle-question', short:'—', tone:'', dot:'', accent:'#cbd5e1', title:'ไม่มีบันทึก' };
+            };
+
             dates.forEach(key => {
                 const log = logMap.get(key);
                 const expense = expenseMap.get(key) || 0;
-                const [y,m,d] = key.split('-').map(Number);
-                const shift = getMonthlyShiftLabel(log);
+                const [y, m, d] = key.split('-').map(Number);
+                const meta = getVisualMeta(log);
                 const todayClass = key === todayKey ? ' today' : '';
-                const dateNumber = d;
                 const crossMonth = m !== startDate.getMonth() ? ' cross-month' : '';
-                const shiftHtml = shift.cls
-                    ? `<div class="monthly-shift-badge ${shift.cls}">${escapeMonthlyHtml(shift.text)}</div>`
+                const hiddenExpense = isBalanceHidden ? '••••' : formatMonthlyCurrency(expense);
+                const expenseLabel = expense > 0 ? `-${hiddenExpense}` : '—';
+                const aria = `${key} ${meta.title}${expense > 0 ? ` มีรายจ่าย ${isBalanceHidden ? 'ซ่อนยอด' : formatMonthlyCurrency(expense)}` : ''}`;
+
+                const shiftHtml = log
+                    ? `<div class="monthly-day-summary" title="${escapeMonthlyHtml(meta.title)}">
+                           <span class="monthly-shift-icon ${meta.tone}" aria-hidden="true"><i class="fa-solid ${meta.icon}"></i></span>
+                           <span class="monthly-shift-short">${escapeMonthlyHtml(meta.short)}</span>
+                       </div>`
                     : `<div class="monthly-empty">ไม่มีบันทึก</div>`;
-                const expenseHtml = expense > 0
-                    ? `<div class="monthly-expense">${isBalanceHidden ? '••••' : escapeMonthlyHtml(formatMonthlyCurrency(expense))}</div>`
-                    : `<div class="monthly-expense zero">—</div>`;
+
+                const financeHtml = expense > 0
+                    ? `<div class="monthly-finance-row">
+                           <div class="monthly-expense">${escapeMonthlyHtml(expenseLabel)}</div>
+                           <span class="monthly-wallet-icon has-expense" aria-hidden="true"><i class="fa-solid fa-wallet"></i></span>
+                       </div>`
+                    : `<div class="monthly-finance-row">
+                           <div class="monthly-expense zero">—</div>
+                           <span class="monthly-wallet-icon" aria-hidden="true"><i class="fa-solid fa-wallet"></i></span>
+                       </div>`;
+
                 html += `
-                    <button type="button" class="monthly-day${todayClass}${crossMonth}" onclick="window.openMonthlyDayModal('${key}')" aria-label="ดูรายละเอียดวันที่ ${key}">
-                        <div class="monthly-day-number">${dateNumber}<span class="monthly-month-mini">${m !== startDate.getMonth() ? `/${m}` : ''}</span></div>
+                    <button
+                        type="button"
+                        class="monthly-day${todayClass}${crossMonth}"
+                        style="--day-accent:${meta.accent}"
+                        data-monthly-date="${key}"
+                        onclick="window.openMonthlyDayModal('${key}')"
+                        aria-label="ดูรายละเอียดวันที่ ${escapeMonthlyHtml(aria)}"
+                    >
+                        <div class="monthly-day-top">
+                            <div class="monthly-day-number">${d}<span class="monthly-month-mini">${m !== startDate.getMonth() ? `/${m}` : ''}</span></div>
+                            <span class="monthly-status-dot ${meta.dot}" title="${escapeMonthlyHtml(meta.title)}" aria-hidden="true"></span>
+                        </div>
                         ${shiftHtml}
-                        ${expenseHtml}
+                        ${financeHtml}
                     </button>`;
             });
 
             const totalCells = startOffset + dates.length;
             const trailing = (7 - (totalCells % 7)) % 7;
             for (let i = 0; i < trailing; i++) {
-                html += `<div class="monthly-day muted"><div class="monthly-day-number">—</div></div>`;
+                html += `<div class="monthly-day muted" aria-hidden="true"><div class="monthly-day-number">—</div></div>`;
             }
+
             calendar.innerHTML = html;
+
+            calendar.querySelectorAll('.monthly-day[data-monthly-date]').forEach(btn => {
+                btn.addEventListener('pointerdown', (event) => {
+                    const rect = btn.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height) * 1.25;
+                    const ripple = document.createElement('span');
+                    ripple.className = 'monthly-ripple';
+                    ripple.style.width = `${size}px`;
+                    ripple.style.height = `${size}px`;
+                    ripple.style.left = `${event.clientX - rect.left - size / 2}px`;
+                    ripple.style.top = `${event.clientY - rect.top - size / 2}px`;
+                    btn.appendChild(ripple);
+                    setTimeout(() => ripple.remove(), 520);
+                });
+            });
         }
 
         window.changeOverviewMonth = function(offset) {
