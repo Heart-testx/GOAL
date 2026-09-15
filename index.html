@@ -262,10 +262,10 @@
         }
         .nav-item {
             display: flex; flex-direction: column; align-items: center; gap: 4px;
-            color: #64748b; text-decoration: none; font-size: 0.72rem; font-weight: 500; width: 22%; transition: var(--transition);
+            color: #64748b; text-decoration: none; font-size: 0.64rem; font-weight: 500; width: 16%; transition: var(--transition);
             position: relative; padding: 4px 0;
         }
-        .nav-item i { font-size: 1.25rem; }
+        .nav-item i { font-size: 1.1rem; }
         .nav-item.active { color: #38bdf8; font-weight: 600; }
         .nav-item.active::after {
             content: ''; position: absolute; bottom: 0; width: 16px; height: 3px; background: #38bdf8;
@@ -383,6 +383,53 @@
         .tx-details p { font-size: 0.75rem; color: var(--text-muted); }
         .tx-amount { font-size: 1rem; font-weight: 700; font-variant-numeric: tabular-nums; }
         .tx-amount.in { color: #10b981; } .tx-amount.out { color: #ef4444; }
+
+        /* Budget Planner Simulator (วางแผนจำลองการใช้จ่าย) */
+        .plan-summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+        .plan-summary-box { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: var(--radius-lg); padding: 12px 14px; }
+        .plan-summary-label { font-size: 0.7rem; color: #94a3b8; margin-bottom: 6px; font-weight: 500; }
+        .plan-summary-label-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+        .plan-summary-label-row .plan-summary-label { margin-bottom: 0; }
+        .plan-auto-btn {
+            background: rgba(56, 189, 248, 0.15); border: none; color: #38bdf8; width: 22px; height: 22px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 0.65rem; cursor: pointer; transition: var(--transition); flex-shrink: 0;
+        }
+        .plan-auto-btn:active { transform: scale(0.85); background: rgba(56, 189, 248, 0.3); }
+        .plan-starting-input-wrap { display: flex; align-items: baseline; gap: 4px; }
+        .plan-currency-prefix { color: #ffffff; font-weight: 700; font-size: 1.05rem; }
+        .plan-starting-input {
+            background: transparent; border: none; border-bottom: 1.5px dashed rgba(255,255,255,0.35);
+            color: #ffffff; font-size: 1.05rem; font-weight: 700; font-variant-numeric: tabular-nums;
+            width: 100%; padding: 2px 0; outline: none; font-family: 'Kanit', sans-serif;
+        }
+        .plan-starting-input::placeholder { color: rgba(255,255,255,0.4); font-weight: 500; }
+        .plan-starting-input:focus { border-bottom-color: #38bdf8; }
+        .plan-starting-input:disabled { color: rgba(255,255,255,0.5); }
+        .plan-summary-subtext { font-size: 0.62rem; color: #64748b; margin-top: 6px; line-height: 1.4; }
+        .plan-summary-value { font-size: 1.05rem; font-weight: 700; color: #ffffff; font-variant-numeric: tabular-nums; }
+        .plan-value-expense { color: #f87171; }
+        .plan-remaining-box {
+            display: flex; justify-content: space-between; align-items: center; gap: 10px;
+            background: rgba(255,255,255,0.05); border-radius: var(--radius-lg); padding: 14px 16px;
+            border: 1px solid rgba(255,255,255,0.12);
+        }
+        .plan-remaining-label { font-size: 0.8rem; color: #cbd5e1; font-weight: 600; }
+        .plan-remaining-value { font-size: 1.3rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+        .plan-remaining-value.positive { color: #34d399; }
+        .plan-remaining-value.negative { color: #f87171; }
+        .plan-item { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 4px; border-bottom: 1px solid var(--border); }
+        .plan-item:last-child { border-bottom: none; }
+        .plan-item-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+        .plan-item-name { font-size: 0.9rem; font-weight: 600; color: var(--text-main); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 50vw; }
+        .plan-item-price { font-size: 0.8rem; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+        .plan-item-delete {
+            flex-shrink: 0; width: 34px; height: 34px; border-radius: 50%; border: none;
+            background: #fef2f2; color: var(--danger); display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: var(--transition); font-size: 0.85rem;
+        }
+        .plan-item-delete:active { transform: scale(0.9); background: #fee2e2; }
+        .plan-hint-text { font-size: 0.78rem; color: #94a3b8; margin-bottom: 16px; line-height: 1.5; }
 
         .fab-btn {
             position: fixed; bottom: calc(95px + env(safe-area-inset-bottom)); right: 20px; width: 54px; height: 54px;
@@ -1456,6 +1503,75 @@
             </button>
         </div>
 
+        <div id="view-plan" class="app-view">
+            <div class="card" style="background: linear-gradient(135deg, #0f172a, #1e293b); border: none;">
+                <div class="card-header" style="margin-bottom: 10px;">
+                    <div class="card-header-left">
+                        <i class="fa-solid fa-piggy-bank" style="color:#38bdf8;"></i>
+                        <h2 style="color:#ffffff;">วางแผนจำลองการใช้จ่าย</h2>
+                    </div>
+                </div>
+                <p class="plan-hint-text">
+                    จำลองแผนการใช้จ่ายแบบ What-If เท่านั้น ไม่กระทบข้อมูลรายรับ-รายจ่ายจริง โดยระบบจะดึงยอดเงินคงเหลือของรอบเงินเดือนปัจจุบันมาเป็น "เงินตั้งต้นจำลอง" ให้อัตโนมัติ
+                </p>
+                <div class="plan-summary-grid">
+                    <div class="plan-summary-box">
+                        <div class="plan-summary-label-row">
+                            <div class="plan-summary-label">เงินตั้งต้น (รอบปัจจุบัน)</div>
+                            <button type="button" class="plan-auto-btn" onclick="window.usePlanAutoStartingAmount()" title="ดึงยอดรับสุทธิรอบบิลนี้ (งาน) อัตโนมัติ" aria-label="ดึงยอดอัตโนมัติ">
+                                <i class="fa-solid fa-arrows-rotate"></i>
+                            </button>
+                        </div>
+                        <div class="plan-starting-input-wrap">
+                            <span class="plan-currency-prefix">฿</span>
+                            <input type="number" id="planStartingAmountInput" class="plan-starting-input" min="0" step="0.01" placeholder="0.00" inputmode="decimal" oninput="window.handlePlanStartingInput(this.value)">
+                        </div>
+                        <div class="plan-summary-subtext" id="planStartingSourceHint">อัตโนมัติจากยอดรับสุทธิรอบบิลนี้ (งาน)</div>
+                    </div>
+                    <div class="plan-summary-box">
+                        <div class="plan-summary-label">รวมที่วางแผนจะซื้อ</div>
+                        <div class="plan-summary-value plan-value-expense" id="planTotalPlanned">฿0.00</div>
+                    </div>
+                </div>
+                <div class="plan-remaining-box">
+                    <div class="plan-remaining-label">เงินคงเหลือจำลอง</div>
+                    <div class="plan-remaining-value positive" id="planRemainingAmount">฿0.00</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-header-left">
+                        <i class="fa-solid fa-cart-plus"></i>
+                        <h2>เพิ่มรายการที่อยากซื้อ</h2>
+                    </div>
+                </div>
+                <form id="planForm" onsubmit="window.handleAddPlanItem(event)">
+                    <div class="form-group">
+                        <label class="form-label" for="planItemName">ชื่อรายการที่อยากซื้อ</label>
+                        <input type="text" id="planItemName" class="form-control" placeholder="เช่น รองเท้าใหม่, หูฟัง..." required maxlength="60">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 16px;">
+                        <label class="form-label" for="planItemPrice">ราคา (บาท)</label>
+                        <input type="number" id="planItemPrice" class="form-control" placeholder="0.00" min="0" step="0.01" required>
+                    </div>
+                    <button type="submit" class="btn-submit">
+                        <i class="fa-solid fa-plus"></i> เพิ่มรายการจำลอง
+                    </button>
+                </form>
+            </div>
+
+            <div class="card" style="padding-bottom: 8px;">
+                <div class="card-header">
+                    <div class="card-header-left">
+                        <i class="fa-solid fa-list-check"></i>
+                        <h2>รายการที่วางแผนไว้</h2>
+                    </div>
+                </div>
+                <div id="planListContainer"></div>
+            </div>
+        </div>
+
         <div id="view-settings" class="app-view">
             <div class="card" style="margin-top: -30px;">
                 <div class="rate-info">
@@ -1496,6 +1612,9 @@
         </a>
         <a href="#" class="nav-item" id="nav-finance" onclick="window.switchView('view-finance')">
             <i class="fa-solid fa-wallet"></i><span>การเงิน</span>
+        </a>
+        <a href="#" class="nav-item" id="nav-plan" onclick="window.switchView('view-plan')">
+            <i class="fa-solid fa-piggy-bank"></i><span>วางแผน</span>
         </a>
         <a href="#" class="nav-item" id="nav-settings" onclick="window.switchView('view-settings')">
             <i class="fa-solid fa-gear"></i><span>ตั้งค่า</span>
@@ -1613,6 +1732,11 @@
 
         const DAILY_RATE = 500, OT_RATE = 93.75, MEAL_RATE = 50, OP_RATE = 50, SS_PERCENT = 0.05, SS_MAX = 750;
         let allLogs = [], otherDeductsMap = {}, allTransactions = [];
+        // วางแผนจำลองการใช้จ่าย (Budget Planner Simulator) - เก็บแยกจากข้อมูลการเงินจริงใน localStorage
+        const PLAN_STORAGE_KEY = 'budgetPlanItems';
+        const PLAN_START_KEY = 'budgetPlanStartingOverride';
+        let planItems = [];
+        let planStartingOverride = null; // null = ใช้ยอดอัตโนมัติจากยอดรับสุทธิรอบบิลนี้ (งาน), ไม่ null = ผู้ใช้กรอกเอง
         // จำสถานะ "ซ่อนยอดเงิน" ไว้ใน localStorage เพื่อไม่ให้รีเซ็ตทุกครั้งที่เปิดแอปใหม่
         let isBalanceHidden = localStorage.getItem('isBalanceHidden') === 'true';
 
@@ -1732,6 +1856,7 @@
             eyeIcon.innerHTML = isBalanceHidden ? '<i class="fa-solid fa-eye-slash"></i>' : '<i class="fa-solid fa-eye"></i>';
             renderApp();
             renderFinanceApp();
+            if (typeof window.renderPlanView === 'function') window.renderPlanView();
         };
 
         window.switchView = function(viewId) {
@@ -1740,11 +1865,12 @@
             document.getElementById(viewId).classList.add('active');
 
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            const navMap = {'view-home': 'nav-home', 'view-monthly': 'nav-monthly', 'view-log': 'nav-log', 'view-finance': 'nav-finance', 'view-settings': 'nav-settings'};
+            const navMap = {'view-home': 'nav-home', 'view-monthly': 'nav-monthly', 'view-log': 'nav-log', 'view-finance': 'nav-finance', 'view-plan': 'nav-plan', 'view-settings': 'nav-settings'};
             if(navMap[viewId]) document.getElementById(navMap[viewId]).classList.add('active');
 
             document.getElementById('fabBtn').style.display = (viewId === 'view-finance') ? 'flex' : 'none';
             if (viewId === 'view-monthly') window.renderMonthlyOverview();
+            if (viewId === 'view-plan') window.renderPlanView();
 
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
@@ -1773,6 +1899,7 @@
             // ตั้งค่าไอคอนตาให้ตรงกับสถานะที่จำไว้ (แก้ปัญหาไอคอนไม่ตรงกับค่าที่โหลดมา)
             const eyeIcon = document.getElementById('btnToggleEye');
             if (eyeIcon) eyeIcon.innerHTML = isBalanceHidden ? '<i class="fa-solid fa-eye-slash"></i>' : '<i class="fa-solid fa-eye"></i>';
+            loadPlanItems();
         });
 
         function setupFirestoreListeners() {
@@ -1781,6 +1908,7 @@
                 allLogs.sort((a, b) => a.date.localeCompare(b.date));
                 renderApp();
                 if (typeof window.renderMonthlyOverview === 'function') window.renderMonthlyOverview();
+                if (typeof window.renderPlanView === 'function') window.renderPlanView();
                 checkExistingLogForDate(document.getElementById('logDate').value);
             }, (error) => showToast("ใช้งานโหมด Offline (งาน)", "info"));
 
@@ -1788,6 +1916,7 @@
                 otherDeductsMap = {};
                 snapshot.docs.forEach(doc => { otherDeductsMap[doc.id] = doc.data().amount || 0; });
                 renderApp();
+                if (typeof window.renderPlanView === 'function') window.renderPlanView();
             });
 
             onSnapshot(collection(db, "transactions"), (snapshot) => {
@@ -1799,6 +1928,7 @@
                 });
                 renderFinanceApp();
                 if (typeof window.renderMonthlyOverview === 'function') window.renderMonthlyOverview();
+                if (typeof window.renderPlanView === 'function') window.renderPlanView();
             }, (error) => console.error(error));
         }
 
@@ -2431,6 +2561,197 @@
             document.getElementById('bankTotalExpense').innerText = isBalanceHidden ? '••••' : totalExpense.toLocaleString(undefined, {minimumFractionDigits: 2});
             document.getElementById('bankTotalBalance').innerText = isBalanceHidden ? '••••••' : totalBal.toLocaleString(undefined, {minimumFractionDigits: 2});
         }
+
+        /* ================= BUDGET PLANNER SIMULATOR (วางแผนจำลองการใช้จ่าย) =================
+           หมายเหตุ: ฟีเจอร์นี้ใช้สำหรับ "จำลอง" แผนการใช้จ่ายเท่านั้น (What-If Scenario)
+           รายการที่เพิ่ม/ลบในนี้ ไม่กระทบและไม่ถูกบันทึกลง Firestore ของข้อมูลการเงินจริงเด็ดขาด
+           เก็บ State แยกต่างหากใน localStorage ของเครื่อง ================================= */
+
+        function loadPlanItems() {
+            try {
+                const saved = localStorage.getItem(PLAN_STORAGE_KEY);
+                planItems = saved ? JSON.parse(saved) : [];
+                if (!Array.isArray(planItems)) planItems = [];
+            } catch (e) {
+                planItems = [];
+            }
+            try {
+                const savedStart = localStorage.getItem(PLAN_START_KEY);
+                const num = savedStart !== null ? parseFloat(savedStart) : NaN;
+                planStartingOverride = isNaN(num) ? null : num;
+            } catch (e) {
+                planStartingOverride = null;
+            }
+            if (typeof window.renderPlanView === 'function') window.renderPlanView();
+        }
+
+        function savePlanItems() {
+            try {
+                localStorage.setItem(PLAN_STORAGE_KEY, JSON.stringify(planItems));
+            } catch (e) {
+                console.warn('ไม่สามารถบันทึกแผนจำลองลง localStorage:', e);
+            }
+        }
+
+        function savePlanStartingOverride() {
+            try {
+                if (planStartingOverride === null || planStartingOverride === undefined || isNaN(planStartingOverride)) {
+                    localStorage.removeItem(PLAN_START_KEY);
+                } else {
+                    localStorage.setItem(PLAN_START_KEY, String(planStartingOverride));
+                }
+            } catch (e) {
+                console.warn('ไม่สามารถบันทึกเงินตั้งต้นจำลองลง localStorage:', e);
+            }
+        }
+
+        // คำนวณ "ยอดอัตโนมัติ" จากยอดรับสุทธิรอบบิลนี้ (งาน) ของรอบเงินเดือนปัจจุบันจริง (ค่าเดียวกับ "สุทธิหลังหัก" ในแท็บภาพรวม)
+        // ใช้รอบปัจจุบันตามวันที่จริงเสมอ (ไม่อิงกับเดือนที่ผู้ใช้กำลังเลื่อนดูอยู่ในแท็บ "ภาพรวม")
+        function getAutoStartingAmount() {
+            const anchor = getCurrentOverviewAnchor();
+            const startDate = getOverviewPeriodStartDate(anchor);
+            const endDate = getOverviewPeriodEndDate(anchor);
+            const startKey = getLocalDateKey(startDate);
+            const endKey = getLocalDateKey(endDate);
+
+            const periodLogs = allLogs.filter(log => log.date >= startKey && log.date <= endKey);
+            let workDays = 0, paidOffDays = 0, totalOTHours = 0, mealCount = 0, opCount = 0;
+            periodLogs.forEach(item => {
+                if (item.status === 'WORK') {
+                    workDays++;
+                    totalOTHours += Number(item.otHours) || 0;
+                    if (item.hasMeal) mealCount++;
+                    if (item.hasOP) opCount++;
+                } else if (item.status === 'OFF_PAID') {
+                    paidOffDays++;
+                }
+            });
+            const baseSalaryTotal = (workDays + paidOffDays) * DAILY_RATE;
+            const otPay = totalOTHours * OT_RATE;
+            const mealPay = mealCount * MEAL_RATE;
+            const opPay = opCount * OP_RATE;
+            const ssDeduction = Math.min(Math.round((baseSalaryTotal + mealPay + opPay) * SS_PERCENT), SS_MAX);
+            const otherDeduct = Number(otherDeductsMap[getPeriodKeyForDate(endKey)]) || 0;
+            const gross = baseSalaryTotal + otPay + mealPay + opPay;
+            const net = gross - ssDeduction - otherDeduct;
+
+            return net; // = ยอดรับสุทธิรอบบิลนี้ (งาน)
+        }
+
+        // เงินตั้งต้นจำลองที่ใช้จริง: ถ้าผู้ใช้กรอกเองไว้ ให้ใช้ค่านั้น ไม่งั้นดึงยอดอัตโนมัติ
+        function getPlanStartingAmount() {
+            const hasOverride = planStartingOverride !== null && planStartingOverride !== undefined && !isNaN(planStartingOverride);
+            return hasOverride ? planStartingOverride : getAutoStartingAmount();
+        }
+
+        window.renderPlanView = function() {
+            const startInput = document.getElementById('planStartingAmountInput');
+            const totalEl = document.getElementById('planTotalPlanned');
+            const remainEl = document.getElementById('planRemainingAmount');
+            const listContainer = document.getElementById('planListContainer');
+            const hintEl = document.getElementById('planStartingSourceHint');
+            if (!startInput || !totalEl || !remainEl || !listContainer) return;
+
+            const hasOverride = planStartingOverride !== null && planStartingOverride !== undefined && !isNaN(planStartingOverride);
+            const startingAmount = getPlanStartingAmount();
+            const totalPlanned = planItems.reduce((sum, item) => sum + (Number(item.price) || 0), 0);
+            const remaining = startingAmount - totalPlanned;
+
+            const fmt = (v) => isBalanceHidden ? '••••••' : `฿${Number(v || 0).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+            // อัพเดทค่าใน input เฉพาะตอนที่ผู้ใช้ไม่ได้กำลังโฟกัส/พิมพ์อยู่ กันค่าเด้งทับระหว่างพิมพ์
+            startInput.disabled = isBalanceHidden;
+            startInput.placeholder = isBalanceHidden ? '••••••' : '0.00';
+            if (document.activeElement !== startInput) {
+                startInput.value = isBalanceHidden ? '' : (startingAmount ? Number(startingAmount.toFixed(2)) : '');
+            }
+            if (hintEl) {
+                hintEl.textContent = isBalanceHidden
+                    ? 'ยอดถูกซ่อนอยู่'
+                    : (hasOverride ? 'กรอกเองแล้ว (กดปุ่ม ⟲ เพื่อดึงยอดอัตโนมัติ)' : 'อัตโนมัติจากยอดรับสุทธิรอบบิลนี้ (งาน)');
+            }
+
+            totalEl.textContent = fmt(totalPlanned);
+            remainEl.textContent = fmt(remaining);
+            remainEl.classList.remove('positive', 'negative');
+            remainEl.classList.add(remaining >= 0 ? 'positive' : 'negative');
+
+            if (planItems.length === 0) {
+                listContainer.innerHTML = `<div class="empty-state" style="padding: 30px;"><i class="fa-solid fa-basket-shopping"></i><p>ยังไม่มีรายการที่วางแผนไว้ ลองเพิ่มของที่อยากซื้อดูสิ</p></div>`;
+                return;
+            }
+
+            let html = '';
+            planItems.forEach(item => {
+                const priceDisplay = isBalanceHidden ? '••••' : `฿${Number(item.price || 0).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+                html += `
+                <div class="plan-item">
+                    <div class="plan-item-info">
+                        <div class="plan-item-name">${escapeMonthlyHtml(item.name)}</div>
+                        <div class="plan-item-price">${priceDisplay}</div>
+                    </div>
+                    <button type="button" class="plan-item-delete" onclick="window.deletePlanItem('${item.id}')" aria-label="ลบรายการจำลอง">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                </div>`;
+            });
+            listContainer.innerHTML = html;
+        };
+
+        // ผู้ใช้พิมพ์แก้ "เงินตั้งต้น" เอง -> เก็บเป็นค่า override แยกจากข้อมูลจริง คำนวณยอดคงเหลือแบบ real-time
+        window.handlePlanStartingInput = function(rawValue) {
+            const trimmed = String(rawValue).trim();
+            if (trimmed === '') {
+                planStartingOverride = null;
+            } else {
+                const num = parseFloat(trimmed);
+                if (isNaN(num)) return;
+                planStartingOverride = num;
+            }
+            savePlanStartingOverride();
+            window.renderPlanView();
+        };
+
+        // ปุ่มดึงยอดอัตโนมัติ: ล้างค่าที่กรอกเอง แล้วกลับไปใช้ยอดรับสุทธิรอบบิลนี้ (งาน)
+        window.usePlanAutoStartingAmount = function() {
+            planStartingOverride = null;
+            savePlanStartingOverride();
+            triggerHaptic();
+            window.renderPlanView();
+            showToast('ดึงยอดรับสุทธิรอบบิลนี้ (งาน) มาเป็นเงินตั้งต้นแล้ว', 'success');
+        };
+
+        window.handleAddPlanItem = function(event) {
+            event.preventDefault();
+            const nameInput = document.getElementById('planItemName');
+            const priceInput = document.getElementById('planItemPrice');
+            const name = nameInput.value.trim();
+            const price = parseFloat(priceInput.value);
+
+            if (!name) { showToast('กรุณากรอกชื่อรายการที่อยากซื้อ', 'error'); return; }
+            if (isNaN(price) || price < 0) { showToast('กรุณากรอกราคาที่ถูกต้อง', 'error'); return; }
+
+            planItems.push({
+                id: 'plan_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 8),
+                name,
+                price
+            });
+            savePlanItems();
+            triggerHaptic();
+            nameInput.value = '';
+            priceInput.value = '';
+            nameInput.focus();
+            window.renderPlanView();
+            showToast('เพิ่มรายการจำลองแล้ว', 'success');
+        };
+
+        window.deletePlanItem = function(id) {
+            triggerHaptic();
+            planItems = planItems.filter(item => item.id !== id);
+            savePlanItems();
+            window.renderPlanView();
+            showToast('ลบรายการจำลองแล้ว', 'info');
+        };
 
         window.openTxHistoryModal = function() {
             triggerHaptic();
