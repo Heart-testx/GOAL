@@ -19,25 +19,26 @@
     
     <style>
         :root {
-            --primary: #2563eb;
-            --primary-dark: #1d4ed8;
-            --primary-light: #3b82f6;
-            --bg-app: #f1f5f9;
-            --header-bg: #0f172a;
+            /* Fintech / Banking palette — formal navy, off-white, no pastels */
+            --primary: #16305c;
+            --primary-dark: #0d1f3d;
+            --primary-light: #3a5a8c;
+            --bg-app: #f6f7f9;
+            --header-bg: #0b1120;
             --card-bg: #ffffff;
             --text-main: #0f172a;
-            --text-muted: #64748b;
-            --input-bg: #f8fafc;
-            --border: #e2e8f0;
-            --danger: #ef4444;
-            --success: #10b981;
-            --accent-gold: #f59e0b;
-            --radius-xl: 24px;
-            --radius-lg: 18px;
-            --radius-md: 12px;
-            --shadow-sm: 0 2px 6px rgba(15, 23, 42, 0.04);
-            --shadow-card: 0 10px 25px -5px rgba(15, 23, 42, 0.08);
-            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --text-muted: #62697a;
+            --input-bg: #f7f8fa;
+            --border: #e4e7ec;
+            --danger: #b3261e;
+            --success: #146c43;
+            --accent-gold: #a9812f;
+            --radius-xl: 20px;
+            --radius-lg: 14px;
+            --radius-md: 10px;
+            --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.05);
+            --shadow-card: 0 6px 20px -6px rgba(15, 23, 42, 0.10);
+            --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         * { box-sizing: border-box; font-family: 'Kanit', sans-serif; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; min-width: 0; }
@@ -74,9 +75,9 @@
         .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .user-profile { display: flex; align-items: center; gap: 12px; }
         .avatar-box {
-            width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg, #3a5a8c, #16305c);
             display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: white;
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4); border: 2px solid rgba(255,255,255,0.2);
+            box-shadow: 0 4px 12px rgba(22, 48, 92, 0.4); border: 2px solid rgba(255,255,255,0.2);
         }
         .greeting-text { display: flex; flex-direction: column; }
         .greeting-title { font-size: 0.75rem; color: #94a3b8; font-weight: 400; }
@@ -253,25 +254,26 @@
         .btn-tool i { color: var(--text-muted); font-size: 1.1rem; }
         .btn-tool:active { background: var(--input-bg); }
 
-        /* Bank Floating Navigation */
+        /* Bank Bottom Navigation — dark, elevated, formal outline-style icons */
         .bottom-nav {
             position: fixed; bottom: max(12px, env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%);
-            width: calc(100% - 32px); max-width: 460px; background: rgba(15, 23, 42, 0.92); backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 28px; display: flex; justify-content: space-around;
-            padding: 8px 0; z-index: 100; box-shadow: 0 10px 30px rgba(15, 23, 42, 0.4);
+            width: calc(100% - 32px); max-width: 460px; background: var(--header-bg);
+            border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 18px; display: flex; justify-content: space-around;
+            padding: 8px 0; z-index: 100; box-shadow: 0 12px 28px rgba(11, 17, 32, 0.35);
         }
         .nav-item {
             display: flex; flex-direction: column; align-items: center; gap: 4px;
-            color: #64748b; text-decoration: none; font-size: 0.64rem; font-weight: 500; width: 16%; transition: var(--transition);
-            position: relative; padding: 4px 0;
+            color: #7b8496; text-decoration: none; font-size: 0.62rem; font-weight: 500; width: 16%; transition: var(--transition);
+            position: relative; padding: 6px 0;
         }
-        .nav-item i { font-size: 1.1rem; }
-        .nav-item.active { color: #38bdf8; font-weight: 600; }
+        .nav-item i { font-size: 1.02rem; font-weight: 400; }
+        .nav-icon { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex: 0 0 auto; }
+        .nav-item.active { color: #ffffff; font-weight: 700; }
         .nav-item.active::after {
-            content: ''; position: absolute; bottom: 0; width: 16px; height: 3px; background: #38bdf8;
-            border-radius: 3px; box-shadow: 0 0 8px #38bdf8;
+            content: ''; position: absolute; bottom: -2px; width: 4px; height: 4px; background: var(--accent-gold);
+            border-radius: 50%;
         }
-        .nav-item:active { transform: scale(0.9); }
+        .nav-item:active { transform: scale(0.92); }
 
         /* Banking Modals & Bottom Sheets */
         .modal-overlay {
@@ -341,29 +343,46 @@
         /* ==================== 
            REAL BANKING CARD UI 
            ==================== */
-        .finance-header { margin-top: -30px; margin-bottom: 20px; position: relative; z-index: 10; }
+        .finance-header { margin-top: -30px; margin-bottom: 14px; position: relative; z-index: 10; }
         .bank-card-ui {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #1e1b4b 100%);
-            border-radius: 24px; padding: 22px; color: white;
-            box-shadow: 0 15px 30px -5px rgba(15, 23, 42, 0.35); position: relative; overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.15);
+            background: linear-gradient(135deg, #0b1120 0%, #16305c 100%);
+            border-radius: 20px; padding: 22px; color: white;
+            box-shadow: 0 12px 26px -8px rgba(11, 17, 32, 0.45); position: relative; overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
         }
         .bank-card-ui::before {
             content: ''; position: absolute; right: -40px; top: -40px;
-            width: 180px; height: 180px; background: radial-gradient(circle, rgba(59,130,246,0.15) 0%, rgba(255,255,255,0) 70%);
+            width: 180px; height: 180px; background: radial-gradient(circle, rgba(169,129,47,0.12) 0%, rgba(255,255,255,0) 70%);
             border-radius: 50%; pointer-events: none;
         }
         .bank-card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
-        .chip-icon { width: 32px; height: 24px; background: linear-gradient(135deg, #fcd34d, #d97706); border-radius: 5px; position: relative; overflow: hidden; }
+        .chip-icon { width: 32px; height: 24px; background: linear-gradient(135deg, #d4bb75, #a9812f); border-radius: 4px; position: relative; overflow: hidden; }
         .chip-icon::after { content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: rgba(0,0,0,0.3); }
-        .card-brand { font-size: 0.85rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #94a3b8; }
+        .card-brand { font-size: 0.8rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #94a3b8; }
         .bank-label { font-size: 0.8rem; color: #94a3b8; margin-bottom: 4px; font-weight: 400; }
-        .bank-balance-total { font-size: 2.2rem; font-weight: 700; margin-bottom: 20px; letter-spacing: -0.5px; color: #ffffff; font-variant-numeric: tabular-nums; }
-        .bank-summary-row { display: flex; gap: 16px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 14px; }
-        .bank-summary-item { flex: 1; }
-        .bank-summary-item div:first-child { font-size: 0.72rem; color: #94a3b8; margin-bottom: 2px;}
-        .bank-summary-item div:last-child { font-size: 1rem; font-weight: 600; font-variant-numeric: tabular-nums; }
-        .text-green { color: #34d399; } .text-red { color: #f87171; }
+        .bank-balance-total { font-size: 2.1rem; font-weight: 700; letter-spacing: -0.5px; color: #ffffff; font-variant-numeric: tabular-nums; }
+        .text-green { color: var(--success); } .text-red { color: var(--danger); }
+
+        /* Fintech dashboard cards — Income / Expense */
+        .finance-summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 18px; }
+        .finance-summary-card {
+            background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius-lg);
+            padding: 16px; box-shadow: var(--shadow-sm);
+        }
+        .finance-summary-top { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+        .finance-summary-icon {
+            width: 26px; height: 26px; border-radius: 8px; display: flex; align-items: center; justify-content: center;
+            font-size: 0.72rem; flex: 0 0 auto;
+        }
+        .is-income .finance-summary-icon { background: #eaf3ee; color: var(--success); }
+        .is-expense .finance-summary-icon { background: #f7eaea; color: var(--danger); }
+        .finance-summary-label { font-size: 0.78rem; color: var(--text-muted); font-weight: 600; }
+        .finance-summary-value {
+            font-size: 1.55rem; font-weight: 800; letter-spacing: -0.3px; font-variant-numeric: tabular-nums;
+            color: var(--text-main);
+        }
+        .is-income .finance-summary-value { color: var(--success); }
+        .is-expense .finance-summary-value { color: var(--danger); }
         
         /* Transaction List Items */
         .tx-item {
@@ -821,30 +840,30 @@
 }
 
 
-/* ================= MONTHLY OVERVIEW — FINTECH CALENDAR PATCH v2 ================= */
+/* ================= MONTHLY OVERVIEW — FINTECH CALENDAR (clean/formal) ================= */
 .monthly-overview-card{
-    background:#f7f9fc !important;
-    border:1px solid #e7edf4 !important;
-    border-radius:22px !important;
-    box-shadow:0 16px 42px rgba(15,23,42,.075) !important;
+    background:var(--card-bg) !important;
+    border:1px solid var(--border) !important;
+    border-radius:var(--radius-xl) !important;
+    box-shadow:var(--shadow-card) !important;
     overflow:hidden;
 }
 .monthly-overview-card > .card-header{
-    background:linear-gradient(145deg,#0b1220,#172033) !important;
+    background:linear-gradient(145deg,#0b1120,#16305c) !important;
     padding:18px 16px 15px !important;
     border:0 !important;
 }
 .monthly-overview-card > .card-header .card-header-left h2{color:#fff !important}
-.monthly-overview-card > .card-header .card-header-left i{color:#7dd3fc !important}
+.monthly-overview-card > .card-header .card-header-left i{color:#c9d6e8 !important}
 
 .monthly-toolbar{
     position:relative;
     margin:14px 0 12px !important;
     padding:8px !important;
-    background:rgba(255,255,255,.92) !important;
-    border:1px solid #e5ebf2 !important;
-    border-radius:17px !important;
-    box-shadow:0 8px 22px rgba(15,23,42,.045) !important;
+    background:var(--input-bg) !important;
+    border:1px solid var(--border) !important;
+    border-radius:var(--radius-md) !important;
+    box-shadow:none !important;
 }
 .monthly-nav-btn,
 .monthly-today-btn{
@@ -852,44 +871,44 @@
     touch-action:manipulation;
 }
 .monthly-nav-btn{
-    width:40px !important;height:40px !important;
-    border-radius:12px !important;
-    background:#f8fafc !important;
-    border:1px solid #e2e8f0 !important;
-    color:#334155 !important;
-    transition:transform .16s ease,background .16s ease,border-color .16s ease,box-shadow .16s ease !important;
+    width:36px !important;height:36px !important;
+    border-radius:8px !important;
+    background:var(--card-bg) !important;
+    border:1px solid var(--border) !important;
+    color:var(--text-main) !important;
+    transition:background .16s ease,border-color .16s ease !important;
 }
-.monthly-nav-btn:hover{background:#eff6ff !important;border-color:#bfdbfe !important}
-.monthly-nav-btn:active{transform:scale(.91) !important}
+.monthly-nav-btn:hover{background:#eef2f7 !important;border-color:#d6dce4 !important}
+.monthly-nav-btn:active{transform:scale(.94) !important}
 .monthly-today-btn{
-    padding:9px 11px !important;
-    border:1px solid #dbeafe !important;
-    background:#eff6ff !important;color:#2563eb !important;
-    border-radius:11px !important;
-    font-weight:800 !important;
+    padding:8px 12px !important;
+    border:1px solid var(--border) !important;
+    background:var(--card-bg) !important;color:var(--primary) !important;
+    border-radius:8px !important;
+    font-weight:700 !important;
 }
 
-.monthly-title{font-size:1rem !important;font-weight:850 !important;color:#0f172a !important}
-.monthly-subtitle{font-size:.68rem !important;color:#64748b !important}
+.monthly-title{font-size:1rem !important;font-weight:800 !important;color:var(--text-main) !important}
+.monthly-subtitle{font-size:.68rem !important;color:var(--text-muted) !important}
 
 .monthly-period-banner{
     margin:10px 0 12px !important;
     padding:11px 12px !important;
-    border-radius:16px !important;
-    background:linear-gradient(135deg,#fff,#f8fbff) !important;
-    border:1px solid #dce9f7 !important;
-    box-shadow:0 6px 18px rgba(37,99,235,.045) !important;
+    border-radius:var(--radius-md) !important;
+    background:var(--input-bg) !important;
+    border:1px solid var(--border) !important;
+    box-shadow:none !important;
 }
 .monthly-period-banner-icon{
-    width:36px !important;height:36px !important;
-    border-radius:11px !important;
-    background:#eff6ff !important;color:#2563eb !important;
+    width:34px !important;height:34px !important;
+    border-radius:8px !important;
+    background:#eaf0f7 !important;color:var(--primary) !important;
 }
-.monthly-period-label{font-size:.61rem !important;color:#64748b !important}
-.monthly-period-range{font-size:.88rem !important;font-weight:850 !important;color:#0f172a !important}
+.monthly-period-label{font-size:.61rem !important;color:var(--text-muted) !important}
+.monthly-period-range{font-size:.88rem !important;font-weight:800 !important;color:var(--text-main) !important}
 .monthly-cutoff-badge{
-    padding:6px 8px !important;border-radius:9px !important;
-    background:#fff7ed !important;border-color:#fed7aa !important;color:#c2410c !important;
+    padding:5px 9px !important;border-radius:6px !important;
+    background:#f7f0e3 !important;border:1px solid #e9dcc0 !important;color:var(--accent-gold) !important;
 }
 
 .monthly-summary-easy{
@@ -899,189 +918,181 @@
 }
 .monthly-summary-box{
     min-width:0 !important;
-    min-height:76px !important;
+    min-height:72px !important;
     padding:11px 12px !important;
-    border-radius:16px !important;
-    border:1px solid #e4eaf1 !important;
-    background:#fff !important;
-    box-shadow:0 6px 16px rgba(15,23,42,.035) !important;
+    border-radius:var(--radius-md) !important;
+    border:1px solid var(--border) !important;
+    background:var(--card-bg) !important;
+    box-shadow:var(--shadow-sm) !important;
 }
-.monthly-summary-label{font-size:.65rem !important;color:#64748b !important;font-weight:750 !important}
+.monthly-summary-label{font-size:.65rem !important;color:var(--text-muted) !important;font-weight:700 !important}
 .monthly-summary-value{
     margin-top:4px !important;
     font-size:.98rem !important;
-    font-weight:850 !important;
+    font-weight:800 !important;
     letter-spacing:-.01em !important;
 }
-.monthly-summary-box-expense{background:linear-gradient(135deg,#fff7f7,#fff) !important;border-color:#fee2e2 !important}
-.monthly-summary-box-income{background:linear-gradient(135deg,#f2fff7,#fff) !important;border-color:#dcfce7 !important}
+.monthly-summary-box-expense{background:var(--card-bg) !important;border-color:var(--border) !important}
+.monthly-summary-box-income{background:var(--card-bg) !important;border-color:var(--border) !important}
 .monthly-summary-box-net{
     grid-column:1 / -1 !important;
-    min-height:82px !important;
-    background:linear-gradient(135deg,#f7f4ff,#fff) !important;
-    border-color:#e9d5ff !important;
+    min-height:78px !important;
+    background:var(--card-bg) !important;
+    border-color:var(--border) !important;
 }
-.monthly-summary-value.expense{color:#dc2626 !important}
-.monthly-summary-value.income{color:#15803d !important}
-.monthly-summary-value.net{color:#6d28d9 !important;font-size:1.16rem !important}
+.monthly-summary-value.expense{color:var(--danger) !important}
+.monthly-summary-value.income{color:var(--success) !important}
+.monthly-summary-value.net{color:var(--primary) !important;font-size:1.14rem !important}
 
+/* Weekday header — plain, no boxed pill */
 .monthly-weekdays{
     display:grid !important;
     grid-template-columns:repeat(7,minmax(0,1fr)) !important;
-    gap:4px !important;
-    padding:5px !important;
+    gap:0 !important;
+    padding:0 0 6px !important;
     margin:0 !important;
-    border:1px solid #e4eaf1 !important;
-    border-radius:13px !important;
-    background:#eef2f7 !important;
+    border:0 !important;
+    border-bottom:1px solid var(--border) !important;
+    background:transparent !important;
 }
 .monthly-weekday{
     min-width:0;
     padding:4px 0 !important;
-    color:#64748b !important;
+    color:var(--text-muted) !important;
     font-size:.61rem !important;
-    font-weight:850 !important;
+    font-weight:800 !important;
+    text-align:center;
 }
 
+/* Calendar grid — thin table lines instead of individual bordered/capsule cards */
 .monthly-calendar{
     display:grid !important;
     grid-template-columns:repeat(7,minmax(0,1fr)) !important;
-    gap:6px !important;
-    margin-top:6px !important;
+    gap:1px !important;
+    margin-top:1px !important;
+    background:var(--border) !important;
+    border:1px solid var(--border) !important;
+    border-radius:var(--radius-md) !important;
+    overflow:hidden;
 }
 .monthly-day{
-    --day-accent:#cbd5e1;
+    --day-accent:#c7ccd4;
     min-width:0 !important;
-    min-height:86px !important;
-    padding:8px !important;
-    border:1px solid #dfe6ef !important;
-    border-radius:15px !important;
-    background:#fff !important;
-    box-shadow:0 5px 14px rgba(15,23,42,.035) !important;
+    min-height:80px !important;
+    padding:7px 6px !important;
+    border:0 !important;
+    border-radius:0 !important;
+    background:var(--card-bg) !important;
+    box-shadow:none !important;
     display:flex !important;
     flex-direction:column !important;
-    gap:6px !important;
+    align-items:center !important;
+    gap:3px !important;
     position:relative !important;
     overflow:hidden !important;
-    isolation:isolate;
     cursor:pointer !important;
     -webkit-tap-highlight-color:transparent;
     touch-action:manipulation;
-    transition:transform .16s ease,border-color .16s ease,box-shadow .16s ease,background .16s ease !important;
-}
-.monthly-day::before{
-    content:"";
-    position:absolute;
-    left:0;top:0;bottom:0;
-    width:3px;
-    border-radius:0 3px 3px 0;
-    background:var(--day-accent);
-    opacity:.9;
-    z-index:-1;
+    transition:background .14s ease !important;
 }
 .monthly-day:hover{
-    transform:translateY(-2px) !important;
-    border-color:#bfd0e2 !important;
-    box-shadow:0 10px 20px rgba(15,23,42,.075) !important;
+    background:#f5f7fa !important;
 }
 .monthly-day:active{
-    transform:scale(.965) !important;
-    box-shadow:0 4px 10px rgba(15,23,42,.055) !important;
+    background:#eef1f5 !important;
 }
 .monthly-day:focus-visible{
-    outline:3px solid rgba(59,130,246,.22) !important;
-    outline-offset:1px;
+    outline:2px solid var(--primary-light) !important;
+    outline-offset:-2px;
 }
 .monthly-day.today{
-    border:2px solid #60a5fa !important;
-    padding:7px !important;
-    box-shadow:0 0 0 3px rgba(96,165,250,.12),0 8px 18px rgba(37,99,235,.07) !important;
+    background:#eef3f9 !important;
 }
+.monthly-day.today .monthly-day-number{ color:var(--primary) !important; }
 .monthly-day.muted{
-    min-height:86px !important;
-    opacity:.32 !important;
-    background:#f8fafc !important;
-    border-color:#edf1f5 !important;
-    box-shadow:none !important;
+    min-height:80px !important;
+    opacity:.4 !important;
+    background:var(--input-bg) !important;
     cursor:default !important;
 }
-.monthly-day.muted::before{display:none}
-.monthly-day.cross-month{background:linear-gradient(180deg,#fff,#f8fbff) !important}
+.monthly-day.cross-month{background:var(--card-bg) !important}
 
 .monthly-day-top{
     display:flex;
     align-items:center;
-    justify-content:space-between;
+    justify-content:center;
     min-width:0;
-    gap:4px;
+    gap:3px;
 }
 .monthly-day-number{
     min-width:0;
     font-size:.78rem !important;
     line-height:1 !important;
-    font-weight:850 !important;
-    color:#0f172a !important;
+    font-weight:700 !important;
+    color:var(--text-main) !important;
     font-variant-numeric:tabular-nums;
 }
 .monthly-month-mini{
     font-size:.46rem !important;
-    color:#94a3b8 !important;
-    margin-left:2px !important;
+    color:var(--text-muted) !important;
+    margin-left:1px !important;
 }
+
+/* Status dot — sits under the date number, replaces large shift icons */
 .monthly-status-dot{
-    width:7px;height:7px;
+    width:6px;height:6px;
     flex:0 0 auto;
     border-radius:50%;
-    background:#cbd5e1;
-    box-shadow:0 0 0 3px rgba(203,213,225,.18);
+    background:#c7ccd4;
+    margin-top:1px;
 }
-.monthly-status-dot.morning{background:#f59e0b;box-shadow:0 0 0 3px rgba(245,158,11,.14)}
-.monthly-status-dot.noon{background:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,.14)}
-.monthly-status-dot.op{background:#8b5cf6;box-shadow:0 0 0 3px rgba(139,92,246,.14)}
-.monthly-status-dot.work{background:#64748b;box-shadow:0 0 0 3px rgba(100,116,139,.13)}
-.monthly-status-dot.paid{background:#10b981;box-shadow:0 0 0 3px rgba(16,185,129,.14)}
-.monthly-status-dot.unpaid{background:#94a3b8;box-shadow:0 0 0 3px rgba(148,163,184,.14)}
+.monthly-status-dot.morning{background:#a9812f}
+.monthly-status-dot.noon{background:#16305c}
+.monthly-status-dot.op{background:#5b4b8a}
+.monthly-status-dot.work{background:#62697a}
+.monthly-status-dot.paid{background:#146c43}
+.monthly-status-dot.unpaid{background:#9aa1ad}
 
 .monthly-day-summary{
     display:flex;
     align-items:center;
-    gap:5px;
+    justify-content:center;
+    gap:3px;
     min-width:0;
-    margin-top:auto;
 }
+/* Shift icon reduced to a small plain glyph — no boxed background/border */
 .monthly-shift-icon{
-    width:24px;height:24px;
-    flex:0 0 24px;
-    display:flex;align-items:center;justify-content:center;
-    border-radius:8px;
-    font-size:.64rem;
-    background:#f8fafc;
-    color:#64748b;
-    border:1px solid #e2e8f0;
+    width:auto;height:auto;
+    flex:0 0 auto;
+    font-size:.56rem;
+    background:none !important;
+    border:0 !important;
+    color:var(--text-muted);
 }
-.monthly-shift-icon.morning{background:#fff7ed;color:#d97706;border-color:#fed7aa}
-.monthly-shift-icon.noon{background:#eff6ff;color:#2563eb;border-color:#bfdbfe}
-.monthly-shift-icon.op{background:#f5f3ff;color:#7c3aed;border-color:#ddd6fe}
-.monthly-shift-icon.work{background:#f8fafc;color:#475569;border-color:#e2e8f0}
-.monthly-shift-icon.paid{background:#ecfdf5;color:#059669;border-color:#a7f3d0}
-.monthly-shift-icon.unpaid{background:#f1f5f9;color:#64748b;border-color:#cbd5e1}
+.monthly-shift-icon.morning{color:#a9812f}
+.monthly-shift-icon.noon{color:#16305c}
+.monthly-shift-icon.op{color:#5b4b8a}
+.monthly-shift-icon.work{color:#62697a}
+.monthly-shift-icon.paid{color:#146c43}
+.monthly-shift-icon.unpaid{color:#9aa1ad}
 
 .monthly-shift-short{
     min-width:0;
-    flex:1;
+    max-width:100%;
     overflow:hidden;
     text-overflow:ellipsis;
     white-space:nowrap;
-    font-size:.55rem;
-    font-weight:800;
-    color:#475569;
+    font-size:.53rem;
+    font-weight:700;
+    color:var(--text-muted);
 }
 .monthly-finance-row{
     display:flex;
     align-items:center;
-    justify-content:space-between;
-    gap:4px;
+    justify-content:center;
+    gap:3px;
     min-width:0;
+    margin-top:auto;
 }
 .monthly-expense{
     min-width:0;
@@ -1090,25 +1101,20 @@
     overflow:hidden;
     text-overflow:ellipsis;
     white-space:nowrap;
-    font-size:.56rem !important;
-    font-weight:850 !important;
-    color:#dc2626 !important;
+    font-size:.55rem !important;
+    font-weight:800 !important;
+    color:var(--danger) !important;
     font-variant-numeric:tabular-nums;
 }
-.monthly-expense.zero{color:#cbd5e1 !important;font-weight:700 !important}
+.monthly-expense.zero{color:#c7ccd4 !important;font-weight:600 !important}
+/* Wallet icon dropped in favor of colored amount text only — kept for a11y, visually minimal */
 .monthly-wallet-icon{
-    width:18px;height:18px;
-    display:flex;align-items:center;justify-content:center;
-    border-radius:6px;
-    font-size:.5rem;
-    color:#94a3b8;
-    background:#f8fafc;
+    display:none;
 }
-.monthly-wallet-icon.has-expense{color:#dc2626;background:#fff1f2}
 
 .monthly-empty{
     margin-top:auto;
-    color:#cbd5e1;
+    color:#c7ccd4;
     font-size:.53rem;
     overflow:hidden;
     white-space:nowrap;
@@ -1120,7 +1126,7 @@
     border-radius:50%;
     transform:scale(0);
     animation:monthlyRipple .48s ease-out;
-    background:rgba(59,130,246,.18);
+    background:rgba(22,48,92,.10);
     pointer-events:none;
     z-index:3;
 }
@@ -1132,83 +1138,76 @@
     gap:8px 13px !important;
     margin-top:13px !important;
     padding:10px 11px !important;
-    border:1px solid #e4eaf1 !important;
-    border-radius:14px !important;
-    background:#fff !important;
-    box-shadow:0 5px 14px rgba(15,23,42,.035) !important;
+    border:1px solid var(--border) !important;
+    border-radius:var(--radius-md) !important;
+    background:var(--card-bg) !important;
+    box-shadow:none !important;
 }
-.monthly-legend-item{font-size:.64rem !important;font-weight:750 !important;color:#64748b !important}
-.monthly-legend-dot{width:8px !important;height:8px !important;box-shadow:0 0 0 3px rgba(148,163,184,.08)}
+.monthly-legend-item{font-size:.64rem !important;font-weight:700 !important;color:var(--text-muted) !important}
+.monthly-legend-dot{width:7px !important;height:7px !important;box-shadow:none}
 
 .monthly-modal .modal-container{
     max-width:560px !important;
     width:min(560px,calc(100% - 20px)) !important;
-    border-radius:22px !important;
+    border-radius:var(--radius-xl) !important;
 }
 .monthly-detail-date{
     padding:14px !important;
-    border-radius:16px !important;
-    background:linear-gradient(135deg,#eff6ff,#fff) !important;
-    border:1px solid #dbeafe !important;
-    box-shadow:0 6px 18px rgba(37,99,235,.045);
+    border-radius:var(--radius-md) !important;
+    background:var(--input-bg) !important;
+    border:1px solid var(--border) !important;
+    box-shadow:none;
 }
-.monthly-detail-date-main{font-size:1.08rem !important;font-weight:850 !important}
+.monthly-detail-date-main{font-size:1.08rem !important;font-weight:800 !important}
 .monthly-detail-status{font-size:.76rem !important}
 .monthly-detail-box{
-    border-radius:13px !important;
-    background:#f8fafc !important;
+    border-radius:var(--radius-md) !important;
+    background:var(--input-bg) !important;
 }
 .monthly-expense-row{
-    border-radius:12px !important;
+    border-radius:var(--radius-md) !important;
     padding:10px 11px !important;
-    background:#fff !important;
+    background:var(--card-bg) !important;
 }
 .monthly-expense-note{min-width:0 !important}
-.monthly-note-box{border-radius:12px !important}
+.monthly-note-box{border-radius:var(--radius-md) !important}
 
 @media (min-width:700px){
     .monthly-summary-easy{grid-template-columns:repeat(4,minmax(0,1fr)) !important}
     .monthly-summary-box-net{grid-column:auto !important}
 }
 @media (max-width:560px){
-    .monthly-overview-card{border-radius:18px !important}
-    .monthly-calendar{gap:4px !important}
+    .monthly-overview-card{border-radius:16px !important}
     .monthly-day{
-        min-height:76px !important;
-        padding:6px !important;
-        border-radius:12px !important;
-        gap:5px !important;
+        min-height:70px !important;
+        padding:6px 4px !important;
     }
-    .monthly-day.today{padding:5px !important}
-    .monthly-day.muted{min-height:76px !important}
+    .monthly-day.muted{min-height:70px !important}
     .monthly-day-number{font-size:.69rem !important}
     .monthly-month-mini{font-size:.42rem !important}
-    .monthly-status-dot{width:6px;height:6px}
-    .monthly-shift-icon{width:21px;height:21px;flex-basis:21px;border-radius:7px;font-size:.55rem}
-    .monthly-shift-short{font-size:.49rem}
-    .monthly-expense{font-size:.51rem !important}
-    .monthly-wallet-icon{width:16px;height:16px;font-size:.45rem}
-    .monthly-summary-box{min-height:70px !important;padding:10px !important}
+    .monthly-status-dot{width:5px;height:5px}
+    .monthly-shift-icon{font-size:.5rem}
+    .monthly-shift-short{font-size:.47rem}
+    .monthly-expense{font-size:.5rem !important}
+    .monthly-summary-box{min-height:68px !important;padding:10px !important}
     .monthly-summary-value{font-size:.86rem !important}
     .monthly-summary-value.net{font-size:1.04rem !important}
     .monthly-weekday{font-size:.57rem !important}
-    .monthly-today-btn{padding:8px 9px !important}
+    .monthly-today-btn{padding:7px 10px !important}
 }
 @media (max-width:390px){
-    .monthly-calendar{gap:3px !important}
-    .monthly-day{min-height:68px !important;padding:5px !important;border-radius:10px !important}
-    .monthly-day.today{padding:4px !important}
-    .monthly-day.muted{min-height:68px !important}
+    .monthly-day{min-height:64px !important;padding:5px 3px !important}
+    .monthly-day.muted{min-height:64px !important}
     .monthly-day-number{font-size:.65rem !important}
-    .monthly-shift-icon{width:19px;height:19px;flex-basis:19px;font-size:.5rem}
-    .monthly-shift-short{font-size:.44rem}
-    .monthly-expense{font-size:.47rem !important}
-    .monthly-wallet-icon{display:none}
+    .monthly-shift-icon{font-size:.46rem}
+    .monthly-shift-short{font-size:.42rem}
+    .monthly-expense{font-size:.46rem !important}
 }
 @media (prefers-reduced-motion:reduce){
     .monthly-day,.monthly-nav-btn{transition:none !important}
     .monthly-ripple{animation:none !important;display:none}
 }
+
 
 </style>
 </head>
@@ -1485,16 +1484,23 @@
                     </div>
                     <div class="bank-label">ยอดเงินคงเหลือรวม (บัญชีส่วนตัว)</div>
                     <div class="bank-balance-total">฿<span id="bankTotalBalance">0.00</span></div>
-                    <div class="bank-summary-row">
-                        <div class="bank-summary-item">
-                            <div><i class="fa-solid fa-arrow-down text-green"></i> รายรับรวม</div>
-                            <div class="text-green">฿<span id="bankTotalIncome">0.00</span></div>
-                        </div>
-                        <div class="bank-summary-item">
-                            <div><i class="fa-solid fa-arrow-up text-red"></i> รายจ่ายรวม</div>
-                            <div class="text-red">฿<span id="bankTotalExpense">0.00</span></div>
-                        </div>
+                </div>
+            </div>
+
+            <div class="finance-summary-grid">
+                <div class="finance-summary-card is-income">
+                    <div class="finance-summary-top">
+                        <span class="finance-summary-icon"><i class="fa-solid fa-arrow-down"></i></span>
+                        <span class="finance-summary-label">รายรับรวม</span>
                     </div>
+                    <div class="finance-summary-value">฿<span id="bankTotalIncome">0.00</span></div>
+                </div>
+                <div class="finance-summary-card is-expense">
+                    <div class="finance-summary-top">
+                        <span class="finance-summary-icon"><i class="fa-solid fa-arrow-up"></i></span>
+                        <span class="finance-summary-label">รายจ่ายรวม</span>
+                    </div>
+                    <div class="finance-summary-value">฿<span id="bankTotalExpense">0.00</span></div>
                 </div>
             </div>
 
@@ -1602,22 +1608,28 @@
 
     <nav class="bottom-nav">
         <a href="#" class="nav-item active" id="nav-home" onclick="window.switchView('view-home')">
-            <i class="fa-solid fa-house"></i><span>หน้าแรก</span>
+            <svg class="nav-icon" viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v9a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1v-9"/></svg>
+            <span>หน้าแรก</span>
         </a>
         <a href="#" class="nav-item" id="nav-monthly" onclick="window.switchView('view-monthly')">
-            <i class="fa-solid fa-calendar-days"></i><span>ภาพรวม</span>
+            <svg class="nav-icon" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/><circle cx="8" cy="14.5" r="0.6" fill="currentColor" stroke="none"/><circle cx="12" cy="14.5" r="0.6" fill="currentColor" stroke="none"/><circle cx="16" cy="14.5" r="0.6" fill="currentColor" stroke="none"/></svg>
+            <span>ภาพรวม</span>
         </a>
         <a href="#" class="nav-item" id="nav-log" onclick="window.switchView('view-log')">
-            <i class="fa-solid fa-pen-to-square"></i><span>งาน</span>
+            <svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+            <span>งาน</span>
         </a>
         <a href="#" class="nav-item" id="nav-finance" onclick="window.switchView('view-finance')">
-            <i class="fa-solid fa-wallet"></i><span>การเงิน</span>
+            <svg class="nav-icon" viewBox="0 0 24 24"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
+            <span>การเงิน</span>
         </a>
         <a href="#" class="nav-item" id="nav-plan" onclick="window.switchView('view-plan')">
-            <i class="fa-solid fa-piggy-bank"></i><span>วางแผน</span>
+            <svg class="nav-icon" viewBox="0 0 24 24"><path d="M20 10c0-3-3-6-8-6-4 0-7 2.5-8 5.5-.7 0-1.5.6-1.5 2S3.3 14 4 14c.4 1 1 1.8 1.8 2.4L5 20h3l.5-1.7c.8.2 1.6.3 2.5.3s1.7-.1 2.5-.3L14 20h3l-.8-3.5C18 15.3 19 13 19 11h1a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1h-.5"/><circle cx="15.5" cy="10.5" r="0.6" fill="currentColor" stroke="none"/></svg>
+            <span>วางแผน</span>
         </a>
         <a href="#" class="nav-item" id="nav-settings" onclick="window.switchView('view-settings')">
-            <i class="fa-solid fa-gear"></i><span>ตั้งค่า</span>
+            <svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            <span>ตั้งค่า</span>
         </a>
     </nav>
 
@@ -2409,8 +2421,8 @@
                     >
                         <div class="monthly-day-top">
                             <div class="monthly-day-number">${d}<span class="monthly-month-mini">${m !== startDate.getMonth() ? `/${m}` : ''}</span></div>
-                            <span class="monthly-status-dot ${meta.dot}" title="${escapeMonthlyHtml(meta.title)}" aria-hidden="true"></span>
                         </div>
+                        <span class="monthly-status-dot ${meta.dot}" title="${escapeMonthlyHtml(meta.title)}" aria-hidden="true"></span>
                         ${shiftHtml}
                         ${financeHtml}
                     </button>`;
