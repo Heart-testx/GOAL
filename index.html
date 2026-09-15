@@ -2440,6 +2440,11 @@
             });
         }
 
+        // แก้บั๊ก: renderMonthlyOverview เป็นฟังก์ชันภายใน module scope เฉยๆ ไม่เคยถูกผูกกับ window
+        // ทำให้ window.renderMonthlyOverview() ที่ถูกเรียกตอนสลับแท็บ/Firestore อัปเดต error แบบเงียบๆ
+        // (TypeError: window.renderMonthlyOverview is not a function) จนหน้า "ภาพรวม" ค้างที่ค่าเริ่มต้น 0/ว่างเปล่า
+        window.renderMonthlyOverview = renderMonthlyOverview;
+
         window.changeOverviewMonth = function(offset) {
             triggerHaptic();
             monthlyOverviewDate = new Date(monthlyOverviewDate.getFullYear(), monthlyOverviewDate.getMonth() + offset, 1);
