@@ -606,239 +606,6 @@
             .monthly-expense { font-size:.52rem; }
         }
 
-    
-/* ================= BANK APP UI PATCH ================= */
-.monthly-overview-card{
-    margin-top:-30px;
-    background:#f6f8fb;
-    border:1px solid #e7edf5;
-    box-shadow:0 18px 50px rgba(15,23,42,.08);
-    overflow:hidden;
-}
-.monthly-overview-card > .card-header{
-    background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%);
-    color:#fff;
-    border-bottom:0;
-    margin:-1px -1px 14px;
-    padding:18px 16px 14px;
-}
-.monthly-overview-card > .card-header .card-header-left h2{
-    color:#fff;
-    font-size:1.02rem;
-    letter-spacing:.01em;
-}
-.monthly-overview-card > .card-header .card-header-left i{
-    color:#60a5fa;
-}
-.monthly-toolbar{
-    background:#fff;
-    border:1px solid #e6edf5;
-    border-radius:18px;
-    padding:10px;
-    box-shadow:0 8px 20px rgba(15,23,42,.04);
-}
-.monthly-nav-btn{
-    width:40px;height:40px;border-radius:13px;
-    background:#f8fafc;border:1px solid #e2e8f0;color:#334155;
-}
-.monthly-today-btn{
-    background:#eff6ff;color:#2563eb;border:1px solid #dbeafe;
-    border-radius:12px;padding:9px 11px;
-}
-.monthly-title{font-size:1rem;color:#0f172a}
-.monthly-subtitle{color:#64748b}
-
-.monthly-period-banner{
-    background:linear-gradient(135deg,#ffffff,#f8fbff);
-    border:1px solid #dbeafe;
-    border-radius:18px;
-    padding:13px;
-    box-shadow:0 7px 18px rgba(37,99,235,.05);
-}
-.monthly-period-banner-icon{
-    width:38px;height:38px;border-radius:12px;
-    background:#eff6ff;color:#2563eb;border:1px solid #dbeafe;
-}
-.monthly-period-label{font-size:.62rem;color:#64748b}
-.monthly-period-range{font-size:.94rem;color:#0f172a}
-.monthly-cutoff-badge{
-    background:#fff7ed;border-color:#fed7aa;color:#c2410c;
-    padding:7px 9px;border-radius:10px;
-}
-
-.monthly-summary-easy{
-    grid-template-columns:repeat(2,minmax(0,1fr));
-    gap:10px;
-    margin:12px 0 16px;
-}
-.monthly-summary-box{
-    min-height:78px;
-    display:flex;flex-direction:column;justify-content:center;
-    padding:12px 13px;
-    text-align:left;
-    border-radius:17px;
-    background:#fff;
-    border:1px solid #e5eaf1;
-    box-shadow:0 7px 18px rgba(15,23,42,.04);
-}
-.monthly-summary-box:nth-child(1),
-.monthly-summary-box:nth-child(2){background:#fff}
-.monthly-summary-box-expense{
-    background:linear-gradient(135deg,#fff8f8,#fff) !important;
-    border-color:#fee2e2;
-}
-.monthly-summary-box-income{
-    background:linear-gradient(135deg,#f3fff7,#fff) !important;
-    border-color:#dcfce7;
-}
-.monthly-summary-box-net{
-    background:linear-gradient(135deg,#f7f4ff,#fff) !important;
-    border-color:#e9d5ff;
-    grid-column:1 / -1;
-    min-height:86px;
-}
-.monthly-summary-label{
-    font-size:.68rem;
-    color:#64748b;
-    font-weight:700;
-    letter-spacing:.01em;
-}
-.monthly-summary-value{
-    font-size:1.02rem;
-    color:#0f172a;
-    margin-top:5px;
-    letter-spacing:-.01em;
-}
-.monthly-summary-value.expense{color:#dc2626}
-.monthly-summary-value.income{color:#15803d}
-.monthly-summary-value.net{color:#6d28d9;font-size:1.18rem}
-
-.monthly-weekdays{
-    background:#eef2f7;
-    border:1px solid #e5eaf1;
-    border-radius:12px;
-    padding:5px;
-    gap:4px;
-}
-.monthly-weekday{
-    padding:4px 0;
-    color:#64748b;
-    font-size:.64rem;
-    font-weight:800;
-}
-.monthly-calendar{
-    gap:6px;
-    margin-top:6px;
-}
-.monthly-day{
-    min-height:96px;
-    border:1px solid #dfe6ef;
-    border-radius:15px;
-    background:#fff;
-    padding:8px;
-    box-shadow:0 5px 12px rgba(15,23,42,.035);
-    gap:6px;
-}
-.monthly-day:hover{
-    border-color:#b8c7da;
-    box-shadow:0 8px 16px rgba(15,23,42,.07);
-}
-.monthly-day.today{
-    border:2px solid #60a5fa;
-    padding:7px;
-    box-shadow:0 0 0 3px rgba(96,165,250,.12);
-}
-.monthly-day-number{
-    font-size:.78rem;
-    color:#0f172a;
-    font-variant-numeric:tabular-nums;
-}
-.monthly-month-mini{color:#94a3b8}
-.monthly-day.muted{
-    opacity:.45;
-    background:#f8fafc;
-    box-shadow:none;
-}
-.monthly-shift-badge{
-    display:block;
-    width:100%;
-    max-width:none;
-    text-align:center;
-    font-size:.57rem;
-    border-radius:9px;
-    padding:5px 4px;
-    line-height:1.05;
-    box-sizing:border-box;
-    font-weight:800;
-}
-.monthly-shift-morning{
-    background:#fff7ed;color:#c2410c;border-color:#fdba74;
-}
-.monthly-shift-noon{
-    background:#eff6ff;color:#2563eb;border-color:#93c5fd;
-}
-.monthly-shift-op{
-    background:#f5f3ff;color:#7c3aed;border-color:#c4b5fd;
-}
-.monthly-shift-work{
-    background:#f8fafc;color:#475569;border-color:#cbd5e1;
-}
-.monthly-shift-paid{
-    background:#ecfdf5;color:#047857;border-color:#86efac;
-}
-.monthly-shift-unpaid{
-    background:#f1f5f9;color:#64748b;border-color:#cbd5e1;
-}
-.monthly-expense{
-    margin-top:auto;
-    font-size:.61rem;
-    padding-top:4px;
-    color:#dc2626;
-    font-weight:850;
-}
-.monthly-expense.zero{
-    color:#94a3b8;
-}
-.monthly-legend{
-    margin-top:14px;
-    padding:11px 10px;
-    background:#fff;
-    border:1px solid #e5eaf1;
-    border-radius:14px;
-    box-shadow:0 5px 14px rgba(15,23,42,.035);
-}
-.monthly-legend-item{font-weight:700;color:#64748b}
-.monthly-legend-dot{width:9px;height:9px}
-
-@media (min-width:700px){
-    .monthly-summary-easy{grid-template-columns:repeat(4,1fr)}
-    .monthly-summary-box-net{grid-column:auto}
-    .monthly-summary-box-expense,
-    .monthly-summary-box-income,
-    .monthly-summary-box-net{min-height:88px}
-}
-@media (max-width:560px){
-    .monthly-overview-card > .card-header{padding:16px 14px 12px}
-    .monthly-calendar{gap:5px}
-    .monthly-day{
-        min-height:84px;
-        padding:7px 6px;
-        border-radius:13px;
-    }
-    .monthly-day.today{padding:6px 5px}
-    .monthly-shift-badge{font-size:.5rem;padding:5px 2px}
-    .monthly-expense{font-size:.54rem}
-    .monthly-summary-box{min-height:74px;padding:10px 11px}
-    .monthly-summary-value{font-size:.9rem}
-    .monthly-summary-value.net{font-size:1.05rem}
-}
-@media (max-width:390px){
-    .monthly-day{min-height:76px}
-    .monthly-day-number{font-size:.69rem}
-    .monthly-shift-badge{font-size:.47rem}
-    .monthly-expense{font-size:.5rem}
-}
-
 
 /* ================= MONTHLY OVERVIEW — FINTECH CALENDAR (clean/formal) ================= */
 .monthly-overview-card{
@@ -1209,6 +976,57 @@
 }
 
 
+
+        /* ================= PATCH: #7 SYNC CENTER / #8 UNDO / #9 WORK STATISTICS ================= */
+        .status-badge.syncing .status-dot { background: #fbbf24; box-shadow: 0 0 8px #fbbf24; animation: pulse-dot 1.2s ease-in-out infinite; }
+        .toast { pointer-events: auto; }
+        .toast-undo-btn {
+            margin-left: auto; background: rgba(255,255,255,0.16); border: 1px solid rgba(255,255,255,0.28);
+            color: #fff; font-weight: 700; font-size: 0.8rem; padding: 6px 14px; border-radius: 20px;
+            cursor: pointer; flex-shrink: 0; -webkit-tap-highlight-color: transparent; font-family: inherit;
+        }
+        .toast-undo-btn:active { background: rgba(255,255,255,0.32); }
+
+        .sync-panel { display: flex; flex-direction: column; gap: 8px; }
+        .sync-row {
+            display: flex; align-items: center; justify-content: space-between; gap: 10px;
+            padding: 10px 12px; background: var(--input-bg); border: 1px solid var(--border);
+            border-radius: var(--radius-md); font-size: 0.85rem;
+        }
+        .sync-row-label { color: var(--text-muted); display: flex; align-items: center; gap: 8px; min-width: 0; }
+        .sync-row-label i { width: 16px; text-align: center; }
+        .sync-row-value { font-weight: 700; color: var(--text-main); font-size: 0.82rem; white-space: nowrap; }
+        .sync-pill { font-size: 0.7rem; padding: 3px 10px; border-radius: 20px; font-weight: 700; white-space: nowrap; }
+        .sync-pill.ok { background: #dcfce7; color: #146c43; }
+        .sync-pill.warn { background: #fef3c7; color: #92400e; }
+        .sync-pill.bad { background: #fee2e2; color: #b3261e; }
+        .btn-undo-row {
+            background: #fff; border: 1px solid var(--border); color: var(--primary);
+            font-weight: 700; font-size: 0.75rem; padding: 6px 12px; border-radius: 20px;
+            cursor: pointer; flex-shrink: 0; font-family: inherit; -webkit-tap-highlight-color: transparent;
+        }
+        .btn-undo-row:active { background: var(--input-bg); }
+
+        .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        .stat-box { background: var(--input-bg); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 12px; }
+        .stat-label { font-size: 0.72rem; color: var(--text-muted); margin-bottom: 4px; }
+        .stat-value { font-size: 1.05rem; font-weight: 700; color: var(--text-main); }
+        .stat-sub { font-size: 0.7rem; color: var(--text-muted); margin-top: 3px; }
+        .stat-trend-up { color: var(--success); font-weight: 700; }
+        .stat-trend-down { color: var(--danger); font-weight: 700; }
+        .stat-trend-flat { color: var(--text-muted); font-weight: 700; }
+        .stat-section-title {
+            font-size: 0.8rem; font-weight: 700; color: var(--text-main);
+            margin: 16px 0 8px; display: flex; align-items: center; gap: 8px;
+        }
+        .stat-section-title i { color: var(--primary-light); }
+        .stat-bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 7px; font-size: 0.78rem; }
+        .stat-bar-name { width: 96px; flex-shrink: 0; color: var(--text-muted); }
+        .stat-bar-track { flex: 1; height: 8px; background: #eef1f5; border-radius: 6px; overflow: hidden; }
+        .stat-bar-fill { height: 100%; border-radius: 6px; background: var(--primary-light); }
+        .stat-bar-count { width: 52px; text-align: right; font-weight: 700; color: var(--text-main); }
+        .stats-empty { text-align: center; padding: 22px 12px; color: var(--text-muted); font-size: 0.85rem; }
+        .stats-empty i { display: block; font-size: 2rem; color: #cbd5e1; margin-bottom: 10px; }
 </style>
 </head>
 <body>
@@ -1314,6 +1132,17 @@
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <!-- PATCH #9: WORK STATISTICS -->
+            <div class="card" id="workStatsCard">
+                <div class="card-header">
+                    <div class="card-header-left">
+                        <i class="fa-solid fa-chart-simple"></i>
+                        <h2>สถิติการทำงาน (รอบ 21–20)</h2>
+                    </div>
+                </div>
+                <div id="workStatsBody"></div>
             </div>
         </div>
 
@@ -1601,6 +1430,20 @@
                     </button>
                 </div>
             </div>
+
+            <!-- PATCH #7: SYNC CENTER + #8: UNDO DELETE -->
+            <div class="card" id="syncCenterCard">
+                <div class="card-header">
+                    <div class="card-header-left">
+                        <i class="fa-solid fa-rotate"></i>
+                        <h2>ศูนย์ซิงค์ข้อมูล (Sync Center)</h2>
+                    </div>
+                </div>
+                <div class="sync-panel" id="syncCenterBody"></div>
+
+                <div class="form-label" style="margin-top: 20px;">ย้อนกลับรายการที่ลบ (Undo)</div>
+                <div class="sync-panel" id="undoPanelBody"></div>
+            </div>
         </div>
     </div>
 
@@ -1816,23 +1659,156 @@
             hidden.value = `${h}:${m}`;
         };
 
+        /* ================= PATCH #7: SYNC STATUS MANAGER =================
+           ใช้ metadata ของ Firestore snapshot ที่มีอยู่แล้ว (fromCache / hasPendingWrites)
+           ไม่เปลี่ยน Firebase version, ไม่เปลี่ยนโครงสร้าง Database */
+        const SYNC_LAST_KEY = 'lastServerSyncAt';
+        const SyncStatus = {
+            collections: {
+                work_logs:        { label: 'บันทึกงาน',        received: false, fromCache: true, pendingCount: 0, count: 0, at: null },
+                other_deductions: { label: 'รายการหักอื่นๆ',   received: false, fromCache: true, pendingCount: 0, count: 0, at: null },
+                transactions:     { label: 'รายการการเงิน',    received: false, fromCache: true, pendingCount: 0, count: 0, at: null }
+            },
+            lastSyncAt: Number(localStorage.getItem(SYNC_LAST_KEY)) || null,
+            lastError: null,
+            state: 'connecting',
+            markSnapshot(name, snapshot) {
+                const c = this.collections[name];
+                if (!c) return;
+                const meta = snapshot.metadata || {};
+                let pending = 0;
+                try { snapshot.docs.forEach(d => { if (d.metadata && d.metadata.hasPendingWrites) pending++; }); } catch (e) { pending = 0; }
+                c.received = true;
+                c.fromCache = !!meta.fromCache;
+                c.pendingCount = pending;
+                c.count = snapshot.docs.length;
+                c.at = Date.now();
+                if (!meta.fromCache && !meta.hasPendingWrites) {
+                    this.lastSyncAt = Date.now();
+                    try { localStorage.setItem(SYNC_LAST_KEY, String(this.lastSyncAt)); } catch (e) {}
+                    this.lastError = null;
+                }
+                this.refresh();
+            },
+            markError(name, error) {
+                this.lastError = `${this.collections[name] ? this.collections[name].label : name}: ${(error && error.message) ? error.message : 'ซิงค์ไม่สำเร็จ'}`;
+                this.refresh();
+            },
+            totalPending() {
+                return Object.values(this.collections).reduce((sum, c) => sum + (c.pendingCount || 0), 0);
+            },
+            compute() {
+                if (!navigator.onLine) return 'offline';
+                const list = Object.values(this.collections);
+                if (this.totalPending() > 0) return 'syncing';
+                if (list.some(c => !c.received)) return 'connecting';
+                if (this.lastError) return 'error';
+                if (list.some(c => c.fromCache)) return 'cache';
+                return 'synced';
+            },
+            refresh() {
+                this.state = this.compute();
+                updateOnlineStatus();
+                renderSyncCenter();
+            }
+        };
+
+        function formatSyncTime(ts) {
+            if (!ts) return 'ยังไม่เคย';
+            const diff = Date.now() - ts;
+            if (diff < 60000) return 'เมื่อสักครู่';
+            if (diff < 3600000) return `${Math.floor(diff / 60000)} นาทีที่แล้ว`;
+            const d = new Date(ts);
+            const pad = (n) => String(n).padStart(2, '0');
+            const sameDay = (new Date()).toDateString() === d.toDateString();
+            const time = `${pad(d.getHours())}:${pad(d.getMinutes())} น.`;
+            return sameDay ? `วันนี้ ${time}` : `${pad(d.getDate())}/${pad(d.getMonth() + 1)} ${time}`;
+        }
+
+        function renderSyncCenter() {
+            const body = document.getElementById('syncCenterBody');
+            if (!body) return;
+            const meta = {
+                synced:     { t: 'ซิงค์กับเซิร์ฟเวอร์แล้ว', c: 'ok',   i: 'fa-circle-check' },
+                syncing:    { t: 'กำลังซิงค์ข้อมูล...',     c: 'warn', i: 'fa-rotate fa-spin' },
+                connecting: { t: 'กำลังเชื่อมต่อ...',       c: 'warn', i: 'fa-rotate fa-spin' },
+                cache:      { t: 'อ่านจากแคชในเครื่อง',     c: 'warn', i: 'fa-database' },
+                offline:    { t: 'ออฟไลน์ (บันทึกลงเครื่อง)', c: 'bad',  i: 'fa-plug-circle-xmark' },
+                error:      { t: 'ซิงค์มีปัญหา',            c: 'bad',  i: 'fa-triangle-exclamation' }
+            };
+            const m = meta[SyncStatus.state] || meta.connecting;
+
+            let rows = '';
+            Object.keys(SyncStatus.collections).forEach(key => {
+                const c = SyncStatus.collections[key];
+                let pill;
+                if (!c.received) pill = '<span class="sync-pill warn">กำลังโหลด</span>';
+                else if (c.pendingCount > 0) pill = `<span class="sync-pill warn">รอซิงค์ ${c.pendingCount}</span>`;
+                else if (c.fromCache) pill = '<span class="sync-pill warn">แคช</span>';
+                else pill = '<span class="sync-pill ok">ซิงค์แล้ว</span>';
+                rows += `
+                    <div class="sync-row">
+                        <div class="sync-row-label"><i class="fa-solid fa-folder"></i>${c.label}</div>
+                        <div style="display:flex;align-items:center;gap:10px;">
+                            <span class="sync-row-value">${c.received ? c.count + ' รายการ' : '—'}</span>${pill}
+                        </div>
+                    </div>`;
+            });
+
+            const totalPending = SyncStatus.totalPending();
+            body.innerHTML = `
+                <div class="sync-row">
+                    <div class="sync-row-label"><i class="fa-solid ${m.i}"></i>สถานะการซิงค์</div>
+                    <span class="sync-pill ${m.c}">${m.t}</span>
+                </div>
+                ${rows}
+                <div class="sync-row">
+                    <div class="sync-row-label"><i class="fa-regular fa-clock"></i>ซิงค์เซิร์ฟเวอร์ล่าสุด</div>
+                    <div class="sync-row-value">${formatSyncTime(SyncStatus.lastSyncAt)}</div>
+                </div>
+                <div class="sync-row">
+                    <div class="sync-row-label"><i class="fa-solid fa-cloud-arrow-up"></i>รอส่งขึ้นเซิร์ฟเวอร์</div>
+                    <div class="sync-row-value" style="color:${totalPending > 0 ? 'var(--danger)' : 'var(--success)'};">${totalPending} รายการ</div>
+                </div>
+                ${SyncStatus.lastError ? `
+                <div class="sync-row" style="background:#fef2f2;border-color:#fecaca;">
+                    <div class="sync-row-label"><i class="fa-solid fa-triangle-exclamation" style="color:var(--danger)"></i>ข้อผิดพลาดล่าสุด</div>
+                    <div class="sync-row-value" style="color:var(--danger);font-size:0.75rem;white-space:normal;text-align:right;">${escapeMonthlyHtml(SyncStatus.lastError)}</div>
+                </div>` : ''}
+            `;
+        }
+        window.renderSyncCenter = renderSyncCenter;
+
         // อัพเดทป้ายสถานะ "ออนไลน์/ออฟไลน์" ให้ตรงกับการเชื่อมต่อจริง
         // (เดิมเป็นข้อความตายตัว ไม่เคยเปลี่ยนตามสถานะเน็ตจริง)
+        // PATCH #7: ผูกกับ SyncStatus เพื่อแสดงสถานะ "กำลังซิงค์ / แคช" ด้วย (ฟังก์ชันเดิม ไม่สร้างซ้ำ)
         function updateOnlineStatus() {
             const badge = document.getElementById('onlineStatusBadge');
             const text = document.getElementById('onlineStatusText');
             if (!badge || !text) return;
-            if (navigator.onLine) {
-                badge.classList.remove('offline');
-                text.textContent = 'ออนไลน์';
-            } else {
+            badge.classList.remove('offline', 'syncing');
+            if (!navigator.onLine) {
                 badge.classList.add('offline');
                 text.textContent = 'ออฟไลน์ (ยังบันทึกได้)';
+                return;
+            }
+            const state = SyncStatus.state;
+            if (state === 'syncing' || state === 'connecting') {
+                badge.classList.add('syncing');
+                text.textContent = 'กำลังซิงค์...';
+            } else if (state === 'cache') {
+                badge.classList.add('syncing');
+                text.textContent = 'ออนไลน์ (แคช)';
+            } else if (state === 'error') {
+                badge.classList.add('offline');
+                text.textContent = 'ซิงค์มีปัญหา';
+            } else {
+                text.textContent = 'ออนไลน์';
             }
         }
-        window.addEventListener('online', () => { updateOnlineStatus(); if (typeof showToast === 'function') showToast('เชื่อมต่ออินเทอร์เน็ตแล้ว กำลังซิงค์ข้อมูล', 'success'); });
-        window.addEventListener('offline', () => { updateOnlineStatus(); if (typeof showToast === 'function') showToast('ขาดการเชื่อมต่อ ข้อมูลจะซิงค์อัตโนมัติเมื่อกลับมาออนไลน์', 'info'); });
-        document.addEventListener('DOMContentLoaded', updateOnlineStatus);
+        window.addEventListener('online', () => { SyncStatus.refresh(); if (typeof showToast === 'function') showToast('เชื่อมต่ออินเทอร์เน็ตแล้ว กำลังซิงค์ข้อมูล', 'success'); });
+        window.addEventListener('offline', () => { SyncStatus.refresh(); if (typeof showToast === 'function') showToast('ขาดการเชื่อมต่อ ข้อมูลจะซิงค์อัตโนมัติเมื่อกลับมาออนไลน์', 'info'); });
+        document.addEventListener('DOMContentLoaded', () => { SyncStatus.refresh(); renderUndoPanel(); });
 
         // รีเฟรชแอป: ล้าง Service Worker + Cache Storage ทั้งหมด แล้วโหลดหน้าใหม่แบบข้าม cache
         // ใช้แก้ปัญหาแอปที่ Add to Home Screen บน iPhone ไม่อัพเดทตามโค้ดใหม่
@@ -1887,15 +1863,34 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        function showToast(message, type = 'success') {
+        // PATCH #8: รองรับปุ่ม Action (ใช้สำหรับ Undo) เพิ่มเป็น argument ที่ 3 แบบ optional
+        // เรียกแบบเดิม showToast(msg, type) ยังทำงานเหมือนเดิมทุกประการ
+        function showToast(message, type = 'success', options = null) {
             const container = document.getElementById('toastContainer');
             const toast = document.createElement('div');
             toast.className = `toast toast-${type}`;
             let iconClass = type === 'error' ? 'fa-triangle-exclamation' : (type === 'info' ? 'fa-circle-info' : 'fa-circle-check');
             toast.innerHTML = `<i class="fa-solid ${iconClass}"></i> <span>${message}</span>`;
+
+            let hideTimer = null;
+            const dismiss = () => {
+                if (hideTimer) { clearTimeout(hideTimer); hideTimer = null; }
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            };
+
+            if (options && typeof options.onAction === 'function') {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'toast-undo-btn';
+                btn.innerHTML = `<i class="fa-solid fa-rotate-left"></i> ${options.actionLabel || 'เลิกทำ'}`;
+                btn.addEventListener('click', () => { dismiss(); options.onAction(); });
+                toast.appendChild(btn);
+            }
+
             container.appendChild(toast);
             setTimeout(() => toast.classList.add('show'), 10);
-            setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 300); }, 3000);
+            hideTimer = setTimeout(dismiss, (options && options.duration) ? options.duration : 3000);
         }
 
         document.addEventListener('DOMContentLoaded', () => { 
@@ -1914,35 +1909,112 @@
             loadPlanItems();
         });
 
+        // PATCH #7: ลายเซ็นข้อมูลล่าสุด ใช้กันการ re-render ซ้ำจาก metadata-only snapshot
+        let lastLogsSignature = null, lastDeductsSignature = null, lastTxSignature = null;
+
         function setupFirestoreListeners() {
-            onSnapshot(collection(db, "work_logs"), (snapshot) => {
-                allLogs = snapshot.docs.map(doc => doc.data());
-                allLogs.sort((a, b) => a.date.localeCompare(b.date));
+            onSnapshot(collection(db, "work_logs"), { includeMetadataChanges: true }, (snapshot) => {
+                SyncStatus.markSnapshot('work_logs', snapshot);
+                const nextLogs = snapshot.docs.map(doc => doc.data());
+                nextLogs.sort((a, b) => a.date.localeCompare(b.date));
+                // PATCH #7: ถ้า snapshot เปลี่ยนเฉพาะ metadata (สถานะซิงค์) ไม่ต้อง re-render ซ้ำ
+                // เพื่อให้พฤติกรรมของฟอร์ม/หน้าจอเหมือนเดิมทุกประการ
+                const nextSig = JSON.stringify(nextLogs);
+                if (nextSig === lastLogsSignature) return;
+                lastLogsSignature = nextSig;
+                allLogs = nextLogs;
                 renderApp();
                 if (typeof window.renderMonthlyOverview === 'function') window.renderMonthlyOverview();
                 if (typeof window.renderPlanView === 'function') window.renderPlanView();
                 checkExistingLogForDate(document.getElementById('logDate').value);
-            }, (error) => showToast("ใช้งานโหมด Offline (งาน)", "info"));
+            }, (error) => { SyncStatus.markError('work_logs', error); showToast("ใช้งานโหมด Offline (งาน)", "info"); });
 
-            onSnapshot(collection(db, "other_deductions"), (snapshot) => {
-                otherDeductsMap = {};
-                snapshot.docs.forEach(doc => { otherDeductsMap[doc.id] = doc.data().amount || 0; });
+            onSnapshot(collection(db, "other_deductions"), { includeMetadataChanges: true }, (snapshot) => {
+                SyncStatus.markSnapshot('other_deductions', snapshot);
+                const nextMap = {};
+                snapshot.docs.forEach(doc => { nextMap[doc.id] = doc.data().amount || 0; });
+                const nextSig = JSON.stringify(nextMap);
+                if (nextSig === lastDeductsSignature) return;
+                lastDeductsSignature = nextSig;
+                otherDeductsMap = nextMap;
                 renderApp();
                 if (typeof window.renderPlanView === 'function') window.renderPlanView();
-            });
+            }, (error) => SyncStatus.markError('other_deductions', error));
 
-            onSnapshot(collection(db, "transactions"), (snapshot) => {
-                allTransactions = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                allTransactions.sort((a, b) => {
+            onSnapshot(collection(db, "transactions"), { includeMetadataChanges: true }, (snapshot) => {
+                SyncStatus.markSnapshot('transactions', snapshot);
+                const nextTx = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                nextTx.sort((a, b) => {
                     const timeA = a.timestamp || new Date(a.date).getTime();
                     const timeB = b.timestamp || new Date(b.date).getTime();
                     return timeB - timeA;
                 });
+                const nextSig = JSON.stringify(nextTx);
+                if (nextSig === lastTxSignature) return;
+                lastTxSignature = nextSig;
+                allTransactions = nextTx;
                 renderFinanceApp();
                 if (typeof window.renderMonthlyOverview === 'function') window.renderMonthlyOverview();
                 if (typeof window.renderPlanView === 'function') window.renderPlanView();
-            }, (error) => console.error(error));
+            }, (error) => { SyncStatus.markError('transactions', error); console.error(error); });
         }
+
+        /* ================= PATCH #8: UNDO MANAGER (กู้คืนข้อมูลที่เพิ่งลบ) =================
+           เก็บสำเนาข้อมูลจริงก่อนลบไว้ในหน่วยความจำ แล้วเขียนกลับด้วย doc id เดิม
+           ไม่เปลี่ยนโครงสร้าง Database และไม่แตะการลบแบบเดิม */
+        const UndoManager = {
+            stack: [],
+            MAX: 20,
+            push(label, restoreFn) {
+                const entry = {
+                    id: 'undo_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 7),
+                    label, restore: restoreFn, at: Date.now()
+                };
+                this.stack.push(entry);
+                if (this.stack.length > this.MAX) this.stack.shift();
+                renderUndoPanel();
+                return entry;
+            },
+            remove(entry) {
+                this.stack = this.stack.filter(e => e !== entry);
+                renderUndoPanel();
+            },
+            async run(entry) {
+                if (!entry || typeof entry.restore !== 'function') return;
+                try {
+                    await entry.restore();
+                    this.remove(entry);
+                    triggerHaptic();
+                    showToast(`กู้คืน ${entry.label} แล้ว`, 'success');
+                } catch (err) {
+                    showToast('กู้คืนไม่สำเร็จ', 'error');
+                }
+            },
+            runById(id) {
+                const entry = this.stack.find(e => e.id === id);
+                if (entry) this.run(entry);
+            }
+        };
+        window.undoDeleteById = function(id) { UndoManager.runById(id); };
+
+        function renderUndoPanel() {
+            const el = document.getElementById('undoPanelBody');
+            if (!el) return;
+            if (UndoManager.stack.length === 0) {
+                el.innerHTML = `<div class="sync-row"><div class="sync-row-label"><i class="fa-solid fa-trash-can-arrow-up"></i>ยังไม่มีรายการที่ลบในรอบการใช้งานนี้</div></div>`;
+                return;
+            }
+            let html = '';
+            [...UndoManager.stack].reverse().slice(0, 8).forEach(entry => {
+                html += `
+                    <div class="sync-row">
+                        <div class="sync-row-label"><i class="fa-solid fa-trash-can-arrow-up"></i>${escapeMonthlyHtml(entry.label)}</div>
+                        <button type="button" class="btn-undo-row" onclick="window.undoDeleteById('${entry.id}')"><i class="fa-solid fa-rotate-left"></i> กู้คืน</button>
+                    </div>`;
+            });
+            el.innerHTML = html;
+        }
+        window.renderUndoPanel = renderUndoPanel;
 
         /* ================= WORK LOG LOGIC ================= */
         function initDateAndPeriods() {
@@ -2140,10 +2212,21 @@
             window.switchView('view-log');
         }
 
+        // PATCH #8: สำรองข้อมูลจริงก่อนลบ เพื่อให้กู้คืนได้ (การลบยังทำงานแบบเดิมทุกอย่าง)
         async function deleteEntry(date) {
             triggerHaptic();
             if (confirm(`ลบบันทึกวันที่ ${date}?`)) {
-                try { await deleteDoc(doc(db, "work_logs", date)); showToast(`ลบแล้ว`, "info"); } catch (err) { showToast("ลบไม่ได้", "error"); }
+                const backup = allLogs.find(l => l.date === date);
+                const snapshotData = backup ? JSON.parse(JSON.stringify(backup)) : null;
+                try {
+                    await deleteDoc(doc(db, "work_logs", date));
+                    if (snapshotData) {
+                        const entry = UndoManager.push(`บันทึกงาน ${date}`, () => setDoc(doc(db, "work_logs", date), snapshotData));
+                        showToast(`ลบแล้ว`, "info", { actionLabel: 'เลิกทำ', duration: 7000, onAction: () => UndoManager.run(entry) });
+                    } else {
+                        showToast(`ลบแล้ว`, "info");
+                    }
+                } catch (err) { showToast("ลบไม่ได้", "error"); }
             }
         }
 
@@ -2178,6 +2261,7 @@
             document.getElementById('metricSS').innerText = `฿${ssDeduction.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
 
             renderHistoryList(periodLogs);
+            renderWorkStats(selectedPeriodKey); // PATCH #9
         }
 
         function renderHistoryList(logs) {
@@ -2220,6 +2304,180 @@
             historyList.innerHTML = html;
         }
 
+
+        /* ================= PATCH #9: WORK STATISTICS MODULE =================
+           คำนวณจากข้อมูลจริงใน allLogs เท่านั้น ใช้รอบบิล 21 ถึง 20 ตามระบบเดิม
+           ไม่มีการสร้างข้อมูลจำลอง ถ้าไม่มีบันทึกจะแสดงสถานะว่าง */
+        function getPeriodBounds(periodKey) {
+            const [y, m] = String(periodKey).split('-').map(Number);
+            if (!y || !m) return null;
+            const end = new Date(y, m - 1, 20);
+            const start = new Date(y, m - 2, 21);
+            return { start, end, startKey: getLocalDateKey(start), endKey: getLocalDateKey(end) };
+        }
+
+        function getPrevPeriodKey(periodKey) {
+            const [y, m] = String(periodKey).split('-').map(Number);
+            let pm = m - 1, py = y;
+            if (pm < 1) { pm = 12; py--; }
+            return `${py}-${String(pm).padStart(2, '0')}`;
+        }
+
+        function computeWorkStats(periodKey) {
+            const bounds = getPeriodBounds(periodKey);
+            if (!bounds) return null;
+            const logs = allLogs.filter(l => l.date >= bounds.startKey && l.date <= bounds.endKey);
+
+            let workDays = 0, paidOffDays = 0, unpaidDays = 0, otHours = 0, mealCount = 0, opCount = 0;
+            const shifts = { morning: 0, noon: 0, op: 0, other: 0 };
+            let topOT = null;
+
+            logs.forEach(item => {
+                if (item.status === 'WORK') {
+                    workDays++;
+                    const ot = Number(item.otHours) || 0;
+                    otHours += ot;
+                    if (item.hasMeal) mealCount++;
+                    if (item.hasOP) opCount++;
+                    if (ot > 0 && (!topOT || ot > topOT.hours)) topOT = { date: item.date, hours: ot };
+                    const ti = item.timeIn || '', to = item.timeOut || '';
+                    if (ti === '08:00' && to === '17:00') shifts.morning++;
+                    else if (ti === '12:00' && to === '21:00') shifts.noon++;
+                    else if (ti === '16:00' && to === '01:00') shifts.op++;
+                    else shifts.other++;
+                } else if (item.status === 'OFF_PAID') paidOffDays++;
+                else if (item.status === 'OFF_UNPAID') unpaidDays++;
+            });
+
+            // นับวันที่ผ่านไปแล้วจริงในรอบนี้ (ไม่เกินวันนี้) เพื่อคิดอัตราการบันทึก
+            const today = new Date(); today.setHours(0, 0, 0, 0);
+            const totalDays = Math.round((bounds.end - bounds.start) / 86400000) + 1;
+            let elapsedDays = 0;
+            if (today >= bounds.start) {
+                const last = today < bounds.end ? today : bounds.end;
+                elapsedDays = Math.round((last - bounds.start) / 86400000) + 1;
+            }
+
+            // สถิติทำงานต่อเนื่องสูงสุด (วันที่ติดกันจริงเท่านั้น)
+            const workDates = logs.filter(l => l.status === 'WORK').map(l => l.date).sort();
+            let streak = 0, best = 0, prev = null;
+            workDates.forEach(d => {
+                if (prev) {
+                    const diff = Math.round((new Date(d + 'T00:00:00') - new Date(prev + 'T00:00:00')) / 86400000);
+                    streak = (diff === 1) ? streak + 1 : 1;
+                } else streak = 1;
+                if (streak > best) best = streak;
+                prev = d;
+            });
+
+            return {
+                periodKey, bounds, recorded: logs.length, totalDays, elapsedDays,
+                workDays, paidOffDays, unpaidDays, otHours, mealCount, opCount,
+                shifts, topOT, bestStreak: best,
+                otPay: otHours * OT_RATE,
+                avgOT: workDays > 0 ? otHours / workDays : 0
+            };
+        }
+
+        function formatStatDate(dateKey) {
+            const parts = String(dateKey).split('-');
+            if (parts.length !== 3) return dateKey;
+            return `${parts[2]}/${parts[1]}/${Number(parts[0]) + 543}`;
+        }
+
+        function renderStatTrend(current, previous, unit, digits = 0) {
+            if (previous === null || previous === undefined) return '';
+            const diff = current - previous;
+            const val = Math.abs(diff).toLocaleString('th-TH', { minimumFractionDigits: digits, maximumFractionDigits: digits });
+            if (Math.abs(diff) < (digits > 0 ? 0.005 : 0.5)) return `<div class="stat-sub stat-trend-flat">เท่ารอบก่อน</div>`;
+            const cls = diff > 0 ? 'stat-trend-up' : 'stat-trend-down';
+            const arrow = diff > 0 ? '▲' : '▼';
+            return `<div class="stat-sub ${cls}">${arrow} ${val} ${unit} เทียบรอบก่อน</div>`;
+        }
+
+        function renderWorkStats(periodKey) {
+            const body = document.getElementById('workStatsBody');
+            if (!body) return;
+            const key = periodKey || (document.getElementById('periodSelect') || {}).value;
+            const stats = computeWorkStats(key);
+            if (!stats) { body.innerHTML = ''; return; }
+
+            if (stats.recorded === 0) {
+                body.innerHTML = `<div class="stats-empty"><i class="fa-solid fa-chart-simple"></i>ยังไม่มีข้อมูลบันทึกงานในรอบบิลนี้<br>สถิติจะคำนวณให้อัตโนมัติเมื่อเริ่มบันทึก</div>`;
+                return;
+            }
+
+            const prev = computeWorkStats(getPrevPeriodKey(key));
+            const prevWork = prev && prev.recorded > 0 ? prev.workDays : null;
+            const prevOT = prev && prev.recorded > 0 ? prev.otHours : null;
+
+            const recordRate = stats.elapsedDays > 0 ? Math.round((stats.recorded / stats.elapsedDays) * 100) : 0;
+            const money = (v) => isBalanceHidden ? '••••••' : `฿${Number(v || 0).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+            const shiftRows = [
+                { name: 'กะเช้า', count: stats.shifts.morning, color: '#f59e0b' },
+                { name: 'กะกลางวัน', count: stats.shifts.noon, color: '#3b82f6' },
+                { name: 'กะปิดร้าน (OP)', count: stats.shifts.op, color: '#8b5cf6' },
+                { name: 'เวลาอื่นๆ', count: stats.shifts.other, color: '#64748b' }
+            ];
+            const maxShift = Math.max(1, ...shiftRows.map(r => r.count));
+            let barsHtml = '';
+            shiftRows.forEach(r => {
+                if (r.count === 0) return;
+                barsHtml += `
+                    <div class="stat-bar-row">
+                        <div class="stat-bar-name">${r.name}</div>
+                        <div class="stat-bar-track"><div class="stat-bar-fill" style="width:${Math.round((r.count / maxShift) * 100)}%;background:${r.color};"></div></div>
+                        <div class="stat-bar-count">${r.count} วัน</div>
+                    </div>`;
+            });
+            if (!barsHtml) barsHtml = `<div class="stat-sub">ยังไม่มีวันทำงานในรอบนี้</div>`;
+
+            body.innerHTML = `
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-label">วันทำงานจริง</div>
+                        <div class="stat-value">${stats.workDays} วัน</div>
+                        ${renderStatTrend(stats.workDays, prevWork, 'วัน')}
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">OT สะสม</div>
+                        <div class="stat-value">${stats.otHours.toFixed(2)} ชม.</div>
+                        ${renderStatTrend(stats.otHours, prevOT, 'ชม.', 2)}
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">วันหยุดได้ค่าแรง</div>
+                        <div class="stat-value">${stats.paidOffDays} วัน</div>
+                        <div class="stat-sub">ลา/ขาด ${stats.unpaidDays} วัน</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">OT เฉลี่ย/วันทำงาน</div>
+                        <div class="stat-value">${stats.avgOT.toFixed(2)} ชม.</div>
+                        <div class="stat-sub">คิดเป็น ${money(stats.otPay)}</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">ทำงานต่อเนื่องสูงสุด</div>
+                        <div class="stat-value">${stats.bestStreak} วันติด</div>
+                        <div class="stat-sub">ค่าอาหาร ${stats.mealCount} ครั้ง • OP ${stats.opCount} ครั้ง</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">ความครบของบันทึก</div>
+                        <div class="stat-value">${stats.recorded}/${stats.elapsedDays} วัน</div>
+                        <div class="stat-sub">${recordRate}% ของวันที่ผ่านมาในรอบ (รอบละ ${stats.totalDays} วัน)</div>
+                    </div>
+                </div>
+
+                <div class="stat-section-title"><i class="fa-solid fa-layer-group"></i> สัดส่วนกะที่ทำจริง</div>
+                ${barsHtml}
+
+                <div class="stat-section-title"><i class="fa-solid fa-fire"></i> วัน OT สูงสุดของรอบ</div>
+                <div class="sync-row">
+                    <div class="sync-row-label"><i class="fa-regular fa-calendar"></i>${stats.topOT ? formatStatDate(stats.topOT.date) : 'ไม่มี OT ในรอบนี้'}</div>
+                    <div class="sync-row-value">${stats.topOT ? stats.topOT.hours.toFixed(2) + ' ชม.' : '—'}</div>
+                </div>
+            `;
+        }
+        window.renderWorkStats = renderWorkStats;
 
         /* ================= MONTHLY OVERVIEW LOGIC ================= */
         let monthlyOverviewDate = (() => {
@@ -2764,10 +3022,22 @@
 
         window.deletePlanItem = function(id) {
             triggerHaptic();
+            // PATCH #8: จำตำแหน่งและข้อมูลเดิมไว้ เพื่อกู้คืนกลับที่เดิมได้
+            const index = planItems.findIndex(item => item.id === id);
+            const backup = index >= 0 ? JSON.parse(JSON.stringify(planItems[index])) : null;
             planItems = planItems.filter(item => item.id !== id);
             savePlanItems();
             window.renderPlanView();
-            showToast('ลบรายการจำลองแล้ว', 'info');
+            if (backup) {
+                const entry = UndoManager.push(`รายการวางแผน "${backup.name}"`, () => {
+                    if (!planItems.some(i => i.id === backup.id)) planItems.splice(Math.min(index, planItems.length), 0, backup);
+                    savePlanItems();
+                    window.renderPlanView();
+                });
+                showToast('ลบรายการจำลองแล้ว', 'info', { actionLabel: 'เลิกทำ', duration: 7000, onAction: () => UndoManager.run(entry) });
+            } else {
+                showToast('ลบรายการจำลองแล้ว', 'info');
+            }
         };
 
         window.openTxHistoryModal = function() {
@@ -2846,10 +3116,19 @@
             if(!id) return;
             
             if (confirm(`ลบรายการนี้ใช่หรือไม่?`)) {
+                // PATCH #8: สำรองข้อมูลจริงก่อนลบ เพื่อให้กู้คืนได้
+                const found = allTransactions.find(t => t.id === id);
+                const backup = found ? JSON.parse(JSON.stringify(found)) : null;
                 try {
                     await deleteDoc(doc(db, "transactions", id));
-                    showToast("ลบรายการแล้ว", "info");
                     closeTxModal();
+                    if (backup) {
+                        const { id: _skip, ...payload } = backup;
+                        const entry = UndoManager.push(`รายการการเงิน "${backup.note || '-'}"`, () => setDoc(doc(db, "transactions", id), payload));
+                        showToast("ลบรายการแล้ว", "info", { actionLabel: 'เลิกทำ', duration: 7000, onAction: () => UndoManager.run(entry) });
+                    } else {
+                        showToast("ลบรายการแล้ว", "info");
+                    }
                 } catch (error) {
                     showToast("ลบไม่ได้ เกิดข้อผิดพลาด", "error");
                 }
